@@ -1,31 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Header from "../components/Header";
-import card from "../assets/card.png";
-import { ReactComponent as BookMarkOn } from "../assets/bookmark_on.svg";
-import { ReactComponent as BookMarkOff } from "../assets/bookmark_off.svg";
+import BookMark from "../components/BookMark";
+import { ReactComponent as Emoji } from "../assets/emoji.svg";
+import { ReactComponent as Posting } from "../assets/posting.svg";
 
 const Main = () => {
+  const [tab, setTab] = useState("모든로그");
+
+  const handleTabClick = (newTab) => {
+    setTab(newTab);
+  };
+
   return (
     <BackGround>
       <Header />
       <Container>
         {/* MenuTab */}
         <Menu>
-          <MenuItem>모든로그</MenuItem>
-          <MenuItem>북마크</MenuItem>
+          <MenuItem
+            selected={tab === "모든로그"}
+            onClick={() => handleTabClick("모든로그")}
+          >
+            모든로그
+          </MenuItem>
+          <MenuItem
+            selected={tab === "북마크"}
+            onClick={() => handleTabClick("북마크")}
+          >
+            북마크
+          </MenuItem>
         </Menu>
 
         {/* Logs */}
         <Contents>
           {records.map((record, i) => (
-            <Card image={`https://source.unsplash.com/random/`}>
+            <Card
+              key={`record-${i}`}
+              image={`https://source.unsplash.com/random/`}
+            >
               <Cover>
                 <BarWrapper>
                   <Bar>
-                    <BookMark marked={record.isMarked}>
-                      {record.isMarked ? <BookMarkOn /> : <BookMarkOff />}
-                    </BookMark>
+                    <BookMark isMarked={record.isMarked} />
                   </Bar>
                 </BarWrapper>
                 <Content>
@@ -37,10 +54,25 @@ const Main = () => {
                     <SmallText>{record.createdAt}</SmallText>
                   </TextWrapper>
                 </Content>
+                <BarWrapper>
+                  <BottomBar>
+                    <EmojiContainer>
+                      <Emoji />
+                      <SmallText>{record.emojiCount}</SmallText>
+                    </EmojiContainer>
+
+                    <SmallText>by {record.writer}</SmallText>
+                  </BottomBar>
+                </BarWrapper>
               </Cover>
             </Card>
           ))}
         </Contents>
+
+        {/* 글작성 버튼 */}
+        <WriteButton>
+          <Posting />
+        </WriteButton>
       </Container>
     </BackGround>
   );
@@ -51,7 +83,7 @@ export default Main;
 const BackGround = styled.div`
   width: 100vw;
   min-height: 100vh;
-  background-color: black;
+  background-color: #1c1e21;
   padding-top: 100px;
 `;
 
@@ -72,7 +104,10 @@ const MenuItem = styled.button`
   align-items: center;
   gap: 2px;
   flex: 1 0 0;
-  color: white;
+  color: ${(props) =>
+    props.selected ? "rgba(255, 255, 255, 0.95)" : "rgba(255, 255, 255, 0.25)"};
+  border-bottom: ${(props) => (props.selected ? "2px solid #ffffff" : "none")};
+  transition: color 0.3s, border-bottom 0.3s;
 `;
 
 const Contents = styled.div`
@@ -120,20 +155,6 @@ const Bar = styled.div`
   align-items: center;
 `;
 
-const BookMark = styled.div`
-  display: inline-flex;
-  padding: 8px;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-
-  border-radius: 999px;
-  background: ${(props) =>
-    props.marked
-      ? "var(--background-bg-input, #FAFAFA)"
-      : "var(--font-text-disabled, rgba(255, 255, 255, 0.25)"};
-`;
-
 const Content = styled.div`
   display: flex;
   width: 320px;
@@ -179,13 +200,44 @@ const RecordContent = styled.div`
   letter-spacing: -0.2px;
 `;
 
-const SmallText = styled.div`
+const SmallText = styled.span`
   font-family: Pretendard;
   font-size: 14px;
   font-style: normal;
   font-weight: 300;
   line-height: 160%; /* 22.4px */
   letter-spacing: -0.2px;
+`;
+
+const EmojiContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+`;
+
+const BottomBar = styled.div`
+  display: flex;
+  width: 288px;
+  justify-content: space-between;
+`;
+
+const WriteButton = styled.div`
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%); /* 가로 중앙 정렬을 위한 변환 */
+  display: inline-flex;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 999px;
+  background: var(--theme-primary, #f4ac40);
+  /* shadow */
+  box-shadow: 0px 4px 10px 0px rgba(28, 30, 33, 0.8);
+  cursor: pointer;
 `;
 
 const currentDate = new Date();
