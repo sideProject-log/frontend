@@ -12,6 +12,13 @@ import PretendardThin from "../assets/fonts/pretendard/woff2-subset/Pretendard-T
 
 export const fonts = css`
   @font-face {
+    font-family: "Pretendard Variable";
+    font-weight: 45 920;
+    font-style: normal;
+    font-display: swap;
+    src: url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/variable/pretendardvariable-dynamic-subset.css");
+  }
+  @font-face {
     font-family: "Pretendard";
     font-style: normal;
     font-weight: 100;
