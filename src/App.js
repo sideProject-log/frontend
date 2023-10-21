@@ -18,7 +18,10 @@ function App() {
       path: "/my",
       element: <MyPage />,
     },
-    { path: "detail/:recordId", element: <Detail /> },
+    {
+      path: "detail/:recordId",
+      element: <Detail />,
+    },
   ]);
 
   return (
