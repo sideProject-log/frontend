@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import ChangedHeader from "../components/ChangedHeader";
 import styled from "styled-components";
 import { convertedCardColor } from "../utils/common";
 import { ReactComponent as Edit } from "../assets/edit.svg";
 import { ReactComponent as StickerOutline } from "../assets/sticker_outline.svg";
+import { ReactComponent as StickerColor } from "../assets/sticker_color.svg";
 import { ReactComponent as BookmarkOn } from "../assets/bookmark_on.svg";
 import { ReactComponent as BookmarkOff } from "../assets/bookmark_off.svg";
 // import { useParams } from "react-router-dom";
@@ -23,6 +24,7 @@ const dummy = {
 };
 
 const Detail = () => {
+  const stickerList = ["😍", "😆", "😋", "😔", "😭", "😡"];
   const {
     data: {
       title,
@@ -34,11 +36,24 @@ const Detail = () => {
       backgroundColor,
     },
   } = dummy;
+  const [showStickers, setShowStickers] = useState(false);
+  const [isClickedStickers, setIsClickedStickers] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(isMarked);
 
   // const convertDate = () => {
   //   // TODO: 날짜 데이터 포맷 변경
   //   return;
   // }
+
+  const onClickBookmark = () => {
+    setIsBookmarked((prev) => !prev);
+    // TODO: 북마크 추가 API 연결
+    // TODO: API 연결 후, 실패 응답시 다시 상태 변경
+  };
+  const onClickStickers = () => {
+    setShowStickers((prev) => !prev);
+    setIsClickedStickers((prev) => !prev);
+  };
 
   return (
     <Wrapper>
@@ -62,18 +77,31 @@ const Detail = () => {
               <p>{createdAt}</p>
             </div>
           </DetailContents>
-          <div className="user-interactions">
-            <div>
-              <StickerOutline />
+          <UserInteractions>
+            <div className="user-sympathy">
+              {showStickers && (
+                <StickerBalloon>
+                  {stickerList.map((sticker) => (
+                    <div key={sticker} className="sticker">
+                      {sticker}
+                    </div>
+                  ))}
+                </StickerBalloon>
+              )}
+              <button type="button" onClick={onClickStickers}>
+                {isClickedStickers ? <StickerColor /> : <StickerOutline />}
+              </button>
             </div>
             <div>
               {username === writer ? (
                 <Edit />
               ) : (
-                <div>{isMarked ? <BookmarkOn /> : <BookmarkOff />}</div>
+                <button type="button" onClick={onClickBookmark}>
+                  {isBookmarked ? <BookmarkOn /> : <BookmarkOff />}
+                </button>
               )}
             </div>
-          </div>
+          </UserInteractions>
         </DetailContainer>
       </DetailWrapper>
     </Wrapper>
@@ -119,12 +147,6 @@ const DetailContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   gap: 1rem;
-
-  .user-interactions {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-  }
 `;
 
 const DetailContents = styled.div`
@@ -133,7 +155,6 @@ const DetailContents = styled.div`
   gap: 4rem;
   p {
     color: rgb(255, 255, 255, 0.85);
-    font-family: "Pretendard Variable";
     font-weight: 300;
     font-size: 1.8rem;
   }
@@ -165,5 +186,49 @@ const DetailContents = styled.div`
       font-weight: 300;
       color: rgb(255, 255, 255, 0.45);
     }
+  }
+`;
+
+const UserInteractions = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  .user-sympathy {
+    position: relative;
+  }
+`;
+
+const StickerBalloon = styled.div`
+  padding: 1rem 1.5rem;
+  /* width: 15rem; */
+  height: 5rem;
+  position: absolute;
+  bottom: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 2rem;
+  background-color: white;
+  border-radius: 8px;
+
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-top-color: white;
+    border-bottom: 0;
+    margin-left: -45%;
+    margin-bottom: -7px;
+  }
+
+  .sticker {
+    width: 2rem;
+    height: 2rem;
+    font-size: 2rem;
   }
 `;
