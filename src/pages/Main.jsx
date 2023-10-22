@@ -22,13 +22,15 @@ const Main = () => {
     }
     const fetchData = async () => {
       try {
-        const response = await axios.get(apiUrl);
+        const response = await axios.get(apiUrl, { withCredentials: true });
         const data = response.data;
         setRecords(data.data);
       } catch (error) {
         console.error("API 호출 오류:", error);
       }
     };
+
+    console.log(records);
 
     fetchData();
   }, [tab]);
@@ -93,7 +95,6 @@ const Main = () => {
                           <Emoji />
                           <SmallText>{record.emojiCount}</SmallText>
                         </EmojiContainer>
-
                         <SmallText>by {record.writer}</SmallText>
                       </BottomBar>
                     </BarWrapper>

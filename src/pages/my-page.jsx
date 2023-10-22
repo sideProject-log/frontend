@@ -47,7 +47,7 @@ const MyPage = () => {
   return (
     <Main>
       <Header />
-      <div style={{ height: "80px" }}></div>
+      <div style={{ height: "90px" }}></div>
       <Diary>
         <AvatarContainer>
           <Avatar src={user.profile} />
