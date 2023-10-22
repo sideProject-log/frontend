@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { convertedCardColor } from "../utils/common";
 import { ReactComponent as Edit } from "../assets/edit.svg";
 import { ReactComponent as StickerOutline } from "../assets/sticker_outline.svg";
+import { ReactComponent as StickerColor } from "../assets/sticker_color.svg";
 import { ReactComponent as BookmarkOn } from "../assets/bookmark_on.svg";
 import { ReactComponent as BookmarkOff } from "../assets/bookmark_off.svg";
 // import { useParams } from "react-router-dom";
@@ -36,12 +37,23 @@ const Detail = () => {
     },
   } = dummy;
   const [showStickers, setShowStickers] = useState(false);
+  const [isClickedStickers, setIsClickedStickers] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(isMarked);
 
   // const convertDate = () => {
   //   // TODO: 날짜 데이터 포맷 변경
   //   return;
   // }
+
+  const onClickBookmark = () => {
+    setIsBookmarked((prev) => !prev);
+    // TODO: 북마크 추가 API 연결
+    // TODO: API 연결 후, 실패 응답시 다시 상태 변경
+  };
+  const onClickStickers = () => {
+    setShowStickers((prev) => !prev);
+    setIsClickedStickers((prev) => !prev);
+  };
 
   return (
     <Wrapper>
@@ -76,21 +88,15 @@ const Detail = () => {
                   ))}
                 </StickerBalloon>
               )}
-              <button
-                type="button"
-                onClick={() => setShowStickers((prev) => !prev)}
-              >
-                <StickerOutline />
+              <button type="button" onClick={onClickStickers}>
+                {isClickedStickers ? <StickerColor /> : <StickerOutline />}
               </button>
             </div>
             <div>
               {username === writer ? (
                 <Edit />
               ) : (
-                <button
-                  type="button"
-                  onClick={() => setIsBookmarked((prev) => !prev)}
-                >
+                <button type="button" onClick={onClickBookmark}>
                   {isBookmarked ? <BookmarkOn /> : <BookmarkOff />}
                 </button>
               )}
