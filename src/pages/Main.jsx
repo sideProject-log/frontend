@@ -44,24 +44,8 @@ const Main = () => {
 
   return (
     <BackGround>
-      <Header />
+      <Header tab={tab} onClick={handleTabClick} />
       <Container>
-        {/* MenuTab */}
-        <Menu>
-          <MenuItem
-            selected={tab === "모든 로그"}
-            onClick={() => handleTabClick("모든 로그")}
-          >
-            모든로그
-          </MenuItem>
-          <MenuItem
-            selected={tab === "북마크"}
-            onClick={() => handleTabClick("북마크")}
-          >
-            북마크
-          </MenuItem>
-        </Menu>
-
         {/* Logs */}
         <Contents>
           {records?.length !== 0
@@ -118,30 +102,11 @@ const BackGround = styled.div`
   width: 100vw;
   min-height: 100vh;
   background-color: ${(props) => props.theme.bg.bg_surface};
-  padding-top: 75px;
+  padding-top: 100px;
 `;
 
 const Container = styled.div`
   width: 100%;
-`;
-
-const Menu = styled.div`
-  display: flex;
-  width: 100vw;
-  padding: 0px 20px;
-`;
-
-const MenuItem = styled.button`
-  display: flex;
-  padding: 8px 0px;
-  justify-content: center;
-  align-items: center;
-  gap: 2px;
-  flex: 1 0 0;
-  color: ${(props) =>
-    props.selected ? "rgba(255, 255, 255, 0.95)" : "rgba(255, 255, 255, 0.25)"};
-  border-bottom: ${(props) => (props.selected ? "2px solid #ffffff" : "none")};
-  transition: color 0.3s, border-bottom 0.3s;
 `;
 
 const Contents = styled.div`
