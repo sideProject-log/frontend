@@ -24,6 +24,7 @@ const Main = () => {
       try {
         const response = await axios.get(apiUrl, { withCredentials: true });
         const data = response.data;
+        console.log("data", data);
         setRecords(data.data);
       } catch (error) {
         console.error("API 호출 오류:", error);
@@ -61,7 +62,10 @@ const Main = () => {
                   <Cover>
                     <BarWrapper>
                       <Bar>
-                        <BookMark isMarked={record.bookmarked} />
+                        <BookMark
+                          isMarked={record.bookmarked}
+                          recordId={record.id}
+                        />
                       </Bar>
                     </BarWrapper>
                     <Content>

@@ -2,13 +2,30 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as BookMarkOn } from "../../assets/bookmark_on.svg";
 import { ReactComponent as BookMarkOff } from "../../assets/bookmark_off.svg";
+import axios from "axios";
 
-const BookMark = ({ isMarked }) => {
+const BookMark = ({ isMarked, recordId }) => {
   console.log("mak", isMarked);
   const [markState, setMarkState] = useState(isMarked);
 
-  const toggleBookmark = (e) => {
+  const toggleBookmark = async (e) => {
     e.stopPropagation();
+
+    let apiUrl;
+    if (!markState) {
+      apiUrl = "http://localhost:8080/api/bookmark/register";
+    }
+    try {
+      const response = await axios.post(
+        apiUrl,
+        { recordId: recordId },
+        { withCredentials: true }
+      );
+      console.log("서버 응답:", response.data);
+    } catch (error) {
+      console.error("API 호출 오류:", error);
+    }
+
     setMarkState(!markState); // 반대로 설정
   };
 
