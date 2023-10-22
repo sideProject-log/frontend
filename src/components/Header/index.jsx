@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import { ReactComponent as Logo } from "../../assets/Log.svg";
 
 const index = () => {
   return (
     <Header>
-      <div>Logo</div>
+      <Logo />
       <div>profile</div>
     </Header>
   );
@@ -19,10 +20,9 @@ const Header = styled.div`
   right: 0;
   display: flex;
   width: 100vw;
-  padding: 24px 20px;
+  padding: 16px 20px;
   justify-content: space-between;
   align-items: center;
-  background-color: #fff;
   z-index: 100;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;

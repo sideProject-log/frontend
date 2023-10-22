@@ -11,16 +11,20 @@ const Main = () => {
   const navigate = useNavigate();
 
   const [records, setRecords] = useState([]);
-  const [tab, setTab] = useState("모든로그");
+  const [tab, setTab] = useState("모든 로그");
 
   // console.log();
 
   useEffect(() => {
+    let apiUrl;
+    if (tab === "모든 로그") {
+      apiUrl = "http://localhost:8080/api/record/getAll";
+    } else {
+      apiUrl = "http://localhost:8080/api/user/bookmarks";
+    }
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8080/api/record/getAll"
-        );
+        const response = await axios.get(apiUrl);
         const data = response.data;
         console.log("records", data);
         setRecords(data);
@@ -30,10 +34,14 @@ const Main = () => {
     };
 
     fetchData();
-  }, []);
+  }, [tab]);
 
   const handleTabClick = (newTab) => {
     setTab(newTab);
+  };
+
+  const onClickWrite = (e) => {
+    e.stopPropagation();
   };
 
   return (
@@ -43,8 +51,8 @@ const Main = () => {
         {/* MenuTab */}
         <Menu>
           <MenuItem
-            selected={tab === "모든로그"}
-            onClick={() => handleTabClick("모든로그")}
+            selected={tab === "모든 로그"}
+            onClick={() => handleTabClick("모든 로그")}
           >
             모든로그
           </MenuItem>
@@ -96,7 +104,7 @@ const Main = () => {
         </Contents>
 
         {/* 글작성 버튼 */}
-        <WriteButton>
+        <WriteButton onClick={(e) => onClickWrite(e)}>
           <Posting />
         </WriteButton>
       </Container>
@@ -270,6 +278,8 @@ const WriteButton = styled.div`
   left: 50%;
   transform: translateX(-50%); /* 가로 중앙 정렬을 위한 변환 */
   display: inline-flex;
+  width: 48px;
+  height: 48px;
   padding: 10px;
   justify-content: center;
   align-items: center;
@@ -279,6 +289,7 @@ const WriteButton = styled.div`
   /* shadow */
   box-shadow: 0px 4px 10px 0px rgba(28, 30, 33, 0.8);
   cursor: pointer;
+  box-sizing: content-box;
 `;
 
 const currentDate = new Date();
