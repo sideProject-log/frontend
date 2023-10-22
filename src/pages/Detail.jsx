@@ -77,7 +77,9 @@ const Detail = () => {
           $backgroundColor={convertedCardColor[backgroundColor]}
         />
       ) : (
-        <BackgroundImage src={image} alt="background-image" />
+        <BackgroundImageContainer>
+          <BackgroundImage src={image} alt="background-image" />
+        </BackgroundImageContainer>
       )}
       <DetailWrapper>
         <DetailContainer>
@@ -143,8 +145,14 @@ const BackgroundCard = styled.div`
   z-index: 1;
 `;
 
+const BackgroundImageContainer = styled.div`
+  background-position: center;
+`;
+
 const BackgroundImage = styled.img`
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
   filter: brightness(60%);
 `;
 
