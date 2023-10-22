@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ChangedHeader from "../components/ChangedHeader";
 import styled from "styled-components";
 import { convertedCardColor } from "../utils/common";
@@ -23,6 +23,8 @@ const dummy = {
 };
 
 const Detail = () => {
+  const [showStickers, setShowStickers] = useState(false);
+  const stickerList = ["😍", "😆", "😋", "😔", "😭", "😡"];
   const {
     data: {
       title,
@@ -62,9 +64,23 @@ const Detail = () => {
               <p>{createdAt}</p>
             </div>
           </DetailContents>
-          <div className="user-interactions">
-            <div>
-              <StickerOutline />
+          <UserInteractions>
+            <div className="user-sympathy">
+              {showStickers && (
+                <StickerBalloon>
+                  {stickerList.map((sticker) => (
+                    <div key={sticker} className="sticker">
+                      {sticker}
+                    </div>
+                  ))}
+                </StickerBalloon>
+              )}
+              <button
+                type="button"
+                onClick={() => setShowStickers((prev) => !prev)}
+              >
+                <StickerOutline />
+              </button>
             </div>
             <div>
               {username === writer ? (
@@ -73,7 +89,7 @@ const Detail = () => {
                 <div>{isMarked ? <BookmarkOn /> : <BookmarkOff />}</div>
               )}
             </div>
-          </div>
+          </UserInteractions>
         </DetailContainer>
       </DetailWrapper>
     </Wrapper>
@@ -119,12 +135,6 @@ const DetailContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
   gap: 1rem;
-
-  .user-interactions {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-  }
 `;
 
 const DetailContents = styled.div`
@@ -133,7 +143,6 @@ const DetailContents = styled.div`
   gap: 4rem;
   p {
     color: rgb(255, 255, 255, 0.85);
-    font-family: "Pretendard Variable";
     font-weight: 300;
     font-size: 1.8rem;
   }
@@ -165,5 +174,49 @@ const DetailContents = styled.div`
       font-weight: 300;
       color: rgb(255, 255, 255, 0.45);
     }
+  }
+`;
+
+const UserInteractions = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+
+  .user-sympathy {
+    position: relative;
+  }
+`;
+
+const StickerBalloon = styled.div`
+  padding: 1rem 1.5rem;
+  /* width: 15rem; */
+  height: 5rem;
+  position: absolute;
+  bottom: 6rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 2rem;
+  background-color: white;
+  border-radius: 8px;
+
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border: 8px solid transparent;
+    border-top-color: white;
+    border-bottom: 0;
+    margin-left: -45%;
+    margin-bottom: -7px;
+  }
+
+  .sticker {
+    width: 2rem;
+    height: 2rem;
+    font-size: 2rem;
   }
 `;
