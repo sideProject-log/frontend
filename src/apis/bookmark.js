@@ -15,7 +15,7 @@ export const removeBookmark = async (bookmarkId) => {
   const response = await axios.delete(
     "http://localhost:8080/api/bookmark/remove",
     {
-      bookmarkId,
+      data: { bookmarkId },
     },
     { withCredentials: true }
   );

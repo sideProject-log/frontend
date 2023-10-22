@@ -32,22 +32,19 @@ const Detail = () => {
     const clickedEmoji = e.currentTarget.children[0].innerText;
     const newComment = await registerComment(recordId, clickedEmoji);
     console.log(newComment);
-    if (userCommentList.includes(clickedEmoji) === false) {
+    if (userCommentList && userCommentList.includes(clickedEmoji) === false) {
       setUserCommentList([...userCommentList, clickedEmoji]);
     }
     toggleStickersState();
-    // TODO: 이모지 댓글 API 요청
   };
 
   const onClickBookmark = async () => {
     if (bookmark === null) {
-      const reponse = await registerBookmark(recordId);
-      setBookmark((prev) => reponse.data.newBookmark.id);
+      const response = await registerBookmark(recordId);
+      setBookmark(response.data.newBookmark.id);
     } else {
-      console.log(bookmark);
       const response = await removeBookmark(bookmark);
-      console.log(response);
-      if (response.status === "ok") setBookmark(null);
+      if (response.data.status === "ok") setBookmark(null);
     }
   };
   const onClickStickers = () => {
@@ -57,9 +54,10 @@ const Detail = () => {
   useEffect(() => {
     const fetchRecord = async () => {
       try {
-        const response = await getRecord(recordId);
-        setRecord(response.data.record);
-        setBookmark(response.data.record.bookmarkId);
+        const { data } = await getRecord(recordId);
+        setRecord(data.record);
+        setBookmark(data.record.bookmarkId);
+        setUserCommentList(data.record.commentList);
       } catch (error) {
         console.error("API 호출 오류:", error);
       }
