@@ -7,9 +7,23 @@ import { ReactComponent as StickerOutline } from "../assets/sticker_outline.svg"
 import { ReactComponent as StickerColor } from "../assets/sticker_color.svg";
 import { ReactComponent as BookmarkOn } from "../assets/bookmark_on.svg";
 import { ReactComponent as BookmarkOff } from "../assets/bookmark_off.svg";
+import testProfileImage from "../assets/test_profile.jpg";
+import testBackgroundImage from "../assets/test_background.jpg";
 // import { useParams } from "react-router-dom";
 
 const username = "";
+// const dummy = {
+//   data: {
+//     title: "테오의 스프린트 16기",
+//     content:
+//       "오늘은 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. ",
+//     writer: "준",
+//     isMarked: false,
+//     createdAt: "2023-10-22",
+//     image: null,
+//     backgroundColor: "#7E7462",
+//   },
+// };
 const dummy = {
   data: {
     title: "테오의 스프린트 16기",
@@ -18,8 +32,8 @@ const dummy = {
     writer: "준",
     isMarked: false,
     createdAt: "2023-10-22",
-    image: null,
-    backgroundColor: "#7E7462",
+    image: testBackgroundImage,
+    backgroundColor: null,
   },
 };
 
@@ -63,7 +77,7 @@ const Detail = () => {
           $backgroundColor={convertedCardColor[backgroundColor]}
         />
       ) : (
-        "이미지"
+        <BackgroundImage src={image} alt="background-image" />
       )}
       <DetailWrapper>
         <DetailContainer>
@@ -73,7 +87,10 @@ const Detail = () => {
               <p className="record-content">{content}</p>
             </div>
             <div className="record-info">
-              <p>{`by ${writer}`}</p>
+              <div className="user-info">
+                <ProfileImage src={testProfileImage} alt="user-profile-image" />
+                <p>{`by ${writer}`}</p>
+              </div>
               <p>{createdAt}</p>
             </div>
           </DetailContents>
@@ -117,6 +134,7 @@ const Wrapper = styled.div`
   width: 100dvw;
   height: 100dvh;
 `;
+
 const BackgroundCard = styled.div`
   position: absolute;
   width: 100%;
@@ -125,8 +143,14 @@ const BackgroundCard = styled.div`
   z-index: 1;
 `;
 
+const BackgroundImage = styled.img`
+  height: 100%;
+  filter: brightness(60%);
+`;
+
 const DetailWrapper = styled.div`
   position: absolute;
+  padding-top: 4rem;
   width: 100%;
   max-width: 80rem;
   height: 100%;
@@ -141,7 +165,7 @@ const DetailWrapper = styled.div`
 `;
 
 const DetailContainer = styled.div`
-  padding: 1rem 2.5rem;
+  padding: 0 2.5rem;
   height: 80%;
   display: flex;
   flex-direction: column;
@@ -171,8 +195,9 @@ const DetailContents = styled.div`
   }
   .record-content {
     min-height: 20rem;
+    line-height: 130%;
     p {
-      word-wrap: break-word;
+      /* word-wrap: break-word; */
     }
   }
   .record-info {
@@ -180,12 +205,18 @@ const DetailContents = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     p {
       font-size: 1.5rem;
       font-weight: 300;
       color: rgb(255, 255, 255, 0.45);
     }
+  }
+  .user-info {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
   }
 `;
 
@@ -231,4 +262,10 @@ const StickerBalloon = styled.div`
     height: 2rem;
     font-size: 2rem;
   }
+`;
+
+const ProfileImage = styled.img`
+  width: 3rem;
+  height: 3rem;
+  border-radius: 20px;
 `;
