@@ -8,7 +8,7 @@ import { ReactComponent as StickerColor } from "../assets/sticker_color.svg";
 import { ReactComponent as BookmarkOn } from "../assets/bookmark_on.svg";
 import { ReactComponent as BookmarkOff } from "../assets/bookmark_off.svg";
 import testProfileImage from "../assets/test_profile.jpg";
-import testBackgroundImage from "../assets/test_background.jpg";
+import Image1 from "../assets/dummy_images/Dummy_Image_1.jpg";
 
 const username = "";
 // const dummy = {
@@ -31,7 +31,7 @@ const dummy = {
     writer: "준",
     isMarked: false,
     createdAt: "2023-10-22",
-    image: testBackgroundImage,
+    image: Image1,
     backgroundColor: null,
     commentList: ["😍", "😆", "😋"],
   },
