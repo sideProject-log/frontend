@@ -6,18 +6,19 @@ import { ReactComponent as BookMarkOff } from "../../assets/bookmark_off.svg";
 const BookMark = ({ isMarked }) => {
   const [markState, setMarkState] = useState(isMarked);
 
-  const toggleBookmark = () => {
+  const toggleBookmark = (e) => {
+    e.stopPropagation();
     setMarkState(!markState); // 반대로 설정
   };
 
   return (
     <>
       {markState ? (
-        <Marked onClick={toggleBookmark}>
+        <Marked onClick={(e) => toggleBookmark(e)}>
           <BookMarkOn />
         </Marked>
       ) : (
-        <UnMarked onClick={toggleBookmark}>
+        <UnMarked onClick={(e) => toggleBookmark(e)}>
           <BookMarkOff />
         </UnMarked>
       )}
@@ -36,6 +37,7 @@ const Marked = styled.div`
   background: var(--background-bg-input, #fafafa);
   border-radius: 999px;
   cursor: pointer;
+  z-index: 10;
 `;
 
 const UnMarked = styled.div`
@@ -47,4 +49,5 @@ const UnMarked = styled.div`
   background: var(--font-text-disabled, rgba(255, 255, 255, 0.25));
   border-radius: 999px;
   cursor: pointer;
+  z-index: 10;
 `;

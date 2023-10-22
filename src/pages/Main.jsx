@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import styled from "styled-components";
 import Header from "../components/Header";
 import BookMark from "../components/BookMark";
@@ -6,7 +8,29 @@ import { ReactComponent as Emoji } from "../assets/emoji.svg";
 import { ReactComponent as Posting } from "../assets/posting.svg";
 
 const Main = () => {
+  const navigate = useNavigate();
+
+  const [records, setRecords] = useState([]);
   const [tab, setTab] = useState("모든로그");
+
+  // console.log();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/api/record/getAll"
+        );
+        const data = response.data;
+        console.log("records", data);
+        setRecords(data);
+      } catch (error) {
+        console.error("API 호출 오류:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleTabClick = (newTab) => {
     setTab(newTab);
@@ -37,7 +61,9 @@ const Main = () => {
           {records.map((record, i) => (
             <Card
               key={`record-${i}`}
-              image={`https://source.unsplash.com/random/`}
+              image={record?.image}
+              background={record.background}
+              onClick={() => navigate(`/detail/${record.id}`)}
             >
               <Cover>
                 <BarWrapper>
@@ -51,7 +77,7 @@ const Main = () => {
                       <RecordTitle>{record.title}</RecordTitle>
                       <RecordContent>{record.content}</RecordContent>
                     </Record>
-                    <SmallText>{record.createdAt}</SmallText>
+                    <SmallText>{record.created_at}</SmallText>
                   </TextWrapper>
                 </Content>
                 <BarWrapper>
@@ -124,7 +150,10 @@ const Card = styled.div`
   width: 320px;
   height: 520px;
   align-items: flex-start;
-  background-image: url(${(props) => props.image});
+  ${(props) =>
+    props.image
+      ? `background-image: url(${props.image});`
+      : `background-color: ${props.background};`}
   background-size: cover;
   color: white;
   border-radius: 16px;
@@ -173,6 +202,7 @@ const TextWrapper = styled.div`
   align-items: center;
   gap: 48px;
   align-self: stretch;
+  width: 244px;
 `;
 
 const Record = styled.div`
@@ -189,6 +219,11 @@ const RecordTitle = styled.div`
   font-weight: 700;
   line-height: 125%; /* 27.5px */
   letter-spacing: -0.3px;
+  width: 244px;
+  text-align: center;
+  overflow: hidden; /* 넘치는 내용 숨김 */
+  text-overflow: ellipsis; /* 생략 부호 표시 */
+  white-space: nowrap;
 `;
 
 const RecordContent = styled.div`
@@ -198,6 +233,12 @@ const RecordContent = styled.div`
   font-weight: 400;
   line-height: 160%; /* 25.6px */
   letter-spacing: -0.2px;
+  overflow: hidden; /* 넘치는 내용 숨김 */
+  text-overflow: ellipsis; /* 생략 부호 표시 */
+  white-space: nowrap;
+  text-align: center;
+  width: 244px;
+  height: 50px;
 `;
 
 const SmallText = styled.span`
@@ -242,23 +283,3 @@ const WriteButton = styled.div`
 
 const currentDate = new Date();
 const createdAt = currentDate.toISOString();
-
-// TODO: 데이터 동적으로 받아오기
-const records = [
-  {
-    title: "오늘의 로그!!!",
-    content: "오늘은 이런걸 했어 !!헤헤",
-    writer: "루이",
-    isMarked: true,
-    createdAt: createdAt,
-    emojiCount: 1,
-  },
-  {
-    title: "오늘의 로그!!!",
-    content: "오늘의 내용은 어쩌구 저쩌구 ??",
-    writer: "루이",
-    isMarked: false,
-    createdAt: "20231022",
-    emojiCount: 1,
-  },
-];
