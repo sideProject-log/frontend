@@ -1,12 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../../assets/Log.svg";
+import { ReactComponent as DefaultProFile } from "../../assets/profile_none.svg";
 
 const index = () => {
   return (
     <Header>
       <Logo />
-      <div>profile</div>
+      <DefaultProFile />
     </Header>
   );
 };

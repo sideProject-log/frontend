@@ -13,8 +13,6 @@ const Main = () => {
   const [records, setRecords] = useState([]);
   const [tab, setTab] = useState("모든 로그");
 
-  // console.log();
-
   useEffect(() => {
     let apiUrl;
     if (tab === "모든 로그") {
@@ -24,10 +22,9 @@ const Main = () => {
     }
     const fetchData = async () => {
       try {
-        const response = await axios.get(apiUrl, { withCredentials: true });
+        const response = await axios.get(apiUrl);
         const data = response.data;
-        console.log("records", data);
-        setRecords(data);
+        setRecords(data.data);
       } catch (error) {
         console.error("API 호출 오류:", error);
       }
@@ -41,6 +38,7 @@ const Main = () => {
   };
 
   const onClickWrite = (e) => {
+    navigate("/post");
     e.stopPropagation();
   };
 
@@ -66,41 +64,43 @@ const Main = () => {
 
         {/* Logs */}
         <Contents>
-          {records.map((record, i) => (
-            <Card
-              key={`record-${i}`}
-              image={record?.image}
-              background={record.background}
-              onClick={() => navigate(`/detail/${record.id}`)}
-            >
-              <Cover>
-                <BarWrapper>
-                  <Bar>
-                    <BookMark isMarked={record.isMarked} />
-                  </Bar>
-                </BarWrapper>
-                <Content>
-                  <TextWrapper>
-                    <Record>
-                      <RecordTitle>{record.title}</RecordTitle>
-                      <RecordContent>{record.content}</RecordContent>
-                    </Record>
-                    <SmallText>{record.created_at}</SmallText>
-                  </TextWrapper>
-                </Content>
-                <BarWrapper>
-                  <BottomBar>
-                    <EmojiContainer>
-                      <Emoji />
-                      <SmallText>{record.emojiCount}</SmallText>
-                    </EmojiContainer>
+          {records?.length !== 0
+            ? records?.map((record, i) => (
+                <Card
+                  key={`record-${i}`}
+                  image={record?.image}
+                  background={record.background}
+                  onClick={() => navigate(`/detail/${record.id}`)}
+                >
+                  <Cover>
+                    <BarWrapper>
+                      <Bar>
+                        <BookMark isMarked={record.bookmarked} />
+                      </Bar>
+                    </BarWrapper>
+                    <Content>
+                      <TextWrapper>
+                        <Record>
+                          <RecordTitle>{record.title}</RecordTitle>
+                          <RecordContent>{record.content}</RecordContent>
+                        </Record>
+                        <SmallText>{record.created_at}</SmallText>
+                      </TextWrapper>
+                    </Content>
+                    <BarWrapper>
+                      <BottomBar>
+                        <EmojiContainer>
+                          <Emoji />
+                          <SmallText>{record.emojiCount}</SmallText>
+                        </EmojiContainer>
 
-                    <SmallText>by {record.writer}</SmallText>
-                  </BottomBar>
-                </BarWrapper>
-              </Cover>
-            </Card>
-          ))}
+                        <SmallText>by {record.writer}</SmallText>
+                      </BottomBar>
+                    </BarWrapper>
+                  </Cover>
+                </Card>
+              ))
+            : null}
         </Contents>
 
         {/* 글작성 버튼 */}
@@ -117,8 +117,8 @@ export default Main;
 const BackGround = styled.div`
   width: 100vw;
   min-height: 100vh;
-  background-color: #1c1e21;
-  padding-top: 100px;
+  background-color: ${(props) => props.theme.bg.bg_surface};
+  padding-top: 75px;
 `;
 
 const Container = styled.div`
@@ -290,6 +290,7 @@ const WriteButton = styled.div`
   box-shadow: 0px 4px 10px 0px rgba(28, 30, 33, 0.8);
   cursor: pointer;
   box-sizing: content-box;
+  z-index: 10;
 `;
 
 const currentDate = new Date();

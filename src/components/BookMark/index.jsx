@@ -4,6 +4,7 @@ import { ReactComponent as BookMarkOn } from "../../assets/bookmark_on.svg";
 import { ReactComponent as BookMarkOff } from "../../assets/bookmark_off.svg";
 
 const BookMark = ({ isMarked }) => {
+  console.log("mak", isMarked);
   const [markState, setMarkState] = useState(isMarked);
 
   const toggleBookmark = (e) => {

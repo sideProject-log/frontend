@@ -7,9 +7,23 @@ import { ReactComponent as StickerOutline } from "../assets/sticker_outline.svg"
 import { ReactComponent as StickerColor } from "../assets/sticker_color.svg";
 import { ReactComponent as BookmarkOn } from "../assets/bookmark_on.svg";
 import { ReactComponent as BookmarkOff } from "../assets/bookmark_off.svg";
+import testProfileImage from "../assets/test_profile.jpg";
+import testBackgroundImage from "../assets/test_background.jpg";
 // import { useParams } from "react-router-dom";
 
 const username = "";
+// const dummy = {
+//   data: {
+//     title: "테오의 스프린트 16기",
+//     content:
+//       "오늘은 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. ",
+//     writer: "준",
+//     isMarked: false,
+//     createdAt: "2023-10-22",
+//     image: null,
+//     backgroundColor: "#7E7462",
+//   },
+// };
 const dummy = {
   data: {
     title: "테오의 스프린트 16기",
@@ -18,8 +32,9 @@ const dummy = {
     writer: "준",
     isMarked: false,
     createdAt: "2023-10-22",
-    image: null,
-    backgroundColor: "#7E7462",
+    image: testBackgroundImage,
+    backgroundColor: null,
+    commentList: ["😍", "😆", "😋"],
   },
 };
 
@@ -34,17 +49,26 @@ const Detail = () => {
       isMarked,
       image,
       backgroundColor,
+      commentList,
     },
   } = dummy;
   const [showStickers, setShowStickers] = useState(false);
   const [isClickedStickers, setIsClickedStickers] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(isMarked);
+  const [userCommentList, setUserCommentList] = useState(commentList);
 
   // const convertDate = () => {
   //   // TODO: 날짜 데이터 포맷 변경
   //   return;
   // }
 
+  const onClickSticker = (e) => {
+    const clickedEmoji = e.currentTarget.children[0].innerText;
+    if (userCommentList.includes(clickedEmoji) === false) {
+      setUserCommentList([...userCommentList, clickedEmoji]);
+    }
+    // TODO: 이모지 댓글 API 요청
+  };
   const onClickBookmark = () => {
     setIsBookmarked((prev) => !prev);
     // TODO: 북마크 추가 API 연결
@@ -63,7 +87,9 @@ const Detail = () => {
           $backgroundColor={convertedCardColor[backgroundColor]}
         />
       ) : (
-        "이미지"
+        <BackgroundImageContainer>
+          <BackgroundImage src={image} alt="background-image" />
+        </BackgroundImageContainer>
       )}
       <DetailWrapper>
         <DetailContainer>
@@ -73,7 +99,10 @@ const Detail = () => {
               <p className="record-content">{content}</p>
             </div>
             <div className="record-info">
-              <p>{`by ${writer}`}</p>
+              <div className="user-info">
+                <ProfileImage src={testProfileImage} alt="user-profile-image" />
+                <p>{`by ${writer}`}</p>
+              </div>
               <p>{createdAt}</p>
             </div>
           </DetailContents>
@@ -82,15 +111,31 @@ const Detail = () => {
               {showStickers && (
                 <StickerBalloon>
                   {stickerList.map((sticker) => (
-                    <div key={sticker} className="sticker">
-                      {sticker}
-                    </div>
+                    <button
+                      key={sticker}
+                      className="sticker"
+                      type="button"
+                      onClick={onClickSticker}
+                    >
+                      <p className="sticker-emoji">{sticker}</p>
+                    </button>
                   ))}
                 </StickerBalloon>
               )}
               <button type="button" onClick={onClickStickers}>
                 {isClickedStickers ? <StickerColor /> : <StickerOutline />}
               </button>
+              <div className="comment-list">
+                {userCommentList.map((comment, index) => (
+                  <CommentSticker
+                    key={comment}
+                    len={userCommentList.length}
+                    idx={index}
+                  >
+                    {comment}
+                  </CommentSticker>
+                ))}
+              </div>
             </div>
             <div>
               {username === writer ? (
@@ -117,6 +162,7 @@ const Wrapper = styled.div`
   width: 100dvw;
   height: 100dvh;
 `;
+
 const BackgroundCard = styled.div`
   position: absolute;
   width: 100%;
@@ -125,8 +171,20 @@ const BackgroundCard = styled.div`
   z-index: 1;
 `;
 
+const BackgroundImageContainer = styled.div`
+  background-position: center;
+`;
+
+const BackgroundImage = styled.img`
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  filter: brightness(60%);
+`;
+
 const DetailWrapper = styled.div`
   position: absolute;
+  padding-top: 4rem;
   width: 100%;
   max-width: 80rem;
   height: 100%;
@@ -141,7 +199,7 @@ const DetailWrapper = styled.div`
 `;
 
 const DetailContainer = styled.div`
-  padding: 1rem 2.5rem;
+  padding: 0 2.5rem;
   height: 80%;
   display: flex;
   flex-direction: column;
@@ -171,8 +229,9 @@ const DetailContents = styled.div`
   }
   .record-content {
     min-height: 20rem;
+    line-height: 130%;
     p {
-      word-wrap: break-word;
+      /* word-wrap: break-word; */
     }
   }
   .record-info {
@@ -180,12 +239,18 @@ const DetailContents = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     p {
       font-size: 1.5rem;
       font-weight: 300;
       color: rgb(255, 255, 255, 0.45);
     }
+  }
+  .user-info {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
   }
 `;
 
@@ -196,11 +261,31 @@ const UserInteractions = styled.div`
 
   .user-sympathy {
     position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .comment-list {
+    position: relative;
+    display: flex;
   }
 `;
 
+const CommentSticker = styled.div`
+  position: absolute;
+  top: -1.3rem;
+  left: ${(props) => props.idx * 2}rem;
+  background-color: white;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 250%;
+  border-radius: 20px;
+  box-shadow: 2px 0px 2px 0px rgba(0, 0, 0, 0.25);
+  z-index: ${(props) => props.len - props.idx + 10};
+`;
+
 const StickerBalloon = styled.div`
-  padding: 1rem 1.5rem;
+  padding: 1rem;
   /* width: 15rem; */
   height: 5rem;
   position: absolute;
@@ -208,7 +293,7 @@ const StickerBalloon = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  gap: 2rem;
+  gap: 1rem;
   background-color: white;
   border-radius: 8px;
 
@@ -227,8 +312,20 @@ const StickerBalloon = styled.div`
   }
 
   .sticker {
-    width: 2rem;
-    height: 2rem;
-    font-size: 2rem;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+  .sticker-emoji {
+    font-size: 24px;
+    text-align: center;
+  }
+`;
+
+const ProfileImage = styled.img`
+  width: 3rem;
+  height: 3rem;
+  border-radius: 20px;
 `;
