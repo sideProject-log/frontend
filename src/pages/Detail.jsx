@@ -34,6 +34,7 @@ const dummy = {
     createdAt: "2023-10-22",
     image: testBackgroundImage,
     backgroundColor: null,
+    commentList: ["😍", "😆", "😋"],
   },
 };
 
@@ -48,17 +49,26 @@ const Detail = () => {
       isMarked,
       image,
       backgroundColor,
+      commentList,
     },
   } = dummy;
   const [showStickers, setShowStickers] = useState(false);
   const [isClickedStickers, setIsClickedStickers] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(isMarked);
+  const [userCommentList, setUserCommentList] = useState(commentList);
 
   // const convertDate = () => {
   //   // TODO: 날짜 데이터 포맷 변경
   //   return;
   // }
 
+  const onClickSticker = (e) => {
+    const clickedEmoji = e.currentTarget.children[0].innerText;
+    if (userCommentList.includes(clickedEmoji) === false) {
+      setUserCommentList([...userCommentList, clickedEmoji]);
+    }
+    // TODO: 이모지 댓글 API 요청
+  };
   const onClickBookmark = () => {
     setIsBookmarked((prev) => !prev);
     // TODO: 북마크 추가 API 연결
@@ -101,15 +111,31 @@ const Detail = () => {
               {showStickers && (
                 <StickerBalloon>
                   {stickerList.map((sticker) => (
-                    <div key={sticker} className="sticker">
-                      {sticker}
-                    </div>
+                    <button
+                      key={sticker}
+                      className="sticker"
+                      type="button"
+                      onClick={onClickSticker}
+                    >
+                      <p className="sticker-emoji">{sticker}</p>
+                    </button>
                   ))}
                 </StickerBalloon>
               )}
               <button type="button" onClick={onClickStickers}>
                 {isClickedStickers ? <StickerColor /> : <StickerOutline />}
               </button>
+              <div className="comment-list">
+                {userCommentList.map((comment, index) => (
+                  <CommentSticker
+                    key={comment}
+                    len={userCommentList.length}
+                    idx={index}
+                  >
+                    {comment}
+                  </CommentSticker>
+                ))}
+              </div>
             </div>
             <div>
               {username === writer ? (
@@ -235,11 +261,31 @@ const UserInteractions = styled.div`
 
   .user-sympathy {
     position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .comment-list {
+    position: relative;
+    display: flex;
   }
 `;
 
+const CommentSticker = styled.div`
+  position: absolute;
+  top: -1.3rem;
+  left: ${(props) => props.idx * 2}rem;
+  background-color: white;
+  width: 24px;
+  height: 24px;
+  text-align: center;
+  line-height: 250%;
+  border-radius: 20px;
+  box-shadow: 2px 0px 2px 0px rgba(0, 0, 0, 0.25);
+  z-index: ${(props) => props.len - props.idx + 10};
+`;
+
 const StickerBalloon = styled.div`
-  padding: 1rem 1.5rem;
+  padding: 1rem;
   /* width: 15rem; */
   height: 5rem;
   position: absolute;
@@ -247,7 +293,7 @@ const StickerBalloon = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  gap: 2rem;
+  gap: 1rem;
   background-color: white;
   border-radius: 8px;
 
@@ -266,9 +312,15 @@ const StickerBalloon = styled.div`
   }
 
   .sticker {
-    width: 2rem;
-    height: 2rem;
-    font-size: 2rem;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sticker-emoji {
+    font-size: 24px;
+    text-align: center;
   }
 `;
 
