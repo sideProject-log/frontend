@@ -9,7 +9,6 @@ import { ReactComponent as BookmarkOn } from "../assets/bookmark_on.svg";
 import { ReactComponent as BookmarkOff } from "../assets/bookmark_off.svg";
 import testProfileImage from "../assets/test_profile.jpg";
 import testBackgroundImage from "../assets/test_background.jpg";
-// import { useParams } from "react-router-dom";
 
 const username = "";
 // const dummy = {
@@ -104,7 +103,13 @@ const Detail = () => {
             </div>
             <div className="record-info">
               <div className="user-info">
-                <ProfileImage src={testProfileImage} alt="user-profile-image" />
+                {/* TODO: 프로필 사진 클릭시 해당 유저의 마이 페이지로 이동 */}
+                <a href={`http://localhost:3000/my/userId`}>
+                  <ProfileImage
+                    src={testProfileImage}
+                    alt="user-profile-image"
+                  />
+                </a>
                 <p>{`by ${writer}`}</p>
               </div>
               <p>{createdAt}</p>
