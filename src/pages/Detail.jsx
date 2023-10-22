@@ -1,109 +1,111 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ChangedHeader from "../components/ChangedHeader";
 import styled from "styled-components";
-import { convertedCardColor } from "../utils/common";
+import { convertDate, convertedCardColor } from "../utils/common";
 import { ReactComponent as Edit } from "../assets/edit.svg";
 import { ReactComponent as StickerOutline } from "../assets/sticker_outline.svg";
 import { ReactComponent as StickerColor } from "../assets/sticker_color.svg";
 import { ReactComponent as BookmarkOn } from "../assets/bookmark_on.svg";
 import { ReactComponent as BookmarkOff } from "../assets/bookmark_off.svg";
 import testProfileImage from "../assets/test_profile.jpg";
-import testBackgroundImage from "../assets/test_background.jpg";
-// import { useParams } from "react-router-dom";
+import { registerBookmark, removeBookmark } from "../apis/bookmark";
+import { useParams } from "react-router-dom";
+import { registerComment } from "../apis/comment";
+import { getRecord } from "../apis/record";
 
 const username = "";
-// const dummy = {
-//   data: {
-//     title: "테오의 스프린트 16기",
-//     content:
-//       "오늘은 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. ",
-//     writer: "준",
-//     isMarked: false,
-//     createdAt: "2023-10-22",
-//     image: null,
-//     backgroundColor: "#7E7462",
-//   },
-// };
-const dummy = {
-  data: {
-    title: "테오의 스프린트 16기",
-    content:
-      "오늘은 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. 어쩌구 저쩌구.. ",
-    writer: "준",
-    isMarked: false,
-    createdAt: "2023-10-22",
-    image: testBackgroundImage,
-    backgroundColor: null,
-    commentList: ["😍", "😆", "😋"],
-  },
-};
 
 const Detail = () => {
   const stickerList = ["😍", "😆", "😋", "😔", "😭", "😡"];
-  const {
-    data: {
-      title,
-      content,
-      writer,
-      createdAt,
-      isMarked,
-      image,
-      backgroundColor,
-      commentList,
-    },
-  } = dummy;
+  const [record, setRecord] = useState(null);
   const [showStickers, setShowStickers] = useState(false);
   const [isClickedStickers, setIsClickedStickers] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(isMarked);
-  const [userCommentList, setUserCommentList] = useState(commentList);
+  const [bookmark, setBookmark] = useState(null);
+  const [userCommentList, setUserCommentList] = useState(null);
+  const { recordId } = useParams();
 
-  // const convertDate = () => {
-  //   // TODO: 날짜 데이터 포맷 변경
-  //   return;
-  // }
-
-  const onClickSticker = (e) => {
-    const clickedEmoji = e.currentTarget.children[0].innerText;
-    if (userCommentList.includes(clickedEmoji) === false) {
-      setUserCommentList([...userCommentList, clickedEmoji]);
-    }
-    // TODO: 이모지 댓글 API 요청
-  };
-  const onClickBookmark = () => {
-    setIsBookmarked((prev) => !prev);
-    // TODO: 북마크 추가 API 연결
-    // TODO: API 연결 후, 실패 응답시 다시 상태 변경
-  };
-  const onClickStickers = () => {
+  const toggleStickersState = () => {
     setShowStickers((prev) => !prev);
     setIsClickedStickers((prev) => !prev);
   };
+  const onClickSticker = async (e) => {
+    const clickedEmoji = e.currentTarget.children[0].innerText;
+    const newComment = await registerComment(recordId, clickedEmoji);
+    console.log(newComment);
+    if (userCommentList.includes(clickedEmoji) === false) {
+      setUserCommentList([...userCommentList, clickedEmoji]);
+    }
+    toggleStickersState();
+    // TODO: 이모지 댓글 API 요청
+  };
+
+  const onClickBookmark = async () => {
+    if (bookmark === null) {
+      const reponse = await registerBookmark(recordId);
+      setBookmark((prev) => reponse.data.newBookmark.id);
+    } else {
+      console.log(bookmark);
+      const response = await removeBookmark(bookmark);
+      console.log(response);
+      if (response.status === "ok") setBookmark(null);
+    }
+  };
+  const onClickStickers = () => {
+    toggleStickersState();
+  };
+
+  useEffect(() => {
+    const fetchRecord = async () => {
+      try {
+        const response = await getRecord(recordId);
+        setRecord(response.data.record);
+        setBookmark(response.data.record.bookmarkId);
+      } catch (error) {
+        console.error("API 호출 오류:", error);
+      }
+    };
+
+    fetchRecord();
+  }, [recordId]);
+
+  if (record === null) {
+    return <div>loading...</div>;
+  }
 
   return (
     <Wrapper>
       <ChangedHeader type="detail" />
-      {image === null ? (
+      {record.image === null || record.image === undefined ? (
         <BackgroundCard
-          $backgroundColor={convertedCardColor[backgroundColor]}
+          background={
+            convertedCardColor[record.background]
+              ? convertedCardColor[record.background]
+              : record.background
+          }
         />
       ) : (
         <BackgroundImageContainer>
-          <BackgroundImage src={image} alt="background-image" />
+          <BackgroundImage src={record.image} alt="background-image" />
         </BackgroundImageContainer>
       )}
       <DetailWrapper>
         <DetailContainer>
           <DetailContents>
             <div className="record-main">
-              <p className="record-title">{title}</p>
-              <p className="record-content">{content}</p>
+              <p className="record-title">{record.title}</p>
+              <p className="record-content">{record.content}</p>
             </div>
             <div className="record-info">
               <div className="user-info">
-                <ProfileImage src={testProfileImage} alt="user-profile-image" />
-                <p>{`by ${writer}`}</p>
+                <a href={`http://localhost:3000/my/userId`}>
+                  <ProfileImage
+                    src={testProfileImage}
+                    alt="user-profile-image"
+                  />
+                </a>
+                <p>{`by ${record.writer}`}</p>
               </div>
-              <p>{createdAt}</p>
+              <p>{convertDate(record.created_at)}</p>
             </div>
           </DetailContents>
           <UserInteractions>
@@ -126,23 +128,24 @@ const Detail = () => {
                 {isClickedStickers ? <StickerColor /> : <StickerOutline />}
               </button>
               <div className="comment-list">
-                {userCommentList.map((comment, index) => (
-                  <CommentSticker
-                    key={comment}
-                    len={userCommentList.length}
-                    idx={index}
-                  >
-                    {comment}
-                  </CommentSticker>
-                ))}
+                {userCommentList &&
+                  userCommentList.map((comment, index) => (
+                    <CommentSticker
+                      key={comment}
+                      len={userCommentList.length}
+                      idx={index}
+                    >
+                      {comment}
+                    </CommentSticker>
+                  ))}
               </div>
             </div>
             <div>
-              {username === writer ? (
+              {username === record.writer ? (
                 <Edit />
               ) : (
                 <button type="button" onClick={onClickBookmark}>
-                  {isBookmarked ? <BookmarkOn /> : <BookmarkOff />}
+                  {bookmark !== null ? <BookmarkOn /> : <BookmarkOff />}
                 </button>
               )}
             </div>
@@ -167,7 +170,7 @@ const BackgroundCard = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: ${(props) => props.$backgroundColor};
+  background-color: ${(props) => props.background};
   z-index: 1;
 `;
 
@@ -200,6 +203,7 @@ const DetailWrapper = styled.div`
 
 const DetailContainer = styled.div`
   padding: 0 2.5rem;
+  width: 100%;
   height: 80%;
   display: flex;
   flex-direction: column;
@@ -228,7 +232,7 @@ const DetailContents = styled.div`
     color: rgb(255, 255, 255, 0.95);
   }
   .record-content {
-    min-height: 20rem;
+    height: 280px;
     line-height: 130%;
     p {
       /* word-wrap: break-word; */
