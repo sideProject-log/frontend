@@ -23,7 +23,6 @@ const dummy = {
 };
 
 const Detail = () => {
-  const [showStickers, setShowStickers] = useState(false);
   const stickerList = ["😍", "😆", "😋", "😔", "😭", "😡"];
   const {
     data: {
@@ -36,6 +35,8 @@ const Detail = () => {
       backgroundColor,
     },
   } = dummy;
+  const [showStickers, setShowStickers] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(isMarked);
 
   // const convertDate = () => {
   //   // TODO: 날짜 데이터 포맷 변경
@@ -86,7 +87,12 @@ const Detail = () => {
               {username === writer ? (
                 <Edit />
               ) : (
-                <div>{isMarked ? <BookmarkOn /> : <BookmarkOff />}</div>
+                <button
+                  type="button"
+                  onClick={() => setIsBookmarked((prev) => !prev)}
+                >
+                  {isBookmarked ? <BookmarkOn /> : <BookmarkOff />}
+                </button>
               )}
             </div>
           </UserInteractions>
