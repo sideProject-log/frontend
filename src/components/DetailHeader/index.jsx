@@ -4,7 +4,7 @@ import { ReactComponent as More } from "../../assets/More.svg";
 import { ReactComponent as Back } from "../../assets/Back.svg";
 import { useNavigate } from "react-router-dom";
 
-const ChangedHeader = ({ type }) => {
+const DetailHeader = () => {
   const navigate = useNavigate();
 
   const onClickBack = () => {
@@ -20,23 +20,16 @@ const ChangedHeader = ({ type }) => {
           </button>
         </div>
         <div>
-          {type === "input" ? (
-            <>
-              <button>사진추가</button>
-              <button>발행!</button>
-            </>
-          ) : (
-            <button>
-              <More />
-            </button>
-          )}
+          <button>
+            <More />
+          </button>
         </div>
       </Container>
     </Header>
   );
 };
 
-export default ChangedHeader;
+export default DetailHeader;
 
 const Header = styled.header`
   position: fixed;
