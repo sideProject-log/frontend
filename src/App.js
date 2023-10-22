@@ -4,6 +4,7 @@ import Main from "./pages/Main";
 import MyPage from "./pages/MyPage";
 import Detail from "./pages/Detail";
 import Post from "./pages/Post";
+import Setting from "./pages/Setting";
 
 function App() {
   const router = createBrowserRouter([
@@ -26,6 +27,10 @@ function App() {
     {
       path: "detail/:recordId",
       element: <Detail />,
+    },
+    {
+      path: "/setting",
+      element: <Setting />,
     },
   ]);
 

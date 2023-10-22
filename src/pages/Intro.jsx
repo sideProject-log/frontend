@@ -1,19 +1,11 @@
 import React from "react";
-import { requestKakaoOAuthLogin } from "../apis/auth";
-import kakaoLogin from "../assets/kakao_login_medium_narrow.png";
 import styled from "styled-components";
-
 import { ReactComponent as Posting } from "../assets/intro_posting.svg";
 import { ReactComponent as Kakao } from "../assets/kakao_login.svg";
 import { ReactComponent as Naver } from "../assets/naver_login.svg";
 import Bg from "../assets/Background.png";
 
 const Intro = () => {
-  const handleLogin = async () => {
-    const data = await requestKakaoOAuthLogin();
-    console.log(data);
-  };
-
   return (
     <Cover image={Bg}>
       <Wrapper>
@@ -30,9 +22,9 @@ const Intro = () => {
       </Wrapper>
       <LoginWrapper>
         <KakaoLogin
-          onClick={() =>
-            (window.location.href = "http://localhost:8080/auth/kakao")
-          }
+          onClick={async () => {
+            window.location.href = "http://localhost:8080/auth/kakao";
+          }}
         >
           <Kakao />
           <SocialTitle>카카오톡으로 시작하기</SocialTitle>

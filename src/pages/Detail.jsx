@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ChangedHeader from "../components/ChangedHeader";
+import DetailHeader from "../components/DetailHeader";
 import styled from "styled-components";
 import { convertDate, convertedCardColor } from "../utils/common";
 import { ReactComponent as Edit } from "../assets/edit.svg";
@@ -72,7 +72,7 @@ const Detail = () => {
 
   return (
     <Wrapper>
-      <ChangedHeader type="detail" />
+      <DetailHeader type="detail" />
       {record.image === null || record.image === undefined ? (
         <BackgroundCard
           background={
