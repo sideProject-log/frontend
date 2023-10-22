@@ -70,6 +70,7 @@ const MyPage = () => {
 
           return (
             <Post
+              id={record.id}
               title={record.title}
               desc={record.content}
               day={record.day}
@@ -147,7 +148,7 @@ function Post(props) {
   const urlRegex =
     /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
   return (
-    <a href={"/"} style={{ userSelect: "none" }}>
+    <a href={"/detail/" + props.id} style={{ userSelect: "none" }}>
       <PostBackGround
         background={
           !props.background.match(urlRegex) ? props.background : "#000000"
