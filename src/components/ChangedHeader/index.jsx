@@ -2,13 +2,20 @@ import React from "react";
 import styled from "styled-components";
 import { ReactComponent as More } from "../../assets/More.svg";
 import { ReactComponent as Back } from "../../assets/Back.svg";
+import { useNavigate } from "react-router-dom";
 
 const ChangedHeader = ({ type }) => {
+  const navigate = useNavigate();
+
+  const onClickBack = () => {
+    navigate(-1);
+  };
+
   return (
     <Header>
       <Container>
         <div>
-          <button>
+          <button type="button" onClick={onClickBack}>
             <Back />
           </button>
         </div>

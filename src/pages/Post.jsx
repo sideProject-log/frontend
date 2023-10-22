@@ -3,12 +3,16 @@ import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-import PostHeader from "../components/PostHeader";
+import PostHeader from "../components/PostHeader/PostHeader";
+
+const bgColor = ["#5B554E", "#7E7462", "#9F8268", "#837970"];
+const randomIndex = Math.floor(Math.random() * bgColor.length);
 
 const Post = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [isSubmit, setSubmit] = useState(false);
 
   const onTitleChange = (e) => {
     setTitle(e.target.value);
@@ -18,7 +22,11 @@ const Post = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("clicked");
+    if (isSubmit) {
+      return;
+    }
+
+    setSubmit(true);
     try {
       const response = await axios.post(
         "http://localhost:8080/api/record/post",
@@ -34,7 +42,7 @@ const Post = () => {
 
   return (
     <Container>
-      <BackGround>
+      <BackGround randIdx={randomIndex}>
         <PostHeader onClick={handleSubmit} />
 
         <InputField>
@@ -48,6 +56,9 @@ const Post = () => {
             value={content}
             onChange={onContentChange}
           ></ContentBox>
+          <PostBottom>
+            <TextNumber>{content.length}/500</TextNumber>
+          </PostBottom>
         </InputField>
       </BackGround>
     </Container>
@@ -55,9 +66,6 @@ const Post = () => {
 };
 
 export default Post;
-
-const bgColor = ["#5B554E", "#7E7462", "#9F8268", "#837970"];
-const randomIndex = Math.floor(Math.random() * bgColor.length);
 
 const Container = styled.div`
   display: flex;
@@ -68,7 +76,7 @@ const Container = styled.div`
 const BackGround = styled.div`
   width: 100%;
   min-height: 100vh;
-  background-color: ${bgColor[randomIndex]};
+  background-color: ${(props) => bgColor[props.randIdx]};
   padding-top: 50px;
 `;
 
@@ -122,4 +130,24 @@ const ContentBox = styled.textarea`
   &::placeholder {
     color: ${(props) => props.theme.font.text_disabled};
   }
+`;
+
+const PostBottom = styled.div`
+  display: flex;
+  width: 320px;
+  height: 36px;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+`;
+
+const TextNumber = styled.div`
+  /* Body/body-small */
+  font-family: Pretendard;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 160%; /* 22.4px */
+  letter-spacing: -0.2px;
+  color: ${(props) => props.theme.font.text_default};
 `;
