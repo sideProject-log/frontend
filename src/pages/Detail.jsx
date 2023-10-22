@@ -62,10 +62,15 @@ const Detail = () => {
   //   return;
   // }
 
+  const toggleStickersState = () => {
+    setShowStickers((prev) => !prev);
+    setIsClickedStickers((prev) => !prev);
+  };
   const onClickSticker = (e) => {
     const clickedEmoji = e.currentTarget.children[0].innerText;
     if (userCommentList.includes(clickedEmoji) === false) {
       setUserCommentList([...userCommentList, clickedEmoji]);
+      toggleStickersState();
     }
     // TODO: 이모지 댓글 API 요청
   };
@@ -75,8 +80,7 @@ const Detail = () => {
     // TODO: API 연결 후, 실패 응답시 다시 상태 변경
   };
   const onClickStickers = () => {
-    setShowStickers((prev) => !prev);
-    setIsClickedStickers((prev) => !prev);
+    toggleStickersState();
   };
 
   return (
@@ -228,7 +232,7 @@ const DetailContents = styled.div`
     color: rgb(255, 255, 255, 0.95);
   }
   .record-content {
-    min-height: 20rem;
+    height: 280px;
     line-height: 130%;
     p {
       /* word-wrap: break-word; */
