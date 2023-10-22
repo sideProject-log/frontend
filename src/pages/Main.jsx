@@ -24,7 +24,7 @@ const Main = () => {
     }
     const fetchData = async () => {
       try {
-        const response = await axios.get(apiUrl);
+        const response = await axios.get(apiUrl, { withCredentials: true });
         const data = response.data;
         console.log("records", data);
         setRecords(data);
