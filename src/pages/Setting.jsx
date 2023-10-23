@@ -13,7 +13,7 @@ const Setting = () => {
         const { data } = await requestIsLogin();
         const { result, user } = data;
         if (result === false) {
-          window.href.location = "/";
+          window.location.href = "/";
         } else {
           setUserInfo(user);
         }
