@@ -85,10 +85,17 @@ const Main = () => {
             ? records?.map((record, i) => (
                 <Card
                   key={`record-${i}`}
-                  image={record?.image}
-                  background={record.background}
+                  $background={record.background}
                   onClick={() => navigate(`/detail/${record.id}`)}
                 >
+                  {record.image && (
+                    <BackgroundImageContainer>
+                      <BackgroundImage
+                        src={record.image}
+                        alt="background-image"
+                      />
+                    </BackgroundImageContainer>
+                  )}
                   <Cover>
                     <BarWrapper>
                       <Bar>
@@ -159,13 +166,25 @@ const Card = styled.div`
   height: 520px;
   align-items: flex-start;
   ${(props) =>
-    props.image
-      ? `background-image: url(${props.image});`
-      : `background-color: ${props.background};`}
+    props.$background ? `background-color: ${props.$background};` : ""}
   background-size: cover;
   color: white;
   border-radius: 16px;
   cursor: pointer;
+`;
+
+const BackgroundImageContainer = styled.div`
+  position: relative;
+  background-position: center;
+`;
+
+const BackgroundImage = styled.img`
+  position: absolute;
+  width: 320px;
+  height: 520px;
+  object-fit: cover;
+  filter: brightness(60%);
+  border-radius: 16px;
 `;
 
 const Cover = styled.div`
@@ -174,6 +193,7 @@ const Cover = styled.div`
   align-items: flex-start;
   align-self: stretch;
   border-radius: 16px;
+  z-index: 10;
 `;
 
 const BarWrapper = styled.div`
@@ -293,6 +313,3 @@ const WriteButton = styled.div`
   box-sizing: content-box;
   z-index: 10;
 `;
-
-const currentDate = new Date();
-const createdAt = currentDate.toISOString();

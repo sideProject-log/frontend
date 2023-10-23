@@ -80,7 +80,9 @@ const Detail = () => {
   return (
     <Wrapper>
       <DetailHeader type="detail" />
-      {record.image === null || record.image === undefined ? (
+      {record.image === null ||
+      record.image === undefined ||
+      record.image.length === 0 ? (
         <BackgroundCard
           $background={
             bgColor[record.background] ? bgColor[record.background] : "#5B554E"
