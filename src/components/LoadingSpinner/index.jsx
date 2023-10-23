@@ -20,7 +20,7 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #7d7771;
+  background-color: #1c1e21;
 `;
 const Container = styled.div`
   width: 80%;
