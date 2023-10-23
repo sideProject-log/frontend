@@ -49,7 +49,7 @@ const Main = () => {
         const response = await axios.get(apiUrl, { withCredentials: true });
         const data = response.data;
         console.log("data", data);
-        setRecords(data.data);
+        setRecords(data.data.reverse());
 
         window.scrollTo({
           top: 0,
