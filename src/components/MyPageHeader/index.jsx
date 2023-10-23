@@ -5,7 +5,10 @@ import { ReactComponent as Logo } from "../../assets/Log.svg";
 const index = () => {
   return (
     <Header>
-      <Logo href="/main" />
+      <a href="/main">
+        <Logo />
+      </a>
+
       <a href="/setting">
         <Setting
           xmlns="http://www.w3.org/2000/svg"
