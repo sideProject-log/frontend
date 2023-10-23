@@ -1,9 +1,72 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SettingHeader from "../components/SettingHeader";
 import styled from "styled-components";
 import { ReactComponent as RightArrow } from "../assets/right_arrow.svg";
-import testProfileImage from "../assets/test_profile.jpg";
 import { ReactComponent as Add } from "../assets/add.svg";
+import { requestIsLogin } from "../apis/auth";
+
+const Setting = () => {
+  const [userInfo, setUserInfo] = useState(null);
+  useEffect(() => {
+    const fetchMyData = async () => {
+      try {
+        const { data } = await requestIsLogin();
+        const { result, user } = data;
+        if (result === false) {
+          window.location.href = "/";
+        } else {
+          setUserInfo(user);
+        }
+      } catch (error) {
+        console.error("API 호출 오류:", error);
+      }
+    };
+    fetchMyData();
+  }, []);
+
+  if (userInfo === null) {
+    return <div>loading...</div>;
+  }
+  return (
+    <>
+      <SettingHeader />
+      <Wrapper>
+        <Container>
+          <InfoContainer>
+            <div className="profile-image">
+              <ProfileImage src={userInfo.profile} />
+              <Add className="change-profile" />
+            </div>
+            <div className="user-info">
+              <UserInfoTab className="first">
+                <p>연동된 이메일</p>
+                {/* 추후 이메일로 변경해야함 */}
+                <p className="users">{userInfo.snsId}</p>
+              </UserInfoTab>
+              <UserInfoTab>
+                <p>닉네임</p>
+                <div className="users user-nickname">
+                  <p>{userInfo.username}</p>
+                  <button type="button">
+                    <RightArrow />
+                  </button>
+                </div>
+              </UserInfoTab>
+              <UserInfoTab className="last">
+                <p>로그아웃</p>
+              </UserInfoTab>
+            </div>
+          </InfoContainer>
+          <div className="delete-account">
+            <p>계정 삭제</p>
+          </div>
+        </Container>
+      </Wrapper>
+    </>
+  );
+};
+
+export default Setting;
 
 const Wrapper = styled.div`
   padding-top: 8rem;
@@ -103,44 +166,3 @@ const UserInfoTab = styled.div`
     align-items: center;
   }
 `;
-
-const Setting = () => {
-  return (
-    <>
-      <SettingHeader />
-      <Wrapper>
-        <Container>
-          <InfoContainer>
-            <div className="profile-image">
-              <ProfileImage src={testProfileImage} />
-              <Add className="change-profile" />
-            </div>
-            <div className="user-info">
-              <UserInfoTab className="first">
-                <p>연동된 이메일</p>
-                <p className="users">dbsfndl@naver.com</p>
-              </UserInfoTab>
-              <UserInfoTab>
-                <p>닉네임</p>
-                <div className="users user-nickname">
-                  <p>루이</p>
-                  <button type="button">
-                    <RightArrow />
-                  </button>
-                </div>
-              </UserInfoTab>
-              <UserInfoTab className="last">
-                <p>로그아웃</p>
-              </UserInfoTab>
-            </div>
-          </InfoContainer>
-          <div className="delete-account">
-            <p>계정 삭제</p>
-          </div>
-        </Container>
-      </Wrapper>
-    </>
-  );
-};
-
-export default Setting;
