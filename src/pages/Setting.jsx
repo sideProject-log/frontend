@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { ReactComponent as RightArrow } from "../assets/right_arrow.svg";
 import { ReactComponent as Add } from "../assets/add.svg";
 import { requestIsLogin } from "../apis/auth";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const Setting = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -25,7 +26,7 @@ const Setting = () => {
   }, []);
 
   if (userInfo === null) {
-    return <div>loading...</div>;
+    return <LoadingSpinner />;
   }
   return (
     <>
@@ -35,12 +36,13 @@ const Setting = () => {
           <InfoContainer>
             <div className="profile-image">
               <ProfileImage src={userInfo.profile} />
-              <Add className="change-profile" />
+              {/* TODO: 프로필 사진 변경 기능 보류*/}
+              <Add className="change-profile" style={{ display: "none" }} />
             </div>
             <div className="user-info">
               <UserInfoTab className="first">
                 <p>연동된 이메일</p>
-                {/* 추후 이메일로 변경해야함 */}
+                {/* TODO: 추후 이메일로 변경해야함 */}
                 <p className="users">{userInfo.snsId}</p>
               </UserInfoTab>
               <UserInfoTab>

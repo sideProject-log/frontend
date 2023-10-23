@@ -5,12 +5,15 @@ import { useParams } from "react-router-dom";
 import { registerComment } from "../apis/comment";
 import { getRecord } from "../apis/record";
 import { registerBookmark, removeBookmark } from "../apis/bookmark";
-import { convertDate, convertedCardColor } from "../utils/common";
+import { bgColor } from "../const/bgColor";
+import { convertDate } from "../utils/common";
 import { ReactComponent as Edit } from "../assets/edit.svg";
 import { ReactComponent as StickerOutline } from "../assets/sticker_outline.svg";
 import { ReactComponent as StickerColor } from "../assets/sticker_color.svg";
 import { ReactComponent as BookmarkOn } from "../assets/bookmark_on.svg";
 import { ReactComponent as BookmarkOff } from "../assets/bookmark_off.svg";
+import DefaultProfileImage from "../assets/profile_none.svg";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const username = "";
 
@@ -29,11 +32,12 @@ const Detail = () => {
   };
   const onClickSticker = async (e) => {
     const clickedEmoji = e.currentTarget.children[0].innerText;
-    const newComment = await registerComment(recordId, clickedEmoji);
-    console.log(newComment);
     if (userCommentList && userCommentList.includes(clickedEmoji) === false) {
       setUserCommentList([...userCommentList, clickedEmoji]);
     }
+    const newComment = await registerComment(recordId, clickedEmoji);
+    console.log(newComment);
+
     toggleStickersState();
   };
 
@@ -66,7 +70,11 @@ const Detail = () => {
   }, [recordId]);
 
   if (record === null) {
-    return <div>loading...</div>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return (
@@ -74,10 +82,8 @@ const Detail = () => {
       <DetailHeader type="detail" />
       {record.image === null || record.image === undefined ? (
         <BackgroundCard
-          background={
-            convertedCardColor[record.background]
-              ? convertedCardColor[record.background]
-              : record.background
+          $background={
+            bgColor[record.background] ? bgColor[record.background] : "#5B554E"
           }
         />
       ) : (
@@ -95,10 +101,17 @@ const Detail = () => {
             <div className="record-info">
               <div className="user-info">
                 <a href={`http://localhost:3000/my/userId`}>
-                  <ProfileImage
-                    src={record.profileImage}
-                    alt="user-profile-image"
-                  />
+                  {record.profileImage !== "" ? (
+                    <ProfileImage
+                      src={record.profileImage}
+                      alt="user-profile-image"
+                    />
+                  ) : (
+                    <ProfileImage
+                      src={DefaultProfileImage}
+                      alt="user-profile-image"
+                    />
+                  )}
                 </a>
                 <p>{`by ${record.writer}`}</p>
               </div>
@@ -129,8 +142,8 @@ const Detail = () => {
                   userCommentList.map((comment, index) => (
                     <CommentSticker
                       key={comment}
-                      len={userCommentList.length}
-                      idx={index}
+                      $length={userCommentList.length}
+                      $index={index}
                     >
                       {comment}
                     </CommentSticker>
@@ -167,7 +180,7 @@ const BackgroundCard = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: ${(props) => props.background};
+  background-color: ${(props) => props.$background};
   z-index: 1;
 `;
 
@@ -274,7 +287,7 @@ const UserInteractions = styled.div`
 const CommentSticker = styled.div`
   position: absolute;
   top: -1.3rem;
-  left: ${(props) => props.idx * 2}rem;
+  left: ${(props) => props.$index * 2}rem;
   background-color: white;
   width: 24px;
   height: 24px;
@@ -282,7 +295,7 @@ const CommentSticker = styled.div`
   line-height: 250%;
   border-radius: 20px;
   box-shadow: 2px 0px 2px 0px rgba(0, 0, 0, 0.25);
-  z-index: ${(props) => props.len - props.idx + 10};
+  z-index: ${(props) => props.$length - props.$index + 10};
 `;
 
 const StickerBalloon = styled.div`

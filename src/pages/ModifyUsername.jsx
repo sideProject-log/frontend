@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { requestIsLogin } from "../apis/auth";
 import ModifyUsernameHeader from "../components/ModifyUsernameHeader";
 import { ReactComponent as Reset } from "../assets/cancel.svg";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const ModifyUsername = () => {
   const [username, setUsername] = useState(null);
@@ -34,7 +35,11 @@ const ModifyUsername = () => {
   }, []);
 
   if (username === null) {
-    return <div>loading...</div>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
   return (
     <>
