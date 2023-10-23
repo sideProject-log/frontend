@@ -7,43 +7,55 @@ import Bg from "../assets/Background.png";
 
 const Intro = () => {
   return (
-    <Cover image={Bg}>
-      <Wrapper>
-        <Asset>
-          <Posting />
-        </Asset>
-        <TextWrapper>
-          <div>
-            <Bold>로그</Bold>
-            <BigText>를</BigText>
-          </div>
-          <BigText>기록해보세요</BigText>
-        </TextWrapper>
-      </Wrapper>
-      <LoginWrapper>
-        <KakaoLogin
-          onClick={async () => {
-            window.location.href = "http://localhost:8080/auth/kakao";
-          }}
-        >
-          <Kakao />
-          <SocialTitle>카카오톡으로 시작하기</SocialTitle>
-        </KakaoLogin>
-        <NaverLogin>
-          <Naver />
-          <SocialTitle style={{ color: "#FFF" }}>네이버로 시작하기</SocialTitle>
-        </NaverLogin>
-        <BottomText>기존 가입 경로를 통해 로그인 해주세요</BottomText>
-      </LoginWrapper>
-    </Cover>
+    <Container>
+      <Cover image={Bg}>
+        <Wrapper>
+          <Asset>
+            <Posting />
+          </Asset>
+          <TextWrapper>
+            <div>
+              <Bold>로그</Bold>
+              <BigText>를</BigText>
+            </div>
+            <BigText>기록해보세요</BigText>
+          </TextWrapper>
+        </Wrapper>
+        <LoginWrapper>
+          <KakaoLogin
+            onClick={async () => {
+              window.location.href = "http://localhost:8080/auth/kakao";
+            }}
+          >
+            <Kakao />
+            <SocialTitle>카카오톡으로 시작하기</SocialTitle>
+          </KakaoLogin>
+          <NaverLogin>
+            <Naver />
+            <SocialTitle style={{ color: "#FFF" }}>
+              네이버로 시작하기
+            </SocialTitle>
+          </NaverLogin>
+          <BottomText>기존 가입 경로를 통해 로그인 해주세요</BottomText>
+        </LoginWrapper>
+      </Cover>
+    </Container>
   );
 };
 
 export default Intro;
 
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  align-items: center;
+`;
+
 const Cover = styled.div`
   background: url(${(props) => props.image});
-  height: 100vh;
+  width: 360px;
+  height: 800px;
 `;
 
 const Asset = styled.div`
