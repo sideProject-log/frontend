@@ -46,7 +46,7 @@ const Post = () => {
 
   return (
     <Container>
-      <BackGround randIdx={randomIndex}>
+      <BackGround $randIdx={randomIndex}>
         <PostHeader onClick={handleSubmit} />
 
         <InputField>
@@ -80,7 +80,7 @@ const Container = styled.div`
 const BackGround = styled.div`
   width: 100%;
   min-height: 100vh;
-  background-color: ${(props) => bgColor[props.randIdx]};
+  background-color: ${(props) => bgColor[props.$randIdx]};
   padding-top: 50px;
 `;
 
