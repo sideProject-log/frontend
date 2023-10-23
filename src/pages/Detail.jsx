@@ -32,11 +32,12 @@ const Detail = () => {
   };
   const onClickSticker = async (e) => {
     const clickedEmoji = e.currentTarget.children[0].innerText;
-    const newComment = await registerComment(recordId, clickedEmoji);
-    console.log(newComment);
     if (userCommentList && userCommentList.includes(clickedEmoji) === false) {
       setUserCommentList([...userCommentList, clickedEmoji]);
     }
+    const newComment = await registerComment(recordId, clickedEmoji);
+    console.log(newComment);
+
     toggleStickersState();
   };
 
