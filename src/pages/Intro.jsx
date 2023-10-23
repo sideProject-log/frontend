@@ -40,7 +40,7 @@ const Intro = () => {
         <LoginWrapper>
           <KakaoLogin
             onClick={async () => {
-              window.location.href = "http://localhost:8080/auth/kakao";
+              window.location.href = `${process.env.REACT_APP_API_URL}/auth/kakao`;
             }}
           >
             <Kakao />

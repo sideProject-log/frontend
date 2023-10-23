@@ -33,7 +33,7 @@ const Post = () => {
     setSubmit(true);
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/record/post",
+        `${process.env.REACT_APP_API_URL}/api/record/post`,
         {
           title,
           content,

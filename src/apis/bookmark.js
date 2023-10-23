@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const registerBookmark = async (recordId) => {
   const response = await axios.post(
-    "http://localhost:8080/api/bookmark/register",
+    `${process.env.REACT_APP_API_URL}/api/bookmark/register`,
     {
       recordId,
     },
@@ -11,12 +11,10 @@ export const registerBookmark = async (recordId) => {
   return response;
 };
 
-export const removeBookmark = async (bookmarkId) => {
+export const removeBookmark = async (recordId) => {
   const response = await axios.delete(
-    "http://localhost:8080/api/bookmark/remove",
-    {
-      data: { bookmarkId },
-    },
+    `${process.env.REACT_APP_API_URL}/api/bookmark/delete/${recordId}`,
+
     { withCredentials: true }
   );
   return response;

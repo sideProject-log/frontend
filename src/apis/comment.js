@@ -3,7 +3,7 @@ import axios from "axios";
 export const registerComment = (recordId, emoji) => {
   console.log(emoji);
   const response = axios.post(
-    "http://localhost:8080/api/comments/register",
+    `${process.env.REACT_APP_API_URL}/api/comments/register`,
     {
       recordId,
       emoji,

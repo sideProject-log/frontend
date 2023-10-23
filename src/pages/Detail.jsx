@@ -46,7 +46,7 @@ const Detail = () => {
       const response = await registerBookmark(recordId);
       setBookmark(response.data.newBookmark.id);
     } else {
-      const response = await removeBookmark(bookmark);
+      const response = await removeBookmark(recordId);
       if (response.data.status === "ok") setBookmark(null);
     }
   };

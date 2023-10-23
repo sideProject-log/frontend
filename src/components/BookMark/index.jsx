@@ -23,7 +23,7 @@ const BookMark = ({ isMarked, recordId }) => {
 
     setIsSubmit(true);
     console.log("북마크 등록 중");
-    const apiUrl = "http://localhost:8080/api/bookmark/register";
+    const apiUrl = `${process.env.REACT_APP_API_URL}/api/bookmark/register`;
 
     try {
       const response = await axios.post(
@@ -51,7 +51,7 @@ const BookMark = ({ isMarked, recordId }) => {
 
     console.log("북마크 삭제 중");
 
-    const apiUrl = `http://localhost:8080/api/bookmark/delete/${recordId}`;
+    const apiUrl = `${process.env.REACT_APP_API_URL}/api/bookmark/delete/${recordId}`;
     try {
       const response = await axios.delete(apiUrl, { withCredentials: true });
       console.log("서버 응답:", response.data);

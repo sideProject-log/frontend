@@ -14,7 +14,7 @@ const MyPage = () => {
     const fetchData = async () => {
       try {
         const userResponse = await axios.get(
-          "http://localhost:8080/auth/isLogin",
+          `${process.env.REACT_APP_API_URL}/auth/isLogin`,
           { withCredentials: true }
         );
         if (!userResponse.data.result) {
@@ -25,7 +25,7 @@ const MyPage = () => {
         setUser(userData);
 
         const recordsResponse = await axios.get(
-          "http://localhost:8080/api/record/my",
+          `${process.env.REACT_APP_API_URL}/api/record/my`,
           { withCredentials: true }
         );
         const recordsData = recordsResponse.data.records;

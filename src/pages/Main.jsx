@@ -19,7 +19,7 @@ const Main = () => {
     const fetchData = async () => {
       try {
         const userResponse = await axios.get(
-          "http://localhost:8080/auth/isLogin",
+          `${process.env.REACT_APP_API_URL}/auth/isLogin`,
           { withCredentials: true }
         );
 
@@ -40,9 +40,9 @@ const Main = () => {
   useEffect(() => {
     let apiUrl;
     if (tab === "모든 로그") {
-      apiUrl = "http://localhost:8080/api/record/getAll";
+      apiUrl = `${process.env.REACT_APP_API_URL}/api/record/getAll`;
     } else {
-      apiUrl = "http://localhost:8080/api/user/bookmarks";
+      apiUrl = `${process.env.REACT_APP_API_URL}/api/user/bookmarks`;
     }
     const fetchData = async () => {
       try {
