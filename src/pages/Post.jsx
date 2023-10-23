@@ -34,7 +34,12 @@ const Post = () => {
     try {
       const response = await axios.post(
         "http://localhost:8080/api/record/post",
-        { title, content, background: bgColor[randomIndex], emoji: "😊" },
+        {
+          title,
+          content,
+          background: bgColor[randomIndex],
+          emoji: "😊",
+        },
         { withCredentials: true }
       );
       console.log("서버 응답:", response.data);

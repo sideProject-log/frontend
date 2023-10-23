@@ -1,5 +1,6 @@
 export const convertDate = (target) => {
   const targetDate = new Date(target);
+  targetDate.setHours(targetDate.getHours() - 9);
   const todayDate = new Date();
 
   const seconds = Math.floor(
