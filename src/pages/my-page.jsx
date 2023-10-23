@@ -58,31 +58,33 @@ const MyPage = () => {
           }}
         >
           {dates.map((date) => {
-            return <DateMenu value={date}>{date}</DateMenu>;
+            return (
+              <DateMenu key={date} value={date}>
+                {date}
+              </DateMenu>
+            );
           })}
         </DateSelect>
       </Diary>
-      <posts>
-        {records.map((record, i) => {
-          if (record.date != currentDate) {
-            return;
-          }
-
-          return (
-            <Post
-              id={record.id}
-              title={record.title}
-              desc={record.content}
-              day={record.day}
-              emojis={record.emojis}
-              bookmarks={record.bookmarks}
-              background={record.background}
-              user={user.username}
-              key={i}
-            />
-          );
-        })}
-      </posts>
+      <div>
+        {records
+          .filter((record) => record.date === currentDate)
+          .map((record) => {
+            return (
+              <Post
+                key={record.id}
+                id={record.id}
+                title={record.title}
+                desc={record.content}
+                day={record.day}
+                emojis={record.emojis}
+                bookmarks={record.bookmarks}
+                background={record.background}
+                user={user.username}
+              />
+            );
+          })}
+      </div>
     </Main>
   );
 };
