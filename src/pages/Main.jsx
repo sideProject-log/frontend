@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import BookMark from "../components/BookMark";
 import { ReactComponent as Emoji } from "../assets/emoji.svg";
 import { ReactComponent as Posting } from "../assets/posting.svg";
+import { convertDate } from "../utils/common";
 
 const Main = () => {
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ const Main = () => {
                           <RecordTitle>{record.title}</RecordTitle>
                           <RecordContent>{record.content}</RecordContent>
                         </Record>
-                        <SmallText>{record.created_at}</SmallText>
+                        <SmallText>{convertDate(record.created_at)}</SmallText>
                       </TextWrapper>
                     </Content>
                     <BarWrapper>

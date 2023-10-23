@@ -5,15 +5,23 @@ import { ReactComponent as BookMarkOff } from "../../assets/bookmark_off.svg";
 import axios from "axios";
 
 const BookMark = ({ isMarked, recordId }) => {
-  console.log("mak", isMarked);
   const [markState, setMarkState] = useState(isMarked);
+  const [isSubmit, setIsSubmit] = useState(false);
+  console.log("mak", recordId, markState);
 
   const toggleBookmark = async (e) => {
     e.stopPropagation();
 
-    let apiUrl;
-    if (!markState) {
-      apiUrl = "http://localhost:8080/api/bookmark/register";
+    if (isSubmit) {
+      return;
+    }
+
+    setIsSubmit(true);
+
+    console.log("북마크 등록 중");
+    let apiUrl = "http://localhost:8080/api/bookmark/register";
+    if (markState) {
+      apiUrl = "http://localhost:8080/api/bookmark/remove";
     }
     try {
       const response = await axios.post(
@@ -27,6 +35,7 @@ const BookMark = ({ isMarked, recordId }) => {
     }
 
     setMarkState(!markState); // 반대로 설정
+    setIsSubmit(false);
   };
 
   return (

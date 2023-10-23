@@ -22,6 +22,10 @@ const Post = () => {
   };
 
   const handleSubmit = async () => {
+    if (title.length == 0 || content.length == 0) {
+      alert("입력하고 글을 발행할 수 있어요!");
+      return;
+    }
     if (isSubmit) {
       return;
     }
