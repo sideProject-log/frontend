@@ -5,6 +5,7 @@ import MyPage from "./pages/my-page";
 import Detail from "./pages/Detail";
 import Post from "./pages/Post";
 import Setting from "./pages/Setting";
+import ModifyUsername from "./pages/ModifyUsername";
 
 function App() {
   const router = createBrowserRouter([
@@ -31,6 +32,10 @@ function App() {
     {
       path: "/setting",
       element: <Setting />,
+    },
+    {
+      path: "/modify/username",
+      element: <ModifyUsername />,
     },
   ]);
 
