@@ -27,7 +27,8 @@ const Main = () => {
         console.log("user", data);
         setUser(data);
         if (!userResponse.data.result) {
-          window.location.href = "/";
+          console.log("유저 정보 없음");
+          // window.location.href = "/";
         }
       } catch (error) {
         console.error("API 호출 오류:", error);
