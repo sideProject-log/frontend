@@ -47,7 +47,12 @@ const Setting = () => {
                 <p>닉네임</p>
                 <div className="users user-nickname">
                   <p>{userInfo.username}</p>
-                  <button type="button">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      window.location.href = "/modify/username";
+                    }}
+                  >
                     <RightArrow />
                   </button>
                 </div>
