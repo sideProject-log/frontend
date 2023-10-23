@@ -13,6 +13,7 @@ import { ReactComponent as StickerColor } from "../assets/sticker_color.svg";
 import { ReactComponent as BookmarkOn } from "../assets/bookmark_on.svg";
 import { ReactComponent as BookmarkOff } from "../assets/bookmark_off.svg";
 import DefaultProfileImage from "../assets/profile_none.svg";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const username = "";
 
@@ -68,7 +69,11 @@ const Detail = () => {
   }, [recordId]);
 
   if (record === null) {
-    return <div>loading...</div>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   return (

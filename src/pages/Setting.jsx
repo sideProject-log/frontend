@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { ReactComponent as RightArrow } from "../assets/right_arrow.svg";
 import { ReactComponent as Add } from "../assets/add.svg";
 import { requestIsLogin } from "../apis/auth";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const Setting = () => {
   const [userInfo, setUserInfo] = useState(null);
@@ -25,7 +26,7 @@ const Setting = () => {
   }, []);
 
   if (userInfo === null) {
-    return <div>loading...</div>;
+    return <LoadingSpinner />;
   }
   return (
     <>
