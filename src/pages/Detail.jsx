@@ -81,7 +81,7 @@ const Detail = () => {
       <DetailHeader type="detail" />
       {record.image === null || record.image === undefined ? (
         <BackgroundCard
-          background={
+          $background={
             bgColor[record.background] ? bgColor[record.background] : "#5B554E"
           }
         />
@@ -141,8 +141,8 @@ const Detail = () => {
                   userCommentList.map((comment, index) => (
                     <CommentSticker
                       key={comment}
-                      len={userCommentList.length}
-                      idx={index}
+                      $length={userCommentList.length}
+                      $index={index}
                     >
                       {comment}
                     </CommentSticker>
@@ -179,7 +179,7 @@ const BackgroundCard = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
-  background-color: ${(props) => props.background};
+  background-color: ${(props) => props.$background};
   z-index: 1;
 `;
 
@@ -286,7 +286,7 @@ const UserInteractions = styled.div`
 const CommentSticker = styled.div`
   position: absolute;
   top: -1.3rem;
-  left: ${(props) => props.idx * 2}rem;
+  left: ${(props) => props.$index * 2}rem;
   background-color: white;
   width: 24px;
   height: 24px;
@@ -294,7 +294,7 @@ const CommentSticker = styled.div`
   line-height: 250%;
   border-radius: 20px;
   box-shadow: 2px 0px 2px 0px rgba(0, 0, 0, 0.25);
-  z-index: ${(props) => props.len - props.idx + 10};
+  z-index: ${(props) => props.$length - props.$index + 10};
 `;
 
 const StickerBalloon = styled.div`
