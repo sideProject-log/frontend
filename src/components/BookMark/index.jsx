@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as BookMarkOn } from "../../assets/bookmark_on.svg";
 import { ReactComponent as BookMarkOff } from "../../assets/bookmark_off.svg";
@@ -7,9 +7,14 @@ import axios from "axios";
 const BookMark = ({ isMarked, recordId }) => {
   const [markState, setMarkState] = useState(isMarked);
   const [isSubmit, setIsSubmit] = useState(false);
-  console.log("mak", recordId, markState);
 
-  const toggleBookmark = async (e) => {
+  useEffect(() => {
+    setMarkState(isMarked);
+  }, [isMarked]);
+
+  console.log("mark", recordId, isMarked, markState);
+
+  const onRegisterBookmark = async (e) => {
     e.stopPropagation();
 
     if (isSubmit) {
@@ -17,12 +22,9 @@ const BookMark = ({ isMarked, recordId }) => {
     }
 
     setIsSubmit(true);
-
     console.log("북마크 등록 중");
-    let apiUrl = "http://localhost:8080/api/bookmark/register";
-    if (markState) {
-      apiUrl = "http://localhost:8080/api/bookmark/remove";
-    }
+    const apiUrl = "http://localhost:8080/api/bookmark/register";
+
     try {
       const response = await axios.post(
         apiUrl,
@@ -38,14 +40,37 @@ const BookMark = ({ isMarked, recordId }) => {
     setIsSubmit(false);
   };
 
+  const onDeleteBookmark = async (e) => {
+    e.stopPropagation();
+
+    if (isSubmit) {
+      return;
+    }
+
+    setIsSubmit(true);
+
+    console.log("북마크 삭제 중");
+
+    const apiUrl = `http://localhost:8080/api/bookmark/delete/${recordId}`;
+    try {
+      const response = await axios.delete(apiUrl, { withCredentials: true });
+      console.log("서버 응답:", response.data);
+    } catch (error) {
+      console.error("API 호출 오류:", error);
+    }
+
+    setMarkState(!markState); // 반대로 설정
+    setIsSubmit(false);
+  };
+
   return (
     <>
       {markState ? (
-        <Marked onClick={(e) => toggleBookmark(e)}>
+        <Marked onClick={(e) => onDeleteBookmark(e)}>
           <BookMarkOn />
         </Marked>
       ) : (
-        <UnMarked onClick={(e) => toggleBookmark(e)}>
+        <UnMarked onClick={(e) => onRegisterBookmark(e)}>
           <BookMarkOff />
         </UnMarked>
       )}

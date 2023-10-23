@@ -11,8 +11,31 @@ import { convertDate } from "../utils/common";
 const Main = () => {
   const navigate = useNavigate();
 
+  const [user, setUser] = useState([]);
   const [records, setRecords] = useState([]);
   const [tab, setTab] = useState("모든 로그");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userResponse = await axios.get(
+          "http://localhost:8080/auth/isLogin",
+          { withCredentials: true }
+        );
+
+        const data = userResponse.data.user;
+        console.log("user", data);
+        setUser(data);
+        if (!userResponse.data.result) {
+          window.location.href = "/";
+        }
+      } catch (error) {
+        console.error("API 호출 오류:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     let apiUrl;
@@ -27,6 +50,11 @@ const Main = () => {
         const data = response.data;
         console.log("data", data);
         setRecords(data.data);
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth", // 부드러운 스크롤 효과 적용 (선택 사항)
+        });
       } catch (error) {
         console.error("API 호출 오류:", error);
       }
@@ -48,7 +76,7 @@ const Main = () => {
 
   return (
     <BackGround>
-      <Header tab={tab} onClick={handleTabClick} />
+      <Header tab={tab} onClick={handleTabClick} profile={user.profile} />
       <Container>
         {/* Logs */}
         <Contents>
@@ -136,6 +164,7 @@ const Card = styled.div`
   background-size: cover;
   color: white;
   border-radius: 16px;
+  cursor: pointer;
 `;
 
 const Cover = styled.div`

@@ -4,24 +4,8 @@ import { ReactComponent as Posting } from "../assets/intro_posting.svg";
 import { ReactComponent as Kakao } from "../assets/kakao_login.svg";
 import { ReactComponent as Naver } from "../assets/naver_login.svg";
 import Bg from "../assets/Background.png";
-import { requestIsLogin } from "../apis/auth";
 
 const Intro = () => {
-  useEffect(() => {
-    const fetchMyData = async () => {
-      try {
-        const { data } = await requestIsLogin();
-        const { result } = data;
-        console.log(data);
-        if (result === true) {
-          window.location.href = "/main";
-        }
-      } catch (error) {
-        console.error("API 호출 오류:", error);
-      }
-    };
-    fetchMyData();
-  }, []);
   return (
     <Cover image={Bg}>
       <Wrapper>

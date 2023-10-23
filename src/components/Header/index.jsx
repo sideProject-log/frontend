@@ -4,13 +4,33 @@ import styled from "styled-components";
 import { ReactComponent as Logo } from "../../assets/Log.svg";
 import { ReactComponent as DefaultProFile } from "../../assets/profile_none.svg";
 
-const Header = ({ tab, onClick }) => {
+const Header = ({ tab, onClick, profile }) => {
   const navigate = useNavigate();
+
+  const onLogoClick = () => {
+    navigate("/main");
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // 부드러운 스크롤 효과 적용 (선택 사항)
+    });
+  };
+
   return (
     <Wrapper>
       <Container>
-        <Logo onClick={() => navigate("/main")} />
-        <DefaultProFile />
+        <Logo onClick={onLogoClick} style={{ cursor: "pointer" }} />
+        {profile ? (
+          <ProfileWrapper
+            onClick={() => navigate("/my")}
+            style={{
+              backgroundImage: `url(${profile})`,
+              backgroundSize: "contain",
+              cursor: "pointer",
+            }}
+          ></ProfileWrapper>
+        ) : (
+          <DefaultProFile style={{ cursor: "pointer" }} />
+        )}
         {/* MenuTab */}
       </Container>
       <Menu>
@@ -68,4 +88,12 @@ const MenuItem = styled.button`
     props.selected ? "rgba(255, 255, 255, 0.95)" : "rgba(255, 255, 255, 0.25)"};
   border-bottom: ${(props) => (props.selected ? "2px solid #ffffff" : "none")};
   transition: color 0.3s, border-bottom 0.3s;
+`;
+
+const ProfileWrapper = styled.div`
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 36px;
+  background: url(<path-to-image>), lightgray 50% / cover no-repeat;
 `;
