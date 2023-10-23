@@ -6,6 +6,7 @@ import { ReactComponent as Reset } from "../assets/cancel.svg";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 const ModifyUsername = () => {
+  const [originUsername, setOriginUsername] = useState(null);
   const [username, setUsername] = useState(null);
   const [showReset, setShowReset] = useState(false);
   const inputRef = useRef(null);
@@ -13,6 +14,13 @@ const ModifyUsername = () => {
   const onClickReset = () => {
     setUsername("");
     if (inputRef.current) inputRef.current.focus();
+  };
+
+  const checkUsername = () => {
+    if (originUsername === username) {
+      alert("이름이 바뀌지 않았어요!");
+      return;
+    }
   };
 
   console.log(username);
@@ -26,6 +34,7 @@ const ModifyUsername = () => {
           window.location.href = "/";
         } else {
           setUsername(user.username);
+          setOriginUsername(user.username);
         }
       } catch (error) {
         console.error("API 호출 오류:", error);
@@ -41,9 +50,10 @@ const ModifyUsername = () => {
       </div>
     );
   }
+
   return (
     <>
-      <ModifyUsernameHeader />
+      <ModifyUsernameHeader onClick={checkUsername} />
       <Wrapper>
         <Container>
           <InfoContainer>
@@ -53,6 +63,7 @@ const ModifyUsername = () => {
                 <input
                   type="text"
                   value={username}
+                  maxLength="14"
                   spellCheck="false"
                   onChange={(e) => setUsername(e.target.value)}
                   onFocus={() => setShowReset(true)}

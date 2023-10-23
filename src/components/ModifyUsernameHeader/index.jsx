@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as Back } from "../../assets/Back.svg";
 
-const ModifyUsernameHeader = ({ tab, onClick }) => {
+const ModifyUsernameHeader = ({ onClick }) => {
   const navigate = useNavigate();
   return (
     <Wrapper>
       <Container>
         <Back onClick={() => navigate(-1)} />
         <Complete>
-          <button className="complete" type="button">
+          <button className="complete" type="button" onClick={onClick}>
             <p className="button-name">확인</p>
           </button>
         </Complete>
