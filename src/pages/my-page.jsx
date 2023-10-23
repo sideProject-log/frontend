@@ -152,7 +152,7 @@ function Post(props) {
   return (
     <a href={"/detail/" + props.id} style={{ userSelect: "none" }}>
       <PostBackGround
-        background={
+        $background={
           !props.background.match(urlRegex) ? props.background : "#000000"
         }
       >
@@ -245,7 +245,7 @@ const PostBackGround = styled.div`
   position: relative;
   width: 85%;
   height: 180px;
-  background-color: ${(props) => props.background};
+  background-color: ${(props) => props.$background};
   overflow: hidden;
   background-size: cover;
   margin: 0 auto;
