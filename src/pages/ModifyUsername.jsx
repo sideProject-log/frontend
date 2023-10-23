@@ -4,11 +4,13 @@ import { requestIsLogin } from "../apis/auth";
 import ModifyUsernameHeader from "../components/ModifyUsernameHeader";
 import { ReactComponent as Reset } from "../assets/cancel.svg";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { requestModifyUsername } from "../apis/user";
 
 const ModifyUsername = () => {
   const [originUsername, setOriginUsername] = useState(null);
   const [username, setUsername] = useState(null);
   const [showReset, setShowReset] = useState(false);
+  const [modifyError, setModifyError] = useState("");
   const inputRef = useRef(null);
 
   const onClickReset = () => {
@@ -16,10 +18,22 @@ const ModifyUsername = () => {
     if (inputRef.current) inputRef.current.focus();
   };
 
-  const checkUsername = () => {
+  const checkUsername = async () => {
     if (originUsername === username) {
       alert("이름이 바뀌지 않았어요!");
       return;
+    }
+
+    try {
+      const result = await requestModifyUsername(username);
+      console.log(result);
+      if (result.data.status === "ok") {
+        window.location.href = "/setting";
+      } else {
+        setModifyError(result.data.message);
+      }
+    } catch (error) {
+      console.error("API 호출 오류:", error);
     }
   };
 
@@ -80,6 +94,9 @@ const ModifyUsername = () => {
                   </button>
                 )}
               </InputTab>
+              {modifyError.length > 0 && (
+                <div className="error-message">{modifyError}</div>
+              )}
             </div>
           </InfoContainer>
         </Container>
@@ -120,6 +137,13 @@ const InfoContainer = styled.div`
   .modify-username {
     font-size: 16px;
     font-weight: 300;
+  }
+
+  .error-message {
+    padding: 2rem 0;
+    font-size: 12px;
+    font-weight: 300;
+    color: #df3f3f;
   }
 `;
 
