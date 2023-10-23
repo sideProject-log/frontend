@@ -5,12 +5,14 @@ import { useParams } from "react-router-dom";
 import { registerComment } from "../apis/comment";
 import { getRecord } from "../apis/record";
 import { registerBookmark, removeBookmark } from "../apis/bookmark";
-import { convertDate, convertedCardColor } from "../utils/common";
+import { bgColor } from "../const/bgColor";
+import { convertDate } from "../utils/common";
 import { ReactComponent as Edit } from "../assets/edit.svg";
 import { ReactComponent as StickerOutline } from "../assets/sticker_outline.svg";
 import { ReactComponent as StickerColor } from "../assets/sticker_color.svg";
 import { ReactComponent as BookmarkOn } from "../assets/bookmark_on.svg";
 import { ReactComponent as BookmarkOff } from "../assets/bookmark_off.svg";
+import DefaultProfileImage from "../assets/profile_none.svg";
 
 const username = "";
 
@@ -75,9 +77,7 @@ const Detail = () => {
       {record.image === null || record.image === undefined ? (
         <BackgroundCard
           background={
-            convertedCardColor[record.background]
-              ? convertedCardColor[record.background]
-              : record.background
+            bgColor[record.background] ? bgColor[record.background] : "#5B554E"
           }
         />
       ) : (
@@ -95,10 +95,17 @@ const Detail = () => {
             <div className="record-info">
               <div className="user-info">
                 <a href={`http://localhost:3000/my/userId`}>
-                  <ProfileImage
-                    src={record.profileImage}
-                    alt="user-profile-image"
-                  />
+                  {record.profileImage !== "" ? (
+                    <ProfileImage
+                      src={record.profileImage}
+                      alt="user-profile-image"
+                    />
+                  ) : (
+                    <ProfileImage
+                      src={DefaultProfileImage}
+                      alt="user-profile-image"
+                    />
+                  )}
                 </a>
                 <p>{`by ${record.writer}`}</p>
               </div>
