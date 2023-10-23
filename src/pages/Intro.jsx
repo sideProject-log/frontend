@@ -53,9 +53,12 @@ const Container = styled.div`
 `;
 
 const Cover = styled.div`
-  background: url(${(props) => props.image});
-  width: 360px;
-  height: 800px;
+  background-image: url(${(props) => props.image});
+  width: 440px;
+  height: 900px;
+  background-size: cover; /* 배경 이미지를 컨테이너에 맞게 조절 */
+  background-position: center; /* 배경 이미지의 중앙 정렬 (선택 사항) */
+  background-repeat: no-repeat; /* 배경 이미지 반복 방지 (선택 사항) */
 `;
 
 const Asset = styled.div`
