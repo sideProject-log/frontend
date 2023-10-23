@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import DetailHeader from "../components/DetailHeader";
 import styled from "styled-components";
+import { useParams } from "react-router-dom";
+import { registerComment } from "../apis/comment";
+import { getRecord } from "../apis/record";
+import { registerBookmark, removeBookmark } from "../apis/bookmark";
 import { convertDate, convertedCardColor } from "../utils/common";
 import { ReactComponent as Edit } from "../assets/edit.svg";
 import { ReactComponent as StickerOutline } from "../assets/sticker_outline.svg";
 import { ReactComponent as StickerColor } from "../assets/sticker_color.svg";
 import { ReactComponent as BookmarkOn } from "../assets/bookmark_on.svg";
 import { ReactComponent as BookmarkOff } from "../assets/bookmark_off.svg";
-import testProfileImage from "../assets/test_profile.jpg";
-import { registerBookmark, removeBookmark } from "../apis/bookmark";
-import { useParams } from "react-router-dom";
-import { registerComment } from "../apis/comment";
-import { getRecord } from "../apis/record";
 
 const username = "";
 
@@ -97,7 +96,7 @@ const Detail = () => {
               <div className="user-info">
                 <a href={`http://localhost:3000/my/userId`}>
                   <ProfileImage
-                    src={testProfileImage}
+                    src={record.profileImage}
                     alt="user-profile-image"
                   />
                 </a>
