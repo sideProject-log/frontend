@@ -177,7 +177,7 @@ const AvatarContainer = styled.div`
 
 function Post(props) {
   const urlRegex =
-    /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+    /[-a-zA-Z0-9@:%._~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_.~#?&//=]*)?/gi;
   return (
     <a href={"/detail/" + props.id} style={{ userSelect: "none" }}>
       <PostBackGround
