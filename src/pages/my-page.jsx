@@ -34,7 +34,7 @@ const MyPage = () => {
 
         console.log("dates", dateData);
         console.log("records", recordsData);
-        setRecords(recordsData);
+        setRecords(recordsData.reverse());
         setDates(dateData);
         setCurrentDate(dateData[0]);
       } catch (error) {
@@ -45,30 +45,32 @@ const MyPage = () => {
   }, []);
 
   return (
-    <Container>
-      <Main>
-        <Header />
-        <div style={{ height: "90px" }}></div>
-        <Diary>
-          <AvatarContainer>
-            <Avatar src={user.profile} />
-          </AvatarContainer>
-          <DateSelect
-            onChange={(e) => {
-              setCurrentDate(e.target.value);
-            }}
-          >
-            {dates.map((date) => {
-              return (
-                <DateMenu key={date} value={date}>
-                  {date}
-                </DateMenu>
-              );
-            })}
-          </DateSelect>
-        </Diary>
-        <div>
-          {records
+
+               <Container>
+    <Main>
+      <Header />
+      <div style={{ height: "90px" }}></div>
+      <Diary>
+        <AvatarContainer>
+          <Avatar src={user.profile} />
+        </AvatarContainer>
+        <DateSelect
+          onChange={(e) => {
+            setCurrentDate(e.target.value);
+          }}
+        >
+          {dates.map((date) => {
+            return (
+              <DateMenu key={date} value={date}>
+                {date}
+              </DateMenu>
+            );
+          })}
+        </DateSelect>
+      </Diary>
+      <div>
+        {records.length > 0 ? (
+          records
             .filter((record) => record.date === currentDate)
             .map((record) => {
               return (
@@ -81,13 +83,21 @@ const MyPage = () => {
                   emojis={record.emojis}
                   bookmarks={record.bookmarks}
                   background={record.background}
+                  image={record.image}
                   user={user.username}
                 />
               );
-            })}
-        </div>
-      </Main>
+            })
+        ) : (
+          <EmptyLogMessage>
+            <p className="message">아직 내 로그가 없어요</p>
+          </EmptyLogMessage>
+        )}
+        {}
+      </div>
+    </Main>
     </Container>
+
   );
 };
 
@@ -110,6 +120,19 @@ const Diary = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+`;
+
+const EmptyLogMessage = styled.div`
+  width: 100%;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  p {
+    font-size: 16px;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.65);
+  }
 `;
 
 const DateSelect = styled.select`
@@ -148,8 +171,8 @@ const AvatarContainer = styled.div`
   width: fit-content;
   border: 2.5px solid transparent;
   border-radius: 50%;
-  background-image: linear-gradient(#fff, #fff),
-    linear-gradient(97deg, rgba(244, 172, 64, 1) 35%, rgba(85, 75, 79, 1) 73%);
+  /* background-image: linear-gradient(#fff, #fff), */
+  /* linear-gradient(97deg, rgba(244, 172, 64, 1) 35%, rgba(85, 75, 79, 1) 73%); */
   background-origin: border-box;
   background-clip: content-box, border-box;
 `;
@@ -164,11 +187,8 @@ function Post(props) {
           !props.background.match(urlRegex) ? props.background : "#000000"
         }
       >
-        {props.background.match(urlRegex) ? (
-          <PostBackImage image={props.background} />
-        ) : (
-          <></>
-        )}
+        {/* {props.background.match(urlRegex) ? ( */}
+        {props.image.length > 0 ? <PostBackImage image={props.image} /> : <></>}
         <PostTitleContainer>
           <div style={{ zIndex: 2 }}>
             <Title>
