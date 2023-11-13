@@ -1,35 +1,55 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { ReactComponent as Logo } from "../../assets/Log.svg";
 import { ReactComponent as SettingIcon } from "../../assets/setting.svg";
 
-const index = () => {
-  return (
-    <Header>
-      <a href="/main">
-        <Logo />
-      </a>
+const Header = ({ tab, onClick, profile }) => {
+  const navigate = useNavigate();
 
-      <a href="/setting">
-        <SettingIcon size={36} />
-      </a>
-    </Header>
+  const onLogoClick = () => {
+    navigate("/main");
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // 부드러운 스크롤 효과 적용 (선택 사항)
+    });
+  };
+
+  const onSettingClick = () => {
+    navigate("/setting");
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", // 부드러운 스크롤 효과 적용 (선택 사항)
+    });
+  };
+
+  return (
+    <Wrapper>
+      <Container>
+        <Logo onClick={onLogoClick} style={{ cursor: "pointer" }} />
+        <SettingIcon onClick={onSettingClick} style={{ cursor: "pointer" }} />
+      </Container>
+    </Wrapper>
   );
 };
 
-export default index;
+export default Header;
 
-const Header = styled.div`
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  background-color: ${(props) => props.theme.bg.bg_surface};
+  z-index: 100;
+`;
+
+const Container = styled.div`
   display: flex;
-  width: 100vw;
+  min-width: 414px;
   padding: 16px 20px;
   justify-content: space-between;
   align-items: center;
   z-index: 100;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 70px;
 `;
