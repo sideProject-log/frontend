@@ -29,64 +29,78 @@ const Setting = () => {
     return <LoadingSpinner />;
   }
   return (
-    <>
-      <SettingHeader />
-      <Wrapper>
-        <Container>
-          <InfoContainer>
-            <div className="profile-image">
-              <ProfileImage src={userInfo.profile} />
-              {/* TODO: 프로필 사진 변경 기능 보류*/}
-              <Add className="change-profile" style={{ display: "none" }} />
+    <Wrapper>
+      <Container>
+        <SettingHeader />
+        <ContentsWrapper>
+          <ContentsContainer>
+            <InfoContainer>
+              <div className="profile-image">
+                <ProfileImage src={userInfo.profile} />
+                {/* TODO: 프로필 사진 변경 기능 보류*/}
+                <Add className="change-profile" style={{ display: "none" }} />
+              </div>
+              <div className="user-info">
+                <UserInfoTab className="first">
+                  <p>연동된 이메일</p>
+                  {/* TODO: 추후 이메일로 변경해야함 */}
+                  <p className="users">{userInfo.snsId}</p>
+                </UserInfoTab>
+                <UserInfoTab>
+                  <p>닉네임</p>
+                  <div className="users user-nickname">
+                    <p>{userInfo.username}</p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        window.location.href = "/modify/username";
+                      }}
+                    >
+                      <RightArrow />
+                    </button>
+                  </div>
+                </UserInfoTab>
+                <UserInfoTab className="last">
+                  <p>로그아웃</p>
+                </UserInfoTab>
+              </div>
+            </InfoContainer>
+            <div className="delete-account">
+              <p>계정 삭제</p>
             </div>
-            <div className="user-info">
-              <UserInfoTab className="first">
-                <p>연동된 이메일</p>
-                {/* TODO: 추후 이메일로 변경해야함 */}
-                <p className="users">{userInfo.snsId}</p>
-              </UserInfoTab>
-              <UserInfoTab>
-                <p>닉네임</p>
-                <div className="users user-nickname">
-                  <p>{userInfo.username}</p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      window.location.href = "/modify/username";
-                    }}
-                  >
-                    <RightArrow />
-                  </button>
-                </div>
-              </UserInfoTab>
-              <UserInfoTab className="last">
-                <p>로그아웃</p>
-              </UserInfoTab>
-            </div>
-          </InfoContainer>
-          <div className="delete-account">
-            <p>계정 삭제</p>
-          </div>
-        </Container>
-      </Wrapper>
-    </>
+          </ContentsContainer>
+        </ContentsWrapper>
+      </Container>
+    </Wrapper>
   );
 };
 
 export default Setting;
 
 const Wrapper = styled.div`
-  padding-top: 8rem;
-  padding-bottom: 6rem;
-  width: 100dvw;
-  height: 100dvh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  background-color: #1c1e21;
 `;
 
 const Container = styled.div`
+  min-width: 414px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #1c1e21;
+`;
+
+const ContentsWrapper = styled.div`
+  padding-top: 8rem;
+  padding-bottom: 6rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ContentsContainer = styled.div`
   width: 320px;
   height: 95%;
   display: flex;
