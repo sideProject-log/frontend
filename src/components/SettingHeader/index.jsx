@@ -16,22 +16,22 @@ const SettingHeader = ({ tab, onClick }) => {
 
 export default SettingHeader;
 
-const Container = styled.div`
-  display: flex;
-  width: 100vw;
-  padding: 16px 20px;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 100;
-`;
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   background-color: ${(props) => props.theme.bg.bg_surface};
+  z-index: 100;
+`;
+
+const Container = styled.div`
+  position: fixed;
+  display: flex;
+  width: 414px;
+  padding: 16px 20px;
+  justify-content: space-between;
+  align-items: center;
   z-index: 100;
 `;
