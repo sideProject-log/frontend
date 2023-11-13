@@ -8,6 +8,8 @@ import { ReactComponent as Posting } from "../assets/posting.svg";
 import { ReactComponent as LeftArrowOn } from "../assets/ic-arrow-left-on.svg";
 import { ReactComponent as RightArrowOn } from "../assets/ic-arrow-right-on.svg";
 import { ReactComponent as RightArrowOff } from "../assets/ic-arrow-right-off.svg";
+import ModalPortal from "../components/ModalPortal";
+import DateSelectModal from "../components/DateSelectModal";
 
 const My = () => {
   const today = new Date();
@@ -16,7 +18,12 @@ const My = () => {
   const [dates, setDates] = useState([]);
   const [currentDate, setCurrentDate] = useState(todayDate);
   const [user, setUser] = useState({});
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+
+  const filteredRecords = records.filter(
+    (record) => record.date === currentDate
+  );
 
   const onClickWrite = (e) => {
     navigate("/post");
@@ -49,6 +56,10 @@ const My = () => {
     }
 
     setCurrentDate(`${year}년 ${month}월`);
+  };
+
+  const toggleShowModal = () => {
+    setShowModal((prev) => !prev);
   };
 
   useEffect(() => {
@@ -95,20 +106,9 @@ const My = () => {
           </AvatarContainer>
           <DateSelector>
             <LeftArrowOn onClick={onClickDecreaseMonth} />
-            <DateSelect
-              onChange={(e) => {
-                setCurrentDate(e.target.value);
-              }}
-              value={currentDate}
-            >
-              {dates.map((date) => {
-                return (
-                  <DateMenu key={date} value={date}>
-                    {date}
-                  </DateMenu>
-                );
-              })}
-            </DateSelect>
+            <DateSelectButton type="button" onClick={toggleShowModal}>
+              <p>{currentDate}</p>
+            </DateSelectButton>
             {currentDate === todayDate ? (
               <RightArrowOff />
             ) : (
@@ -117,25 +117,23 @@ const My = () => {
           </DateSelector>
         </Diary>
         <div>
-          {records.length > 0 ? (
-            records
-              .filter((record) => record.date === currentDate)
-              .map((record) => {
-                return (
-                  <Post
-                    key={record.id}
-                    id={record.id}
-                    title={record.title}
-                    desc={record.content}
-                    day={record.day}
-                    emojis={record.emojis}
-                    bookmarks={record.bookmarks}
-                    background={record.background}
-                    image={record.image}
-                    user={user.username}
-                  />
-                );
-              })
+          {filteredRecords.length > 0 ? (
+            filteredRecords.map((record) => {
+              return (
+                <Post
+                  key={record.id}
+                  id={record.id}
+                  title={record.title}
+                  desc={record.content}
+                  day={record.day}
+                  emojis={record.emojis}
+                  bookmarks={record.bookmarks}
+                  background={record.background}
+                  image={record.image}
+                  user={user.username}
+                />
+              );
+            })
           ) : (
             <EmptyLogMessage>
               <p className="message">아직 내 로그가 없어요</p>
@@ -147,6 +145,15 @@ const My = () => {
       <WriteButton onClick={(e) => onClickWrite(e)}>
         <Posting />
       </WriteButton>
+      {showModal && (
+        <ModalPortal>
+          <DateSelectModal
+            dates={dates}
+            onClose={toggleShowModal}
+            setDate={setCurrentDate}
+          />
+        </ModalPortal>
+      )}
     </Container>
   );
 };
@@ -191,29 +198,16 @@ const DateSelector = styled.div`
   justify-content: center;
 `;
 
-const DateSelect = styled.select`
-  &::-webkit-appearance {
-    border: none;
-  }
-  margin-top: 0.4rem;
-  width: 120px;
-  height: fit-content;
-  font-family: "Pretendard";
-  font-weight: 900;
-  color: #ffffffb7;
-  background-color: transparent;
-  border: none;
-  font-size: 20px;
-  outline: none;
-  border: none;
-`;
+const DateSelectButton = styled.button`
+  width: 140px;
 
-const DateMenu = styled.option`
-  &::selection {
-    background-color: black;
+  p {
+    margin-top: 0.4rem;
+    font-family: "Pretendard";
+    font-weight: 700;
+    font-size: 24px;
+    color: #ffffffb7;
   }
-  background-color: #141414;
-  border: none;
 `;
 
 const Avatar = styled.img`
