@@ -45,59 +45,57 @@ const MyPage = () => {
   }, []);
 
   return (
-
-               <Container>
-    <Main>
-      <Header />
-      <div style={{ height: "90px" }}></div>
-      <Diary>
-        <AvatarContainer>
-          <Avatar src={user.profile} />
-        </AvatarContainer>
-        <DateSelect
-          onChange={(e) => {
-            setCurrentDate(e.target.value);
-          }}
-        >
-          {dates.map((date) => {
-            return (
-              <DateMenu key={date} value={date}>
-                {date}
-              </DateMenu>
-            );
-          })}
-        </DateSelect>
-      </Diary>
-      <div>
-        {records.length > 0 ? (
-          records
-            .filter((record) => record.date === currentDate)
-            .map((record) => {
+    <Container>
+      <Main>
+        <Header />
+        <div style={{ height: "90px" }}></div>
+        <Diary>
+          <AvatarContainer>
+            <Avatar src={user.profile} />
+          </AvatarContainer>
+          <DateSelect
+            onChange={(e) => {
+              setCurrentDate(e.target.value);
+            }}
+          >
+            {dates.map((date) => {
               return (
-                <Post
-                  key={record.id}
-                  id={record.id}
-                  title={record.title}
-                  desc={record.content}
-                  day={record.day}
-                  emojis={record.emojis}
-                  bookmarks={record.bookmarks}
-                  background={record.background}
-                  image={record.image}
-                  user={user.username}
-                />
+                <DateMenu key={date} value={date}>
+                  {date}
+                </DateMenu>
               );
-            })
-        ) : (
-          <EmptyLogMessage>
-            <p className="message">아직 내 로그가 없어요</p>
-          </EmptyLogMessage>
-        )}
-        {}
-      </div>
-    </Main>
+            })}
+          </DateSelect>
+        </Diary>
+        <div>
+          {records.length > 0 ? (
+            records
+              .filter((record) => record.date === currentDate)
+              .map((record) => {
+                return (
+                  <Post
+                    key={record.id}
+                    id={record.id}
+                    title={record.title}
+                    desc={record.content}
+                    day={record.day}
+                    emojis={record.emojis}
+                    bookmarks={record.bookmarks}
+                    background={record.background}
+                    image={record.image}
+                    user={user.username}
+                  />
+                );
+              })
+          ) : (
+            <EmptyLogMessage>
+              <p className="message">아직 내 로그가 없어요</p>
+            </EmptyLogMessage>
+          )}
+          {}
+        </div>
+      </Main>
     </Container>
-
   );
 };
 

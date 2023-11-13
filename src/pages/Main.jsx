@@ -86,10 +86,17 @@ const Main = () => {
               ? records?.map((record, i) => (
                   <Card
                     key={`record-${i}`}
-                    image={record?.image}
-                    background={record.background}
+                    $background={record.background}
                     onClick={() => navigate(`/detail/${record.id}`)}
                   >
+                    {record.image && (
+                      <BackgroundImageContainer>
+                        <BackgroundImage
+                          src={record.image}
+                          alt="background-image"
+                        />
+                      </BackgroundImageContainer>
+                    )}
                     <Cover>
                       <BarWrapper>
                         <Bar>
