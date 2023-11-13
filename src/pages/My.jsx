@@ -7,9 +7,12 @@ import { useNavigate } from "react-router-dom";
 import { ReactComponent as Posting } from "../assets/posting.svg";
 
 const My = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
   const [records, setRecords] = useState([]);
   const [dates, setDates] = useState([]);
-  const [currentDate, setCurrentDate] = useState("");
+  const [currentDate, setCurrentDate] = useState(`${year}년 ${month}월`);
   const [user, setUser] = useState({});
   const navigate = useNavigate();
 
@@ -44,7 +47,6 @@ const My = () => {
         console.log("records", recordsData);
         setRecords(recordsData.reverse());
         setDates(dateData);
-        setCurrentDate(dateData[0]);
       } catch (error) {
         console.error("API 호출 오류:", error);
       }
@@ -68,7 +70,11 @@ const My = () => {
           >
             {dates.map((date) => {
               return (
-                <DateMenu key={date} value={date}>
+                <DateMenu
+                  key={date}
+                  value={date}
+                  selected={date === currentDate ? true : false}
+                >
                   {date}
                 </DateMenu>
               );
@@ -232,7 +238,7 @@ function Post(props) {
                 : props.desc}
             </Desc>
           </div>
-          <Date>{props.day}</Date>
+          <CreationDate>{props.day}</CreationDate>
         </PostTitleContainer>
         <PostInfoContainer>
           <StickerMain>
@@ -343,7 +349,7 @@ const Desc = styled.p`
   opacity: 80%;
 `;
 
-const Date = styled.h3`
+const CreationDate = styled.h3`
   font-weight: bold;
   font-size: 18px;
   background-color: #000000;
