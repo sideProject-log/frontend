@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as Back } from "../../assets/back_icon.svg";
-import { ReactComponent as Photo } from "../../assets/photo_icon.svg";
 import { ReactComponent as Check } from "../../assets/check_icon.svg";
+import FileInput from "../FileInput";
 
-const PostHeader = ({ onClick }) => {
+const PostHeader = ({ onClick, onImageClick }) => {
   const navigate = useNavigate();
 
   const onBackClick = () => {
@@ -19,9 +19,7 @@ const PostHeader = ({ onClick }) => {
       </button>
 
       <HeaderRightBox>
-        <button>
-          <Photo />
-        </button>
+        <FileInput onChange={onImageClick} />
         <button onClick={onClick}>
           <Check />
         </button>
