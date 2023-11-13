@@ -3,12 +3,20 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import Header from "../components/MyHeader";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ReactComponent as Posting } from "../assets/posting.svg";
 
 const My = () => {
   const [records, setRecords] = useState([]);
   const [dates, setDates] = useState([]);
   const [currentDate, setCurrentDate] = useState("");
   const [user, setUser] = useState({});
+  const navigate = useNavigate();
+
+  const onClickWrite = (e) => {
+    navigate("/post");
+    e.stopPropagation();
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,6 +103,9 @@ const My = () => {
           {}
         </div>
       </Main>
+      <WriteButton onClick={(e) => onClickWrite(e)}>
+        <Posting />
+      </WriteButton>
     </Container>
   );
 };
@@ -173,6 +184,27 @@ const AvatarContainer = styled.div`
   /* linear-gradient(97deg, rgba(244, 172, 64, 1) 35%, rgba(85, 75, 79, 1) 73%); */
   background-origin: border-box;
   background-clip: content-box, border-box;
+`;
+
+const WriteButton = styled.div`
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%); /* 가로 중앙 정렬을 위한 변환 */
+  display: inline-flex;
+  width: 48px;
+  height: 48px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 999px;
+  background: var(--theme-primary, #f4ac40);
+  /* shadow */
+  box-shadow: 0px 4px 10px 0px rgba(28, 30, 33, 0.8);
+  cursor: pointer;
+  box-sizing: content-box;
+  z-index: 10;
 `;
 
 function Post(props) {
