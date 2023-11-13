@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { css, keyframes } from "styled-components";
+
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -12,13 +13,36 @@ const Post = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [imgFile, setImgFile] = useState("");
+  const [isContentFull, setIsContentFull] = useState(false);
   const [isSubmit, setSubmit] = useState(false);
+
+  console.log("imgFile", imgFile);
 
   const onTitleChange = (e) => {
     setTitle(e.target.value);
   };
   const onContentChange = (e) => {
-    setContent(e.target.value);
+    if (e.target.value.length >= 501) {
+      setIsContentFull(true);
+    } else {
+      setIsContentFull(false);
+      setContent(e.target.value);
+    }
+  };
+
+  // 이미지 업로드 input의 onChange
+  const saveImgFile = (e) => {
+    const { files } = e.target;
+
+    if (!files || !files[0]) return;
+
+    const uploadImage = files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(uploadImage);
+    reader.onloadend = () => {
+      setImgFile(reader.result);
+    };
   };
 
   const handleSubmit = async () => {
@@ -37,6 +61,7 @@ const Post = () => {
         {
           title,
           content,
+          image: imgFile,
           background: bgColor[randomIndex],
           emoji: "😊",
         },
@@ -51,8 +76,8 @@ const Post = () => {
 
   return (
     <Container>
-      <BackGround $randIdx={randomIndex}>
-        <PostHeader onClick={handleSubmit} />
+      <BackGround imgFile={imgFile} $randIdx={randomIndex}>
+        <PostHeader onImageClick={saveImgFile} onClick={handleSubmit} />
 
         <InputField>
           <TitleBox
@@ -64,6 +89,7 @@ const Post = () => {
             placeholder="텍스트를 입력해주세요."
             value={content}
             onChange={onContentChange}
+            isContentFull={isContentFull}
           ></ContentBox>
           <PostBottom>
             <TextNumber>{content.length}/500</TextNumber>
@@ -78,21 +104,26 @@ export default Post;
 
 const Container = styled.div`
   display: flex;
-  max-width: 360px;
   justify-content: center;
 `;
 
 const BackGround = styled.div`
-  width: 100%;
+  min-width: 414px;
   min-height: 100vh;
-  background-color: ${(props) => bgColor[props.$randIdx]};
+  ${(props) =>
+    props.imgFile
+      ? `background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url(${props.imgFile});
+         background-size: cover;
+         background-position: center;
+        `
+      : `background-color: ${bgColor[props.$randIdx]};`}
   padding-top: 50px;
 `;
 
 const InputField = styled.div`
   display: flex;
   width: 100%;
-  padding: 8px 20px;
+  padding: 8px 24px;
   flex-direction: column;
   align-items: flex-start;
   gap: 16px;
@@ -139,6 +170,12 @@ const ContentBox = styled.textarea`
   &::placeholder {
     color: ${(props) => props.theme.font.text_disabled};
   }
+
+  ${(props) =>
+    props.isContentFull &&
+    css`
+      animation: ${shakeAnimation} 0.5s; /* 흔드는 애니메이션 설정 */
+    `}
 `;
 
 const PostBottom = styled.div`
@@ -159,4 +196,19 @@ const TextNumber = styled.div`
   line-height: 160%; /* 22.4px */
   letter-spacing: -0.2px;
   color: ${(props) => props.theme.font.text_default};
+`;
+
+const shakeAnimation = keyframes`
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
 `;

@@ -24,7 +24,7 @@ const Main = () => {
         );
 
         const data = userResponse.data.user;
-        console.log("user", data);
+        // console.log("user", data);
         setUser(data);
         if (!userResponse.data.result) {
           console.log("유저 정보 없음");
@@ -76,72 +76,74 @@ const Main = () => {
   };
 
   return (
-    <BackGround>
-      <Header tab={tab} onClick={handleTabClick} profile={user.profile} />
-      <Container>
-        {/* Logs */}
-        <Contents>
-          {records?.length !== 0
-            ? records?.map((record, i) => (
-                <Card
-                  key={`record-${i}`}
-                  $background={record.background}
-                  onClick={() => navigate(`/detail/${record.id}`)}
-                >
-                  {record.image && (
-                    <BackgroundImageContainer>
-                      <BackgroundImage
-                        src={record.image}
-                        alt="background-image"
-                      />
-                    </BackgroundImageContainer>
-                  )}
-                  <Cover>
-                    <BarWrapper>
-                      <Bar>
-                        <BookMark
-                          isMarked={record.bookmarked}
-                          recordId={record.id}
-                        />
-                      </Bar>
-                    </BarWrapper>
-                    <Content>
-                      <TextWrapper>
-                        <Record>
-                          <RecordTitle>{record.title}</RecordTitle>
-                          <RecordContent>{record.content}</RecordContent>
-                        </Record>
-                        <SmallText>{convertDate(record.created_at)}</SmallText>
-                      </TextWrapper>
-                    </Content>
-                    <BarWrapper>
-                      <BottomBar>
-                        <EmojiContainer>
-                          <Emoji />
-                          <SmallText>{record.emojiCount}</SmallText>
-                        </EmojiContainer>
-                        <SmallText>by {record.writer}</SmallText>
-                      </BottomBar>
-                    </BarWrapper>
-                  </Cover>
-                </Card>
-              ))
-            : null}
-        </Contents>
+    <MainContainer>
+      <BackGround>
+        <Header tab={tab} onClick={handleTabClick} profile={user.profile} />
+        <Container>
+          {/* Logs */}
+          <Contents>
+            {records?.length !== 0
+              ? records?.map((record, i) => (
+                  <Card
+                    key={`record-${i}`}
+                    image={record?.image}
+                    background={record.background}
+                    onClick={() => navigate(`/detail/${record.id}`)}
+                  >
+                    <Cover>
+                      <BarWrapper>
+                        <Bar>
+                          <BookMark
+                            isMarked={record.bookmarked}
+                            recordId={record.id}
+                          />
+                        </Bar>
+                      </BarWrapper>
+                      <Content>
+                        <TextWrapper>
+                          <Record>
+                            <RecordTitle>{record.title}</RecordTitle>
+                            <RecordContent>{record.content}</RecordContent>
+                          </Record>
+                          <SmallText>
+                            {convertDate(record.created_at)}
+                          </SmallText>
+                        </TextWrapper>
+                      </Content>
+                      <BarWrapper>
+                        <BottomBar>
+                          <EmojiContainer>
+                            <Emoji />
+                            <SmallText>{record.emojiCount}</SmallText>
+                          </EmojiContainer>
+                          <SmallText>by {record.writer}</SmallText>
+                        </BottomBar>
+                      </BarWrapper>
+                    </Cover>
+                  </Card>
+                ))
+              : null}
+          </Contents>
 
-        {/* 글작성 버튼 */}
-        <WriteButton onClick={(e) => onClickWrite(e)}>
-          <Posting />
-        </WriteButton>
-      </Container>
-    </BackGround>
+          {/* 글작성 버튼 */}
+          <WriteButton onClick={(e) => onClickWrite(e)}>
+            <Posting />
+          </WriteButton>
+        </Container>
+      </BackGround>
+    </MainContainer>
   );
 };
 
 export default Main;
 
+const MainContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 const BackGround = styled.div`
-  width: 100vw;
+  min-width: 414px;
   min-height: 100vh;
   background-color: ${(props) => props.theme.bg.bg_surface};
   padding-top: 100px;

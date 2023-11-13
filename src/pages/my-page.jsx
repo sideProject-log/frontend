@@ -45,6 +45,8 @@ const MyPage = () => {
   }, []);
 
   return (
+
+               <Container>
     <Main>
       <Header />
       <div style={{ height: "90px" }}></div>
@@ -94,10 +96,18 @@ const MyPage = () => {
         {}
       </div>
     </Main>
+    </Container>
+
   );
 };
 
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 const Main = styled.div`
+  min-width: 414px;
   font-family: "Pretendard";
   background-color: #1c1e21;
   min-height: 100vh;
