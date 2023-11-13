@@ -50,9 +50,18 @@ const Header = ({ tab, onClick, profile }) => {
 
 export default Header;
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  background-color: ${(props) => props.theme.bg.bg_surface};
+  z-index: 100;
+`;
+
 const Container = styled.div`
   display: flex;
-  width: 100vw;
+  min-width: 414px;
   padding: 16px 20px;
   justify-content: space-between;
   align-items: center;
@@ -60,20 +69,9 @@ const Container = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 `;
 
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: ${(props) => props.theme.bg.bg_surface};
-  z-index: 100;
-`;
-
 const Menu = styled.div`
   display: flex;
-  width: 100vw;
+  width: 100%;
   padding: 0px 20px;
 `;
 
