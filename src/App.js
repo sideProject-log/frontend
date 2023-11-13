@@ -1,7 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Intro from "./pages/Intro";
 import Main from "./pages/Main";
-import MyPage from "./pages/my-page";
+import My from "./pages/My";
 import Detail from "./pages/Detail";
 import Post from "./pages/Post";
 import Setting from "./pages/Setting";
@@ -19,7 +19,7 @@ function App() {
     },
     {
       path: "/my",
-      element: <MyPage />,
+      element: <My />,
     },
     {
       path: "/post",

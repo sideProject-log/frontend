@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import styled from "styled-components";
-import Header from "../components/MyPageHeader";
+import Header from "../components/MyHeader";
 import axios from "axios";
 
-const MyPage = () => {
+const My = () => {
   const [records, setRecords] = useState([]);
   const [dates, setDates] = useState([]);
   const [currentDate, setCurrentDate] = useState("");
@@ -346,4 +346,4 @@ const PostInfoText = styled.p`
   opacity: 70%;
 `;
 
-export default MyPage;
+export default My;
