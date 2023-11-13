@@ -45,51 +45,59 @@ const MyPage = () => {
   }, []);
 
   return (
-    <Main>
-      <Header />
-      <div style={{ height: "90px" }}></div>
-      <Diary>
-        <AvatarContainer>
-          <Avatar src={user.profile} />
-        </AvatarContainer>
-        <DateSelect
-          onChange={(e) => {
-            setCurrentDate(e.target.value);
-          }}
-        >
-          {dates.map((date) => {
-            return (
-              <DateMenu key={date} value={date}>
-                {date}
-              </DateMenu>
-            );
-          })}
-        </DateSelect>
-      </Diary>
-      <div>
-        {records
-          .filter((record) => record.date === currentDate)
-          .map((record) => {
-            return (
-              <Post
-                key={record.id}
-                id={record.id}
-                title={record.title}
-                desc={record.content}
-                day={record.day}
-                emojis={record.emojis}
-                bookmarks={record.bookmarks}
-                background={record.background}
-                user={user.username}
-              />
-            );
-          })}
-      </div>
-    </Main>
+    <Container>
+      <Main>
+        <Header />
+        <div style={{ height: "90px" }}></div>
+        <Diary>
+          <AvatarContainer>
+            <Avatar src={user.profile} />
+          </AvatarContainer>
+          <DateSelect
+            onChange={(e) => {
+              setCurrentDate(e.target.value);
+            }}
+          >
+            {dates.map((date) => {
+              return (
+                <DateMenu key={date} value={date}>
+                  {date}
+                </DateMenu>
+              );
+            })}
+          </DateSelect>
+        </Diary>
+        <div>
+          {records
+            .filter((record) => record.date === currentDate)
+            .map((record) => {
+              return (
+                <Post
+                  key={record.id}
+                  id={record.id}
+                  title={record.title}
+                  desc={record.content}
+                  day={record.day}
+                  emojis={record.emojis}
+                  bookmarks={record.bookmarks}
+                  background={record.background}
+                  user={user.username}
+                />
+              );
+            })}
+        </div>
+      </Main>
+    </Container>
   );
 };
 
+const Container = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 const Main = styled.div`
+  min-width: 414px;
   font-family: "Pretendard";
   background-color: #1c1e21;
   min-height: 100vh;
