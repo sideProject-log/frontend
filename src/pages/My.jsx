@@ -5,20 +5,50 @@ import Header from "../components/MyHeader";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ReactComponent as Posting } from "../assets/posting.svg";
+import { ReactComponent as LeftArrowOn } from "../assets/ic-arrow-left-on.svg";
+import { ReactComponent as RightArrowOn } from "../assets/ic-arrow-right-on.svg";
+import { ReactComponent as RightArrowOff } from "../assets/ic-arrow-right-off.svg";
 
 const My = () => {
   const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth() + 1;
+  const todayDate = `${today.getFullYear()}년 ${today.getMonth() + 1}월`;
   const [records, setRecords] = useState([]);
   const [dates, setDates] = useState([]);
-  const [currentDate, setCurrentDate] = useState(`${year}년 ${month}월`);
+  const [currentDate, setCurrentDate] = useState(todayDate);
   const [user, setUser] = useState({});
   const navigate = useNavigate();
 
   const onClickWrite = (e) => {
     navigate("/post");
     e.stopPropagation();
+  };
+
+  const onClickDecreaseMonth = () => {
+    let [year, month] = currentDate.split(" ");
+    year = +year.split("년")[0];
+    month = +month.split("월")[0];
+
+    month -= 1;
+    if (month <= 0) {
+      month = 12;
+      year -= 1;
+    }
+
+    setCurrentDate(`${year}년 ${month}월`);
+  };
+
+  const onClickIncreaseMonth = () => {
+    let [year, month] = currentDate.split(" ");
+    year = +year.split("년")[0];
+    month = +month.split("월")[0];
+
+    month += 1;
+    if (month > 12) {
+      month = 1;
+      year += 1;
+    }
+
+    setCurrentDate(`${year}년 ${month}월`);
   };
 
   useEffect(() => {
@@ -63,23 +93,28 @@ const My = () => {
           <AvatarContainer>
             <Avatar src={user.profile} />
           </AvatarContainer>
-          <DateSelect
-            onChange={(e) => {
-              setCurrentDate(e.target.value);
-            }}
-          >
-            {dates.map((date) => {
-              return (
-                <DateMenu
-                  key={date}
-                  value={date}
-                  selected={date === currentDate ? true : false}
-                >
-                  {date}
-                </DateMenu>
-              );
-            })}
-          </DateSelect>
+          <DateSelector>
+            <LeftArrowOn onClick={onClickDecreaseMonth} />
+            <DateSelect
+              onChange={(e) => {
+                setCurrentDate(e.target.value);
+              }}
+              value={currentDate}
+            >
+              {dates.map((date) => {
+                return (
+                  <DateMenu key={date} value={date}>
+                    {date}
+                  </DateMenu>
+                );
+              })}
+            </DateSelect>
+            {currentDate === todayDate ? (
+              <RightArrowOff />
+            ) : (
+              <RightArrowOn onClick={onClickIncreaseMonth} />
+            )}
+          </DateSelector>
         </Diary>
         <div>
           {records.length > 0 ? (
@@ -149,12 +184,19 @@ const EmptyLogMessage = styled.div`
     color: rgba(255, 255, 255, 0.65);
   }
 `;
+const DateSelector = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+`;
 
 const DateSelect = styled.select`
   &::-webkit-appearance {
     border: none;
   }
-  width: 150px;
+  margin-top: 0.4rem;
+  width: 120px;
   height: fit-content;
   font-family: "Pretendard";
   font-weight: 900;
