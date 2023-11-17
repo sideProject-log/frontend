@@ -66,59 +66,73 @@ const ModifyUsername = () => {
   }
 
   return (
-    <>
-      <ModifyUsernameHeader onClick={checkUsername} />
-      <Wrapper>
-        <Container>
-          <InfoContainer>
-            <p className="modify-username">닉네임 변경</p>
-            <div className="user-info">
-              <InputTab>
-                <input
-                  type="text"
-                  value={username}
-                  maxLength="14"
-                  spellCheck="false"
-                  onChange={(e) => setUsername(e.target.value)}
-                  onFocus={() => setShowReset(true)}
-                  onBlur={() => setShowReset(false)}
-                  ref={inputRef}
-                />
-                {showReset && (
-                  <button
-                    type="button"
-                    onMouseDown={(e) => e.preventDefault()}
-                    onClick={onClickReset}
-                  >
-                    <Reset />
-                  </button>
+    <Wrapper>
+      <Container>
+        <ModifyUsernameHeader onClick={checkUsername} />
+        <ContentsWrapper>
+          <ContentsContainer>
+            <InfoContainer>
+              <p className="modify-username">닉네임 변경</p>
+              <div className="user-info">
+                <InputTab>
+                  <input
+                    type="text"
+                    value={username}
+                    maxLength="14"
+                    spellCheck="false"
+                    onChange={(e) => setUsername(e.target.value)}
+                    onFocus={() => setShowReset(true)}
+                    onBlur={() => setShowReset(false)}
+                    ref={inputRef}
+                  />
+                  {showReset && (
+                    <button
+                      type="button"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={onClickReset}
+                    >
+                      <Reset />
+                    </button>
+                  )}
+                </InputTab>
+                {modifyError.length > 0 && (
+                  <div className="error-message">{modifyError}</div>
                 )}
-              </InputTab>
-              {modifyError.length > 0 && (
-                <div className="error-message">{modifyError}</div>
-              )}
-            </div>
-          </InfoContainer>
-        </Container>
-      </Wrapper>
-    </>
+              </div>
+            </InfoContainer>
+          </ContentsContainer>
+        </ContentsWrapper>
+      </Container>
+    </Wrapper>
   );
 };
 
 export default ModifyUsername;
 
 const Wrapper = styled.div`
-  padding-top: 8rem;
-  padding-bottom: 6rem;
-  width: 100dvw;
-  height: 100dvh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  background-color: #1c1e21;
 `;
 
 const Container = styled.div`
+  min-width: 414px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #1c1e21;
+`;
+
+const ContentsWrapper = styled.div`
+  padding-top: 8rem;
+  padding-bottom: 6rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ContentsContainer = styled.div`
   width: 320px;
   height: 95%;
   display: flex;

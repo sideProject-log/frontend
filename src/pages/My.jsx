@@ -1,14 +1,66 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import styled from "styled-components";
-import Header from "../components/MyPageHeader";
+import Header from "../components/MyHeader";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ReactComponent as Posting } from "../assets/posting.svg";
+import { ReactComponent as LeftArrowOn } from "../assets/ic-arrow-left-on.svg";
+import { ReactComponent as RightArrowOn } from "../assets/ic-arrow-right-on.svg";
+import { ReactComponent as RightArrowOff } from "../assets/ic-arrow-right-off.svg";
+import ModalPortal from "../components/ModalPortal";
+import DateSelectModal from "../components/DateSelectModal";
 
-const MyPage = () => {
+const My = () => {
+  const today = new Date();
+  const todayDate = `${today.getFullYear()}년 ${today.getMonth() + 1}월`;
   const [records, setRecords] = useState([]);
   const [dates, setDates] = useState([]);
-  const [currentDate, setCurrentDate] = useState("");
+  const [currentDate, setCurrentDate] = useState(todayDate);
   const [user, setUser] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+
+  const filteredRecords = records.filter(
+    (record) => record.date === currentDate
+  );
+
+  const onClickWrite = (e) => {
+    navigate("/post");
+    e.stopPropagation();
+  };
+
+  const onClickDecreaseMonth = () => {
+    let [year, month] = currentDate.split(" ");
+    year = +year.split("년")[0];
+    month = +month.split("월")[0];
+
+    month -= 1;
+    if (month <= 0) {
+      month = 12;
+      year -= 1;
+    }
+
+    setCurrentDate(`${year}년 ${month}월`);
+  };
+
+  const onClickIncreaseMonth = () => {
+    let [year, month] = currentDate.split(" ");
+    year = +year.split("년")[0];
+    month = +month.split("월")[0];
+
+    month += 1;
+    if (month > 12) {
+      month = 1;
+      year += 1;
+    }
+
+    setCurrentDate(`${year}년 ${month}월`);
+  };
+
+  const toggleShowModal = () => {
+    setShowModal((prev) => !prev);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,7 +88,6 @@ const MyPage = () => {
         console.log("records", recordsData);
         setRecords(recordsData.reverse());
         setDates(dateData);
-        setCurrentDate(dateData[0]);
       } catch (error) {
         console.error("API 호출 오류:", error);
       }
@@ -53,40 +104,36 @@ const MyPage = () => {
           <AvatarContainer>
             <Avatar src={user.profile} />
           </AvatarContainer>
-          <DateSelect
-            onChange={(e) => {
-              setCurrentDate(e.target.value);
-            }}
-          >
-            {dates.map((date) => {
-              return (
-                <DateMenu key={date} value={date}>
-                  {date}
-                </DateMenu>
-              );
-            })}
-          </DateSelect>
+          <DateSelector>
+            <LeftArrowOn onClick={onClickDecreaseMonth} />
+            <DateSelectButton type="button" onClick={toggleShowModal}>
+              <p>{currentDate}</p>
+            </DateSelectButton>
+            {currentDate === todayDate ? (
+              <RightArrowOff />
+            ) : (
+              <RightArrowOn onClick={onClickIncreaseMonth} />
+            )}
+          </DateSelector>
         </Diary>
         <div>
-          {records.length > 0 ? (
-            records
-              .filter((record) => record.date === currentDate)
-              .map((record) => {
-                return (
-                  <Post
-                    key={record.id}
-                    id={record.id}
-                    title={record.title}
-                    desc={record.content}
-                    day={record.day}
-                    emojis={record.emojis}
-                    bookmarks={record.bookmarks}
-                    background={record.background}
-                    image={record.image}
-                    user={user.username}
-                  />
-                );
-              })
+          {filteredRecords.length > 0 ? (
+            filteredRecords.map((record) => {
+              return (
+                <Post
+                  key={record.id}
+                  id={record.id}
+                  title={record.title}
+                  desc={record.content}
+                  day={record.day}
+                  emojis={record.emojis}
+                  bookmarks={record.bookmarks}
+                  background={record.background}
+                  image={record.image}
+                  user={user.username}
+                />
+              );
+            })
           ) : (
             <EmptyLogMessage>
               <p className="message">아직 내 로그가 없어요</p>
@@ -95,6 +142,18 @@ const MyPage = () => {
           {}
         </div>
       </Main>
+      <WriteButton onClick={(e) => onClickWrite(e)}>
+        <Posting />
+      </WriteButton>
+      {showModal && (
+        <ModalPortal>
+          <DateSelectModal
+            dates={dates}
+            onClose={toggleShowModal}
+            setDate={setCurrentDate}
+          />
+        </ModalPortal>
+      )}
     </Container>
   );
 };
@@ -132,29 +191,23 @@ const EmptyLogMessage = styled.div`
     color: rgba(255, 255, 255, 0.65);
   }
 `;
-
-const DateSelect = styled.select`
-  &::-webkit-appearance {
-    border: none;
-  }
-  width: 150px;
-  height: fit-content;
-  font-family: "Pretendard";
-  font-weight: 900;
-  color: #ffffffb7;
-  background-color: transparent;
-  border: none;
-  font-size: 20px;
-  outline: none;
-  border: none;
+const DateSelector = styled.div`
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
 `;
 
-const DateMenu = styled.option`
-  &::selection {
-    background-color: black;
+const DateSelectButton = styled.button`
+  width: 140px;
+
+  p {
+    margin-top: 0.4rem;
+    font-family: "Pretendard";
+    font-weight: 700;
+    font-size: 24px;
+    color: #ffffffb7;
   }
-  background-color: #141414;
-  border: none;
 `;
 
 const Avatar = styled.img`
@@ -175,9 +228,30 @@ const AvatarContainer = styled.div`
   background-clip: content-box, border-box;
 `;
 
+const WriteButton = styled.div`
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%); /* 가로 중앙 정렬을 위한 변환 */
+  display: inline-flex;
+  width: 48px;
+  height: 48px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: 999px;
+  background: var(--theme-primary, #f4ac40);
+  /* shadow */
+  box-shadow: 0px 4px 10px 0px rgba(28, 30, 33, 0.8);
+  cursor: pointer;
+  box-sizing: content-box;
+  z-index: 10;
+`;
+
 function Post(props) {
   const urlRegex =
-    /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+    /[-a-zA-Z0-9@:%._~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_.~#?&//=]*)?/gi;
   return (
     <a href={"/detail/" + props.id} style={{ userSelect: "none" }}>
       <PostBackGround
@@ -200,7 +274,7 @@ function Post(props) {
                 : props.desc}
             </Desc>
           </div>
-          <Date>{props.day}</Date>
+          <CreationDate>{props.day}</CreationDate>
         </PostTitleContainer>
         <PostInfoContainer>
           <StickerMain>
@@ -311,7 +385,7 @@ const Desc = styled.p`
   opacity: 80%;
 `;
 
-const Date = styled.h3`
+const CreationDate = styled.h3`
   font-weight: bold;
   font-size: 18px;
   background-color: #000000;
@@ -346,4 +420,4 @@ const PostInfoText = styled.p`
   opacity: 70%;
 `;
 
-export default MyPage;
+export default My;
