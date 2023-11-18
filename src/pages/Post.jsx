@@ -108,8 +108,8 @@ const Container = styled.div`
 `;
 
 const BackGround = styled.div`
-  min-width: 414px;
   min-height: 100vh;
+  width: 414px;
   ${(props) =>
     props.imgFile
       ? `background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url(${props.imgFile});
@@ -117,19 +117,18 @@ const BackGround = styled.div`
          background-position: center;
         `
       : `background-color: ${bgColor[props.$randIdx]};`}
-  padding-top: 50px;
 `;
 
 const InputField = styled.div`
   display: flex;
-  width: 100%;
-  padding: 8px 24px;
+  padding: 8px 20px;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 16px;
+  gap: 2rem;
+  align-items: center;
 `;
 
 const TitleBox = styled.input`
+  width: 320px;
   overflow: hidden;
   color: var(--font-text-lighten, rgba(255, 255, 255, 0.95));
   font-feature-settings: "clig" off, "liga" off;
@@ -144,7 +143,6 @@ const TitleBox = styled.input`
   letter-spacing: -0.3px;
   background: transparent; /* 배경을 투명하게 설정 */
   border: none; /* 테두리를 없앱니다. 필요에 따라 추가할 수 있습니다. */
-  width: 100%; /* 너비를 100%로 설정하여 부모 요소에 맞춥니다. */
   height: 40px;
   outline: none; /* 클릭 테두리 제거 */
   &::placeholder {
@@ -153,6 +151,7 @@ const TitleBox = styled.input`
 `;
 
 const ContentBox = styled.textarea`
+  width: 320px;
   color: var(--font-text-active, rgba(255, 255, 255, 0.85));
   font-feature-settings: "clig" off, "liga" off;
   /* Body/body-large */
@@ -164,7 +163,6 @@ const ContentBox = styled.textarea`
   letter-spacing: -0.3px;
   background: transparent; /* 배경을 투명하게 설정 */
   border: none; /* 테두리를 없앱니다. 필요에 따라 추가할 수 있습니다. */
-  width: 100%; /* 너비를 100%로 설정하여 부모 요소에 맞춥니다. */
   height: 260px;
   outline: none; /* 클릭 테두리 제거 */
   &::placeholder {
@@ -179,8 +177,8 @@ const ContentBox = styled.textarea`
 `;
 
 const PostBottom = styled.div`
-  display: flex;
   width: 320px;
+  display: flex;
   height: 36px;
   justify-content: flex-end;
   align-items: center;

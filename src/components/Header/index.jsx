@@ -16,53 +16,76 @@ const Header = ({ tab, onClick, profile }) => {
   };
 
   return (
-    <Wrapper>
-      <Container>
-        <Logo onClick={onLogoClick} style={{ cursor: "pointer" }} />
-        {profile ? (
-          <ProfileWrapper
-            onClick={() => navigate("/my")}
-            style={{
-              backgroundImage: `url(${profile})`,
-              backgroundSize: "contain",
-              cursor: "pointer",
-            }}
-          ></ProfileWrapper>
-        ) : (
-          <DefaultProFile style={{ cursor: "pointer" }} />
-        )}
-        {/* MenuTab */}
-      </Container>
-      <Menu>
-        <MenuItem
-          selected={tab === "모든 로그"}
-          onClick={() => onClick("모든 로그")}
-        >
-          모든로그
-        </MenuItem>
-        <MenuItem selected={tab === "북마크"} onClick={() => onClick("북마크")}>
-          북마크
-        </MenuItem>
-      </Menu>
-    </Wrapper>
+    <MainContainer>
+      <HeaderContainer>
+        <Wrapper>
+          <Flexbox>
+            <LogoContainer>
+              <Logo onClick={onLogoClick} style={{ cursor: "pointer" }} />
+              {profile ? (
+                <ProfileWrapper
+                  onClick={() => navigate("/my")}
+                  style={{
+                    backgroundImage: `url(${profile})`,
+                    backgroundSize: "contain",
+                    cursor: "pointer",
+                  }}
+                ></ProfileWrapper>
+              ) : (
+                <DefaultProFile style={{ cursor: "pointer" }} />
+              )}
+              {/* MenuTab */}
+            </LogoContainer>
+            <Menu>
+              <MenuItem
+                selected={tab === "모든 로그"}
+                onClick={() => onClick("모든 로그")}
+              >
+                모든 로그
+              </MenuItem>
+              <MenuItem
+                selected={tab === "북마크"}
+                onClick={() => onClick("북마크")}
+              >
+                북마크
+              </MenuItem>
+            </Menu>
+          </Flexbox>
+        </Wrapper>
+      </HeaderContainer>
+    </MainContainer>
   );
 };
 
 export default Header;
 
-const Wrapper = styled.div`
+const MainContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+`;
+
+const HeaderContainer = styled.div`
   position: fixed;
   top: 0;
   background-color: ${(props) => props.theme.bg.bg_surface};
+  max-width: 414px;
+  width: 100%;
   z-index: 100;
 `;
 
-const Container = styled.div`
+const Wrapper = styled.div`
   display: flex;
-  min-width: 414px;
-  padding: 16px 20px;
+  justify-content: center;
+  padding: 0 20px;
+`;
+
+const Flexbox = styled.div`
+  width: 320px;
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  padding: 16px 0px 16px 0px;
   justify-content: space-between;
   align-items: center;
   z-index: 100;
@@ -71,11 +94,11 @@ const Container = styled.div`
 
 const Menu = styled.div`
   display: flex;
-  width: 100%;
-  padding: 0px 20px;
+  width: 320px;
 `;
 
 const MenuItem = styled.button`
+  ${(props) => props.theme.font["button"]};
   display: flex;
   padding: 8px 0px;
   justify-content: center;

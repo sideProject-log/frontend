@@ -38,6 +38,70 @@ const theme = {
     text_default: "#FFFFFFA6",
     text_muted: "#FFFFFF73",
     text_disabled: "#FFFFFF40",
+
+    "title-extra": {
+      fontSize: "26px", // 단위(px) 추가
+      fontFamily: "Pretendard", // 오타 수정 및 따옴표 사용
+      fontWeight: "700", // 따옴표 사용
+      lineHeight: "32.50px", // 단위(px) 추가
+      letterSpacing: "-0.3px",
+    },
+
+    "title-large": {
+      fontSize: "22px", // 단위(px) 추가
+      fontFamily: "Pretendard", // 오타 수정 및 따옴표 사용
+      fontWeight: "700", // 따옴표 사용
+      lineHeight: "27.5px", // 단위(px) 추가
+      letterSpacing: "-0.3px",
+    },
+
+    "title-medium": {
+      fontSize: "20px", // 단위(px) 추가
+      fontFamily: "Pretendard", // 오타 수정 및 따옴표 사용
+      fontWeight: "700", // 따옴표 사용
+      lineHeight: "25px", // 단위(px) 추가
+      letterSpacing: "-0.3px",
+    },
+
+    "body-large": {
+      fontFamily: "Pretendard",
+      fontSize: "18px",
+      fontWeight: "300",
+      lineHeight: "160%",
+      letterSpacing: "-0.2px",
+    },
+
+    "body-large": {
+      fontFamily: "Pretendard",
+      fontSize: "16px",
+      fontWeight: "400",
+      lineHeight: "160%",
+      letterSpacing: "-0.2px",
+    },
+
+    "body-large": {
+      fontFamily: "Pretendard",
+      fontSize: "14px",
+      fontWeight: "300",
+      lineHeight: "160%",
+      letterSpacing: "-0.2px",
+    },
+
+    button: {
+      fontSize: "16px",
+      fontStyle: "normal",
+      fontWeight: "700",
+      lineHeight: "160%",
+      letterSpacing: "-0.2px",
+    },
+
+    caption: {
+      fontSize: "14px",
+      fontStyle: "normal",
+      fontWeight: "600",
+      lineHeight: "125%",
+      letterSpacing: "-0.1px",
+    },
   },
 };
 
