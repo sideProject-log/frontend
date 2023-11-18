@@ -200,11 +200,10 @@ const DetailWrapper = styled.div`
 
 const DetailContainer = styled.div`
   padding: 8px 20px;
-  width: 320px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 117px;
+  gap: 90px;
 `;
 
 const DetailContents = styled.div`
@@ -225,9 +224,11 @@ const DetailContents = styled.div`
     gap: 2rem;
   }
   .record-title {
+    width: 320px;
     ${(props) => props.theme.font["title-extra"]};
   }
   .record-content {
+    width: 320px;
     height: 350px;
     ${(props) => props.theme.font["body-large"]};
   }
