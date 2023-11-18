@@ -14,8 +14,7 @@ import { ReactComponent as BookmarkOn } from "../assets/bookmark_on.svg";
 import { ReactComponent as BookmarkOff } from "../assets/bookmark_off.svg";
 import DefaultProfileImage from "../assets/profile_none.svg";
 import LoadingSpinner from "../components/LoadingSpinner";
-
-const username = "";
+import { getUserInfo } from "../apis/getUserInfo";
 
 const Detail = () => {
   const stickerList = ["😍", "😆", "😋", "😔", "😭", "😡"];
@@ -24,6 +23,7 @@ const Detail = () => {
   const [isClickedStickers, setIsClickedStickers] = useState(false);
   const [bookmark, setBookmark] = useState(null);
   const [userCommentList, setUserCommentList] = useState(null);
+  const [username, setUsername] = useState("");
   const { recordId } = useParams();
 
   const toggleStickersState = () => {
@@ -58,6 +58,8 @@ const Detail = () => {
     const fetchRecord = async () => {
       try {
         const { data } = await getRecord(recordId);
+        const userData = await getUserInfo();
+        setUsername(userData.data.user.username);
         setRecord(data.record);
         setBookmark(data.record.bookmarkId);
         setUserCommentList(data.record.commentList);
@@ -79,7 +81,7 @@ const Detail = () => {
 
   return (
     <Wrapper>
-      <DetailHeader type="detail" />
+      <DetailHeader type='detail' />
       {record.image === null ||
       record.image === undefined ||
       record.image.length === 0 ? (
@@ -90,28 +92,28 @@ const Detail = () => {
         />
       ) : (
         <BackgroundImageContainer>
-          <BackgroundImage src={record.image} alt="background-image" />
+          <BackgroundImage src={record.image} alt='background-image' />
         </BackgroundImageContainer>
       )}
       <DetailWrapper>
         <DetailContainer>
           <DetailContents>
-            <div className="record-main">
-              <p className="record-title">{record.title}</p>
-              <p className="record-content">{record.content}</p>
+            <div className='record-main'>
+              <p className='record-title'>{record.title}</p>
+              <p className='record-content'>{record.content}</p>
             </div>
-            <div className="record-info">
-              <div className="user-info">
+            <div className='record-info'>
+              <div className='user-info'>
                 <a href={`http://localhost:3000/my/userId`}>
                   {record.profileImage !== "" ? (
                     <ProfileImage
                       src={record.profileImage}
-                      alt="user-profile-image"
+                      alt='user-profile-image'
                     />
                   ) : (
                     <ProfileImage
                       src={DefaultProfileImage}
-                      alt="user-profile-image"
+                      alt='user-profile-image'
                     />
                   )}
                 </a>
@@ -121,25 +123,25 @@ const Detail = () => {
             </div>
           </DetailContents>
           <UserInteractions>
-            <div className="user-sympathy">
+            <div className='user-sympathy'>
               {showStickers && (
                 <StickerBalloon>
                   {stickerList.map((sticker) => (
                     <button
                       key={sticker}
-                      className="sticker"
-                      type="button"
+                      className='sticker'
+                      type='button'
                       onClick={onClickSticker}
                     >
-                      <p className="sticker-emoji">{sticker}</p>
+                      <p className='sticker-emoji'>{sticker}</p>
                     </button>
                   ))}
                 </StickerBalloon>
               )}
-              <button type="button" onClick={onClickStickers}>
+              <button type='button' onClick={onClickStickers}>
                 {isClickedStickers ? <StickerColor /> : <StickerOutline />}
               </button>
-              <div className="comment-list">
+              <div className='comment-list'>
                 {userCommentList &&
                   userCommentList.map((comment, index) => (
                     <CommentSticker
@@ -156,7 +158,7 @@ const Detail = () => {
               {username === record.writer ? (
                 <Edit />
               ) : (
-                <button type="button" onClick={onClickBookmark}>
+                <button type='button' onClick={onClickBookmark}>
                   {bookmark !== null ? <BookmarkOn /> : <BookmarkOff />}
                 </button>
               )}
