@@ -70,8 +70,10 @@ const Container = styled.div`
 
 const Cover = styled.div`
   background-image: url(${(props) => props.image});
+  position: relative;
   width: 440px;
-  height: 900px;
+  height: 100vh;
+  max-height: 900px;
   background-size: cover; /* 배경 이미지를 컨테이너에 맞게 조절 */
   background-position: center; /* 배경 이미지의 중앙 정렬 (선택 사항) */
   background-repeat: no-repeat; /* 배경 이미지 반복 방지 (선택 사항) */
@@ -90,10 +92,11 @@ const Asset = styled.div`
 `;
 
 const Wrapper = styled.div`
+  position: absolute;
   display: flex;
   flex-direction: column;
-  padding-top: 180px;
-  margin-left: 30px;
+  top: 180px;
+  left: 30px;
 `;
 
 const TextWrapper = styled.div`
@@ -130,16 +133,21 @@ const BigText = styled.span`
 `;
 
 const LoginWrapper = styled.div`
+  width: 300px;
+  max-width: 440px;
+  position: absolute;
   display: flex;
   flex-direction: column;
-  margin-top: 150px;
   align-items: center;
   gap: 16px;
+  left: 50%;
+  bottom: 110px;
+  transform: translateX(-50%);
 `;
 
 const KakaoLogin = styled.div`
   display: flex;
-  width: 300px;
+  width: 100%;
   padding: 8px 16px;
   justify-content: space-between;
   align-items: center;
@@ -162,7 +170,7 @@ const SocialTitle = styled.div`
 
 const NaverLogin = styled.div`
   display: flex;
-  width: 300px;
+  width: 100%;
   padding: 8px 16px;
   justify-content: space-between;
   align-items: center;
