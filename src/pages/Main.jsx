@@ -76,69 +76,70 @@ const Main = () => {
   };
 
   return (
-    <MainContainer>
-      <BackGround>
-        <Header tab={tab} onClick={handleTabClick} profile={user.profile} />
-        <Container>
-          {/* Logs */}
-          <Contents>
-            {records?.length !== 0
-              ? records?.map((record, i) => (
-                  <Card
-                    key={`record-${i}`}
-                    $background={record.background}
-                    onClick={() => navigate(`/detail/${record.id}`)}
-                  >
-                    {record.image && (
-                      <BackgroundImageContainer>
-                        <BackgroundImage
-                          src={record.image}
-                          alt="background-image"
-                        />
-                      </BackgroundImageContainer>
-                    )}
-                    <Cover>
-                      <BarWrapper>
-                        <Bar>
-                          <BookMark
-                            isMarked={record.bookmarked}
-                            recordId={record.id}
+    <>
+      <Header tab={tab} onClick={handleTabClick} profile={user.profile} />
+      <MainContainer>
+        <BackGround>
+          <Container>
+            {/* Logs */}
+            <Contents>
+              {records?.length !== 0
+                ? records?.map((record, i) => (
+                    <Card
+                      key={`record-${i}`}
+                      $background={record.background}
+                      onClick={() => navigate(`/detail/${record.id}`)}
+                    >
+                      {record.image && (
+                        <BackgroundImageContainer>
+                          <BackgroundImage
+                            src={record.image}
+                            alt="background-image"
                           />
-                        </Bar>
-                      </BarWrapper>
-                      <Content>
-                        <TextWrapper>
-                          <Record>
-                            <RecordTitle>{record.title}</RecordTitle>
-                            <RecordContent>{record.content}</RecordContent>
-                          </Record>
-                          <SmallText>
-                            {convertDate(record.created_at)}
-                          </SmallText>
-                        </TextWrapper>
-                      </Content>
-                      <BarWrapper>
-                        <BottomBar>
-                          <EmojiContainer>
-                            <Emoji />
-                            <SmallText>{record.emojiCount}</SmallText>
-                          </EmojiContainer>
-                          <SmallText>by {record.writer}</SmallText>
-                        </BottomBar>
-                      </BarWrapper>
-                    </Cover>
-                  </Card>
-                ))
-              : null}
-          </Contents>
-
+                        </BackgroundImageContainer>
+                      )}
+                      <Cover>
+                        <BarWrapper>
+                          <Bar>
+                            <BookMark
+                              isMarked={record.bookmarked}
+                              recordId={record.id}
+                            />
+                          </Bar>
+                        </BarWrapper>
+                        <Content>
+                          <TextWrapper>
+                            <Record>
+                              <RecordTitle>{record.title}</RecordTitle>
+                              <RecordContent>{record.content}</RecordContent>
+                            </Record>
+                            <SmallText>
+                              {convertDate(record.created_at)}
+                            </SmallText>
+                          </TextWrapper>
+                        </Content>
+                        <BarWrapper>
+                          <BottomBar>
+                            <EmojiContainer>
+                              <Emoji />
+                              <SmallText>{record.emojiCount}</SmallText>
+                            </EmojiContainer>
+                            <SmallText>by {record.writer}</SmallText>
+                          </BottomBar>
+                        </BarWrapper>
+                      </Cover>
+                    </Card>
+                  ))
+                : null}
+            </Contents>
+          </Container>
           {/* 글작성 버튼 */}
           <WriteButton onClick={(e) => onClickWrite(e)}>
             <Posting />
           </WriteButton>
-        </Container>
-      </BackGround>
-    </MainContainer>
+        </BackGround>
+      </MainContainer>
+    </>
   );
 };
 
@@ -150,10 +151,10 @@ const MainContainer = styled.div`
 `;
 
 const BackGround = styled.div`
-  min-width: 414px;
+  width: 414px;
   min-height: 100vh;
   background-color: ${(props) => props.theme.bg.bg_surface};
-  padding-top: 100px;
+  padding-top: 127px;
 `;
 
 const Container = styled.div`
@@ -162,7 +163,7 @@ const Container = styled.div`
 
 const Contents = styled.div`
   display: flex;
-  padding: 20px;
+  padding: 0px 20px 20px 20px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -171,7 +172,7 @@ const Contents = styled.div`
 
 const Card = styled.div`
   display: flex;
-  width: 320px;
+  justify-content: center;
   height: 520px;
   align-items: flex-start;
   ${(props) =>
@@ -188,8 +189,8 @@ const BackgroundImageContainer = styled.div`
 `;
 
 const BackgroundImage = styled.img`
-  position: absolute;
   width: 320px;
+  position: absolute;
   height: 520px;
   object-fit: cover;
   filter: brightness(60%);
@@ -224,7 +225,6 @@ const Bar = styled.div`
 
 const Content = styled.div`
   display: flex;
-  width: 320px;
   padding: 0px 38px;
   flex-direction: column;
   justify-content: center;
@@ -305,8 +305,7 @@ const BottomBar = styled.div`
 const WriteButton = styled.div`
   position: fixed;
   bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%); /* 가로 중앙 정렬을 위한 변환 */
+  left: calc(50% - 34px);
   display: inline-flex;
   width: 48px;
   height: 48px;

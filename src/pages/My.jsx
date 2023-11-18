@@ -164,7 +164,7 @@ const Container = styled.div`
 `;
 
 const Main = styled.div`
-  min-width: 414px;
+  min-width: 360px;
   font-family: "Pretendard";
   background-color: #1c1e21;
   min-height: 100vh;

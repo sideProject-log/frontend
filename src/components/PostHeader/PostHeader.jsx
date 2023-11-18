@@ -14,16 +14,18 @@ const PostHeader = ({ onClick, onImageClick }) => {
 
   return (
     <Container>
-      <button onClick={onBackClick}>
-        <Back />
-      </button>
-
-      <HeaderRightBox>
-        <FileInput onChange={onImageClick} />
-        <button onClick={onClick}>
-          <Check />
+      <Wrapper>
+        <button style={{ padding: 0 }} onClick={onBackClick}>
+          <Back />
         </button>
-      </HeaderRightBox>
+
+        <HeaderRightBox>
+          <FileInput onChange={onImageClick} />
+          <button style={{ padding: 0 }} onClick={onClick}>
+            <Check />
+          </button>
+        </HeaderRightBox>
+      </Wrapper>
     </Container>
   );
 };
@@ -32,13 +34,20 @@ export default PostHeader;
 
 const Container = styled.div`
   display: flex;
-  padding: 16px 20px;
-  justify-content: space-between;
-  align-items: center;
+
+  justify-content: center;
 `;
 
 const HeaderRightBox = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+`;
+
+const Wrapper = styled.div`
+  width: 320px;
+  padding: 16px 0px;
+  height: 68px;
+  display: flex;
+  justify-content: space-between;
 `;

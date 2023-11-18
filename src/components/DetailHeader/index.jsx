@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { ReactComponent as More } from "../../assets/More.svg";
-import { ReactComponent as Back } from "../../assets/Back.svg";
+import { ReactComponent as Back } from "../../assets/back_icon.svg";
 import { useNavigate } from "react-router-dom";
 
 const DetailHeader = () => {
@@ -14,13 +14,11 @@ const DetailHeader = () => {
   return (
     <Header>
       <Container>
+        <button style={{ padding: 0 }} type="button" onClick={onClickBack}>
+          <Back />
+        </button>
         <div>
-          <button type="button" onClick={onClickBack}>
-            <Back />
-          </button>
-        </div>
-        <div>
-          <button>
+          <button style={{ padding: 0 }}>
             <More />
           </button>
         </div>
@@ -38,16 +36,15 @@ const Header = styled.header`
   right: 0;
   display: flex;
   width: 100dvw;
-  padding: 2.5rem 1.5rem;
   justify-content: center;
   align-items: center;
   z-index: 100;
 `;
 
 const Container = styled.div`
-  padding: 1rem 1%;
-  width: 100%;
-  max-width: 80rem;
+  padding: 16px 0;
+  width: 320px;
+  height: 68px;
   display: flex;
   justify-content: space-between;
   /* align-items: center; */

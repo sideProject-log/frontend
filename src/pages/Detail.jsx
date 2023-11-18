@@ -171,19 +171,16 @@ const Detail = () => {
 export default Detail;
 
 const Wrapper = styled.div`
-  position: relative;
-  top: 0;
-  left: 0;
-  width: 100dvw;
-  height: 100dvh;
+  display: flex;
+  justify-content: center;
 `;
 
 const BackgroundCard = styled.div`
   position: absolute;
-  width: 100%;
+  width: 414px;
   height: 100%;
   background-color: ${(props) => props.$background};
-  z-index: 1;
+  z-index: -1;
 `;
 
 const BackgroundImageContainer = styled.div`
@@ -198,35 +195,24 @@ const BackgroundImage = styled.img`
 `;
 
 const DetailWrapper = styled.div`
-  position: absolute;
-  padding-top: 4rem;
-  width: 100%;
-  max-width: 80rem;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 5;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  padding-top: 68px;
 `;
 
 const DetailContainer = styled.div`
-  padding: 0 2.5rem;
-  width: 100%;
-  height: 80%;
+  padding: 8px 20px;
+  width: 320px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 117px;
 `;
 
 const DetailContents = styled.div`
   display: flex;
   flex-direction: column;
+  min-height: 470px;
   gap: 4rem;
+
   p {
     color: rgb(255, 255, 255, 0.85);
     font-weight: 300;
@@ -239,19 +225,13 @@ const DetailContents = styled.div`
     gap: 2rem;
   }
   .record-title {
-    font-size: 2.5rem;
-    font-weight: 600;
-    color: rgb(255, 255, 255, 0.95);
+    ${(props) => props.theme.font["title-extra"]};
   }
   .record-content {
-    height: 280px;
-    line-height: 130%;
-    p {
-      /* word-wrap: break-word; */
-    }
+    height: 350px;
+    ${(props) => props.theme.font["body-large"]};
   }
   .record-info {
-    padding: 0 0.5rem;
     width: 100%;
     display: flex;
     justify-content: space-between;
