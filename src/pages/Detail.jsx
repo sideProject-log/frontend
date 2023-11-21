@@ -81,7 +81,7 @@ const Detail = () => {
 
   return (
     <Wrapper>
-      <DetailHeader type='detail' />
+      <DetailHeader type="detail" />
       {record.image === null ||
       record.image === undefined ||
       record.image.length === 0 ? (
@@ -92,28 +92,28 @@ const Detail = () => {
         />
       ) : (
         <BackgroundImageContainer>
-          <BackgroundImage src={record.image} alt='background-image' />
+          <BackgroundImage src={record.image} alt="background-image" />
         </BackgroundImageContainer>
       )}
       <DetailWrapper>
         <DetailContainer>
           <DetailContents>
-            <div className='record-main'>
-              <p className='record-title'>{record.title}</p>
-              <p className='record-content'>{record.content}</p>
+            <div className="record-main">
+              <p className="record-title">{record.title}</p>
+              <p className="record-content">{record.content}</p>
             </div>
-            <div className='record-info'>
-              <div className='user-info'>
+            <div className="record-info">
+              <div className="user-info">
                 <a href={`http://localhost:3000/my/userId`}>
                   {record.profileImage !== "" ? (
                     <ProfileImage
                       src={record.profileImage}
-                      alt='user-profile-image'
+                      alt="user-profile-image"
                     />
                   ) : (
                     <ProfileImage
                       src={DefaultProfileImage}
-                      alt='user-profile-image'
+                      alt="user-profile-image"
                     />
                   )}
                 </a>
@@ -123,25 +123,25 @@ const Detail = () => {
             </div>
           </DetailContents>
           <UserInteractions>
-            <div className='user-sympathy'>
+            <div className="user-sympathy">
               {showStickers && (
                 <StickerBalloon>
                   {stickerList.map((sticker) => (
                     <button
                       key={sticker}
-                      className='sticker'
-                      type='button'
+                      className="sticker"
+                      type="button"
                       onClick={onClickSticker}
                     >
-                      <p className='sticker-emoji'>{sticker}</p>
+                      <p className="sticker-emoji">{sticker}</p>
                     </button>
                   ))}
                 </StickerBalloon>
               )}
-              <button type='button' onClick={onClickStickers}>
+              <button type="button" onClick={onClickStickers}>
                 {isClickedStickers ? <StickerColor /> : <StickerOutline />}
               </button>
-              <div className='comment-list'>
+              <div className="comment-list">
                 {userCommentList &&
                   userCommentList.map((comment, index) => (
                     <CommentSticker
@@ -158,7 +158,7 @@ const Detail = () => {
               {username === record.writer ? (
                 <Edit />
               ) : (
-                <button type='button' onClick={onClickBookmark}>
+                <button type="button" onClick={onClickBookmark}>
                   {bookmark !== null ? <BookmarkOn /> : <BookmarkOff />}
                 </button>
               )}
@@ -173,6 +173,7 @@ const Detail = () => {
 export default Detail;
 
 const Wrapper = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
 `;
@@ -197,6 +198,7 @@ const BackgroundImage = styled.img`
 `;
 
 const DetailWrapper = styled.div`
+  position: absolute;
   padding-top: 68px;
 `;
 
