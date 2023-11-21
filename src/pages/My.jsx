@@ -199,7 +199,7 @@ const DateSelector = styled.div`
 `;
 
 const DateSelectButton = styled.button`
-  width: 140px;
+  width: 160px;
 
   p {
     margin-top: 0.4rem;
