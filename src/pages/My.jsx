@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import Header from "../components/MyHeader";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { ReactComponent as Posting } from "../assets/posting.svg";
 import { ReactComponent as LeftArrowOn } from "../assets/ic-arrow-left-on.svg";
 import { ReactComponent as RightArrowOn } from "../assets/ic-arrow-right-on.svg";
@@ -19,6 +19,8 @@ const My = () => {
   const [currentDate, setCurrentDate] = useState(todayDate);
   const [user, setUser] = useState({});
   const [showModal, setShowModal] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState(-1);
+  const { userId } = useParams();
   const navigate = useNavigate();
 
   const filteredRecords = records.filter(
@@ -69,36 +71,27 @@ const My = () => {
           `${process.env.REACT_APP_API_URL}/auth/isLogin`,
           { withCredentials: true }
         );
-        if (!userResponse.data.result) {
-          window.location.href = "/";
-        }
-        const userData = userResponse.data.user;
-
-        setUser(userData);
-
-        const recordsResponse = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/record/my`,
+        const { data } = await axios.get(
+          `${process.env.REACT_APP_API_URL}/api/record/find/${userId}`,
           { withCredentials: true }
         );
-        const recordsData = recordsResponse.data.records;
+        const { records: recordsData, dates: dateData, user: userData } = data;
 
-        const dateData = recordsResponse.data.dates;
-
-        console.log("dates", dateData);
-        console.log("records", recordsData);
+        setCurrentUserId(userResponse.data.user.id);
         setRecords(recordsData.reverse());
         setDates(dateData);
+        setUser(userData);
       } catch (error) {
         console.error("API 호출 오류:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [userId]);
 
   return (
     <Container>
       <Main>
-        <Header />
+        <Header isCurrentUser={currentUserId === user.id} />
         <div style={{ height: "90px" }}></div>
         <Diary>
           <AvatarContainer>
@@ -219,7 +212,11 @@ const Avatar = styled.img`
 `;
 
 const AvatarContainer = styled.div`
-  width: fit-content;
+  width: 85px;
+  height: 85px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 2.5px solid transparent;
   border-radius: 50%;
   /* background-image: linear-gradient(#fff, #fff), */

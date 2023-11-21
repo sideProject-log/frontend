@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { ReactComponent as Logo } from "../../assets/Log.svg";
 import { ReactComponent as SettingIcon } from "../../assets/setting.svg";
 
-const Header = ({ tab, onClick, profile }) => {
+const Header = ({ isCurrentUser }) => {
   const navigate = useNavigate();
 
   const onLogoClick = () => {
@@ -30,10 +30,12 @@ const Header = ({ tab, onClick, profile }) => {
           <Flexbox>
             <Container>
               <Logo onClick={onLogoClick} style={{ cursor: "pointer" }} />
-              <SettingIcon
-                onClick={onSettingClick}
-                style={{ cursor: "pointer" }}
-              />
+              {isCurrentUser && (
+                <SettingIcon
+                  onClick={onSettingClick}
+                  style={{ cursor: "pointer" }}
+                />
+              )}
             </Container>
           </Flexbox>
         </Wrapper>

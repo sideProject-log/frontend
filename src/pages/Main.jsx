@@ -77,7 +77,12 @@ const Main = () => {
 
   return (
     <>
-      <Header tab={tab} onClick={handleTabClick} profile={user.profile} />
+      <Header
+        tab={tab}
+        onClick={handleTabClick}
+        profile={user.profile}
+        userId={user.id}
+      />
       <MainContainer>
         <BackGround>
           <Container>
