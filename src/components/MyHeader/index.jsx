@@ -24,30 +24,53 @@ const Header = ({ tab, onClick, profile }) => {
   };
 
   return (
-    <Wrapper>
-      <Container>
-        <Logo onClick={onLogoClick} style={{ cursor: "pointer" }} />
-        <SettingIcon onClick={onSettingClick} style={{ cursor: "pointer" }} />
-      </Container>
-    </Wrapper>
+    <MyContainer>
+      <HeaderContainer>
+        <Wrapper>
+          <Flexbox>
+            <Container>
+              <Logo onClick={onLogoClick} style={{ cursor: "pointer" }} />
+              <SettingIcon
+                onClick={onSettingClick}
+                style={{ cursor: "pointer" }}
+              />
+            </Container>
+          </Flexbox>
+        </Wrapper>
+      </HeaderContainer>
+    </MyContainer>
   );
 };
 
 export default Header;
 
-const Wrapper = styled.div`
+const MyContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+`;
+
+const HeaderContainer = styled.div`
   position: fixed;
   top: 0;
   background-color: ${(props) => props.theme.bg.bg_surface};
+  max-width: 414px;
+  width: 100%;
   z-index: 100;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 0 20px;
+`;
+
+const Flexbox = styled.div`
+  width: 320px;
 `;
 
 const Container = styled.div`
   display: flex;
-  min-width: 414px;
-  padding: 16px 20px;
+  padding: 16px 0px 16px 0px;
   justify-content: space-between;
   align-items: center;
   z-index: 100;
