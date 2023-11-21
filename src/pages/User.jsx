@@ -11,7 +11,7 @@ import { ReactComponent as RightArrowOff } from "../assets/ic-arrow-right-off.sv
 import ModalPortal from "../components/ModalPortal";
 import DateSelectModal from "../components/DateSelectModal";
 
-const My = () => {
+const User = () => {
   const today = new Date();
   const todayDate = `${today.getFullYear()}년 ${today.getMonth() + 1}월`;
   const [records, setRecords] = useState([]);
@@ -150,6 +150,8 @@ const My = () => {
     </Container>
   );
 };
+
+export default User;
 
 const Container = styled.div`
   display: flex;
@@ -416,5 +418,3 @@ const PostInfoText = styled.p`
   font-weight: 400;
   opacity: 70%;
 `;
-
-export default My;
