@@ -181,7 +181,7 @@ const Wrapper = styled.div`
 const BackgroundCard = styled.div`
   position: absolute;
   width: 414px;
-  height: 100%;
+  height: 100dvh;
   background-color: ${(props) => props.$background};
   z-index: -1;
 `;
@@ -191,8 +191,8 @@ const BackgroundImageContainer = styled.div`
 `;
 
 const BackgroundImage = styled.img`
-  width: 100vw;
-  height: 100vh;
+  width: 414px;
+  height: 100dvh;
   object-fit: cover;
   filter: brightness(60%);
 `;
