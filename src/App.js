@@ -6,6 +6,8 @@ import Detail from "./pages/Detail";
 import Post from "./pages/Post";
 import Setting from "./pages/Setting";
 import ModifyUsername from "./pages/ModifyUsername";
+import ToastList from "./components/Toast/ToastList";
+import { RecoilRoot } from "recoil";
 
 function App() {
   const router = createBrowserRouter([
@@ -41,7 +43,10 @@ function App() {
 
   return (
     <div>
-      <RouterProvider router={router} />
+      <RecoilRoot>
+        <ToastList />
+        <RouterProvider router={router} />
+      </RecoilRoot>
     </div>
   );
 }
