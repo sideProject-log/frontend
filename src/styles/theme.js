@@ -71,7 +71,7 @@ const theme = {
       letterSpacing: "-0.2px",
     },
 
-    "body-large": {
+    "body-medium": {
       fontFamily: "Pretendard",
       fontSize: "16px",
       fontWeight: "400",
@@ -79,7 +79,7 @@ const theme = {
       letterSpacing: "-0.2px",
     },
 
-    "body-large": {
+    "body-small": {
       fontFamily: "Pretendard",
       fontSize: "14px",
       fontWeight: "300",
