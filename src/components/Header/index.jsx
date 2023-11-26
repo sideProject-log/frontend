@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { ReactComponent as Logo } from "../../assets/Log.svg";
 import { ReactComponent as DefaultProFile } from "../../assets/profile_none.svg";
 
-const Header = ({ tab, onClick, profile }) => {
+const Header = ({ tab, onClick, profile, userId }) => {
   const navigate = useNavigate();
 
   const onLogoClick = () => {
@@ -24,7 +24,7 @@ const Header = ({ tab, onClick, profile }) => {
               <Logo onClick={onLogoClick} style={{ cursor: "pointer" }} />
               {profile ? (
                 <ProfileWrapper
-                  onClick={() => navigate("/my")}
+                  onClick={() => navigate(`/${userId}`)}
                   style={{
                     backgroundImage: `url(${profile})`,
                     backgroundSize: "contain",

@@ -29,6 +29,8 @@ const GlobalStyles = createGlobalStyle`
     body{
         line-height: 1;
         font-family: "Pretendard-Regular";
+        overflow-x: hidden;
+        overflow-y: auto;
     }
     ol, ul{
         list-style: none;
