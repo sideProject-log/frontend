@@ -2,17 +2,17 @@ import styled, { keyframes } from "styled-components";
 
 export const StToastList = styled.div`
   left: 50%;
-  bottom: 0;
+  top: 10%;
   position: fixed;
   z-index: 1000;
-  display: flex; /* Flex 컨테이너 설정 */
-  justify-content: center; /* 가로 방향으로 중앙 정렬 */
+  display: flex;
+  justify-content: center;
 `;
 
 const fadeIn = keyframes`
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(-20px);
   }
   to {
     opacity: 1;
