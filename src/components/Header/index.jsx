@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { ReactComponent as Logo } from "../../assets/Log.svg";
 import { ReactComponent as DefaultProFile } from "../../assets/profile_none.svg";
 
-const Header = ({ tab, onClick, profile }) => {
+const Header = ({ tab, onClick, profile, userId }) => {
   const navigate = useNavigate();
 
   const onLogoClick = () => {
@@ -25,7 +25,7 @@ const Header = ({ tab, onClick, profile }) => {
               {profile !==
               "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg" ? (
                 <ProfileWrapper
-                  onClick={() => navigate("/my")}
+                  onClick={() => navigate(`/${userId}`)}
                   style={{
                     backgroundImage: `url(${profile})`,
                     backgroundSize: "contain",

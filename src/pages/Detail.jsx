@@ -18,8 +18,9 @@ import axios from "axios";
 import { ContentBox, PostBottom, TextNumber, TitleBox } from "./Post";
 import PostHeader from "../components/PostHeader/PostHeader";
 import { useToast } from "../hooks/useToast";
-
 const username = "";
+import { getUserInfo } from "../apis/getUserInfo";
+
 
 const Detail = () => {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ const Detail = () => {
   const [content, setContent] = useState("");
   const [imgFile, setImgFile] = useState("");
   const [isContentFull, setIsContentFull] = useState(false);
+  const [username, setUsername] = useState("");
 
   const toggleStickersState = () => {
     setShowStickers((prev) => !prev);
@@ -290,6 +292,7 @@ const Detail = () => {
 export default Detail;
 
 const Wrapper = styled.div`
+  position: relative;
   display: flex;
   justify-content: center;
 `;
@@ -297,7 +300,7 @@ const Wrapper = styled.div`
 const BackgroundCard = styled.div`
   position: absolute;
   width: 414px;
-  height: 100%;
+  height: 100dvh;
   background-color: ${(props) => props.$background};
   z-index: -1;
 `;
