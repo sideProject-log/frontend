@@ -7,6 +7,7 @@ import BookMark from "../components/BookMark";
 import { ReactComponent as Emoji } from "../assets/emoji.svg";
 import { ReactComponent as Posting } from "../assets/posting.svg";
 import { convertDate } from "../utils/common";
+import DefaultProfileImage from "../assets/profile_none.svg";
 
 const Main = () => {
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ const Main = () => {
       try {
         const response = await axios.get(apiUrl, { withCredentials: true });
         const data = response.data;
-        console.log("data", data);
+        // console.log("data", data);
         setRecords(data.data.reverse());
 
         window.scrollTo({
@@ -61,7 +62,7 @@ const Main = () => {
       }
     };
 
-    console.log(records);
+    // console.log(records);
 
     fetchData();
   }, [tab]);
@@ -124,7 +125,26 @@ const Main = () => {
                               <Emoji />
                               <SmallText>{record.emojiCount}</SmallText>
                             </EmojiContainer>
-                            <SmallText>by {record.writer}</SmallText>
+                            <ImgContainer
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/${record.user_id}`);
+                              }}
+                            >
+                              {record.user.profile !==
+                              "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg" ? (
+                                <ProfileImage
+                                  src={record.user.profile}
+                                  alt="user-profile"
+                                />
+                              ) : (
+                                <ProfileImage
+                                  src={DefaultProfileImage}
+                                  alt="user-profile-image"
+                                />
+                              )}
+                              <SmallText>by {record.writer}</SmallText>
+                            </ImgContainer>
                           </BottomBar>
                         </BarWrapper>
                       </Cover>
@@ -280,12 +300,7 @@ const RecordContent = styled.div`
 `;
 
 const SmallText = styled.span`
-  font-family: Pretendard;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 160%; /* 22.4px */
-  letter-spacing: -0.2px;
+  ${(props) => props.theme.font["body-small"]};
 `;
 
 const EmojiContainer = styled.div`
@@ -320,4 +335,16 @@ const WriteButton = styled.div`
   cursor: pointer;
   box-sizing: content-box;
   z-index: 10;
+`;
+
+const ProfileImage = styled.img`
+  margin-right: 5px;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 20px;
+`;
+
+const ImgContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
