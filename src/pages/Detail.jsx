@@ -18,9 +18,9 @@ import axios from "axios";
 import { ContentBox, PostBottom, TextNumber, TitleBox } from "./Post";
 import PostHeader from "../components/PostHeader/PostHeader";
 import { useToast } from "../hooks/useToast";
-const username = "";
 import { getUserInfo } from "../apis/getUserInfo";
 
+const username = "";
 
 const Detail = () => {
   const navigate = useNavigate();
