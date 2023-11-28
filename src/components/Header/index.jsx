@@ -33,7 +33,10 @@ const Header = ({ tab, onClick, profile, userId }) => {
                   }}
                 ></ProfileWrapper>
               ) : (
-                <DefaultProFile style={{ cursor: "pointer" }} />
+                <DefaultProFile
+                  style={{ cursor: "pointer" }}
+                  onClick={() => navigate(`/${userId}`)}
+                />
               )}
               {/* MenuTab */}
             </LogoContainer>
