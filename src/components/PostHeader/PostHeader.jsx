@@ -9,33 +9,49 @@ const PostHeader = ({ onClick, onImageClick }) => {
   const navigate = useNavigate();
 
   const onBackClick = () => {
-    navigate(-1); // 뒤로 가기
+    navigate(`/main`); // 뒤로 가기
   };
 
   return (
-    <Container>
-      <Wrapper>
-        <button style={{ padding: 0 }} onClick={onBackClick}>
-          <Back />
-        </button>
-
-        <HeaderRightBox>
-          <FileInput onChange={onImageClick} />
-          <button style={{ padding: 0 }} onClick={onClick}>
-            <Check />
+    <FlexCenter>
+      <div>
+        <Wrapper>
+          <button style={{ padding: 0 }} onClick={onBackClick}>
+            <Back />
           </button>
-        </HeaderRightBox>
-      </Wrapper>
-    </Container>
+
+          <HeaderRightBox>
+            <FileInput onChange={onImageClick} />
+            <button style={{ padding: 0 }} onClick={onClick}>
+              <Check />
+            </button>
+          </HeaderRightBox>
+        </Wrapper>
+      </div>
+    </FlexCenter>
   );
 };
 
 export default PostHeader;
 
+const FlexCenter = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  width: 100dvw;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+`;
+
 const Container = styled.div`
   display: flex;
-
-  justify-content: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  position: fixed;
 `;
 
 const HeaderRightBox = styled.div`

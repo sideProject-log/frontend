@@ -22,7 +22,8 @@ const Header = ({ tab, onClick, profile, userId }) => {
           <Flexbox>
             <LogoContainer>
               <Logo onClick={onLogoClick} style={{ cursor: "pointer" }} />
-              {profile ? (
+              {profile !==
+              "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg" ? (
                 <ProfileWrapper
                   onClick={() => navigate(`/${userId}`)}
                   style={{

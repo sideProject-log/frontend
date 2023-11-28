@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import DetailHeader from "../components/DetailHeader";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { registerComment } from "../apis/comment";
 import { getRecord } from "../apis/record";
 import { registerBookmark, removeBookmark } from "../apis/bookmark";
@@ -14,17 +14,32 @@ import { ReactComponent as BookmarkOn } from "../assets/bookmark_on.svg";
 import { ReactComponent as BookmarkOff } from "../assets/bookmark_off.svg";
 import DefaultProfileImage from "../assets/profile_none.svg";
 import LoadingSpinner from "../components/LoadingSpinner";
+import axios from "axios";
+import { ContentBox, PostBottom, TextNumber, TitleBox } from "./Post";
+import PostHeader from "../components/PostHeader/PostHeader";
+import { useToast } from "../hooks/useToast";
 import { getUserInfo } from "../apis/getUserInfo";
 
+const username = "";
+
 const Detail = () => {
+  const navigate = useNavigate();
+  const { recordId } = useParams();
+  const { fireToast } = useToast();
+
   const stickerList = ["😍", "😆", "😋", "😔", "😭", "😡"];
   const [record, setRecord] = useState(null);
   const [showStickers, setShowStickers] = useState(false);
   const [isClickedStickers, setIsClickedStickers] = useState(false);
   const [bookmark, setBookmark] = useState(null);
   const [userCommentList, setUserCommentList] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(-1);
+  const [onUpdate, setOnUpdate] = useState(false);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [imgFile, setImgFile] = useState("");
+  const [isContentFull, setIsContentFull] = useState(false);
   const [username, setUsername] = useState("");
-  const { recordId } = useParams();
 
   const toggleStickersState = () => {
     setShowStickers((prev) => !prev);
@@ -54,20 +69,88 @@ const Detail = () => {
     toggleStickersState();
   };
 
-  useEffect(() => {
-    const fetchRecord = async () => {
+  const onTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
+  const onContentChange = (e) => {
+    if (e.target.value.length >= 501) {
+      setIsContentFull(true);
+      fireToast({
+        content: "500자 이상 쓸 수 없습니다.",
+        bottom: "50",
+      });
+    } else {
+      setIsContentFull(false);
+      setContent(e.target.value);
+    }
+  };
+
+  // 이미지 업로드 input의 onChange
+  const saveImgFile = (e) => {
+    const { files } = e.target;
+
+    if (!files || !files[0]) return;
+
+    const uploadImage = files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(uploadImage);
+    reader.onloadend = () => {
+      setImgFile(reader.result);
+      setRecord((prev) => ({ ...prev, image: reader.result }));
+    };
+  };
+
+  const handleUpdate = () => {
+    const updateRecord = async () => {
       try {
-        const { data } = await getRecord(recordId);
-        const userData = await getUserInfo();
-        setUsername(userData.data.user.username);
-        setRecord(data.record);
-        setBookmark(data.record.bookmarkId);
-        setUserCommentList(data.record.commentList);
+        const res = await axios.patch(
+          `${process.env.REACT_APP_API_URL}/api/record/edit`,
+          {
+            postId: recordId,
+            title,
+            content,
+            // image: imgFile ?? "",
+          },
+          { withCredentials: true }
+        );
+
+        if (res.status === 201) {
+          fireToast({
+            content: "수정이 완료되었습니다.",
+            bottom: "50",
+          });
+        }
       } catch (error) {
         console.error("API 호출 오류:", error);
       }
     };
 
+    updateRecord();
+    setOnUpdate((prev) => !prev);
+
+    fetchRecord();
+  };
+
+  const fetchRecord = async () => {
+    try {
+      const userResponse = await axios.get(
+        `${process.env.REACT_APP_API_URL}/auth/isLogin`,
+        { withCredentials: true }
+      );
+
+      const { data } = await getRecord(recordId);
+      setCurrentUserId(userResponse.data.user.id);
+      setRecord(data.record);
+      setBookmark(data.record.bookmarkId);
+      setUserCommentList(data.record.commentList);
+      setTitle(data.record.title);
+      setContent(data.record.content);
+    } catch (error) {
+      console.error("API 호출 오류:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchRecord();
   }, [recordId]);
 
@@ -81,7 +164,17 @@ const Detail = () => {
 
   return (
     <Wrapper>
-      <DetailHeader type="detail" />
+      {!onUpdate ? (
+        <DetailHeader
+          postId={record.id}
+          isCurrentUser={currentUserId === record.user_id}
+          onUpdate={onUpdate}
+          setOnUpdate={setOnUpdate}
+          type="detail"
+        />
+      ) : (
+        <PostHeader onImageClick={saveImgFile} onClick={handleUpdate} />
+      )}
       {record.image === null ||
       record.image === undefined ||
       record.image.length === 0 ? (
@@ -99,24 +192,50 @@ const Detail = () => {
         <DetailContainer>
           <DetailContents>
             <div className="record-main">
-              <p className="record-title">{record.title}</p>
-              <p className="record-content">{record.content}</p>
+              {!onUpdate ? (
+                <>
+                  <p className="record-title">{record.title}</p>
+                  <p className="record-content">{record.content}</p>
+                </>
+              ) : (
+                <>
+                  <TitleBox
+                    placeholder="제목을 입력해주세요."
+                    value={title}
+                    onChange={onTitleChange}
+                  />
+                  <ContentBox
+                    placeholder="텍스트를 입력해주세요."
+                    value={content}
+                    onChange={onContentChange}
+                    isContentFull={isContentFull}
+                  />
+                  <PostBottom>
+                    <TextNumber>{content.length}/500</TextNumber>
+                  </PostBottom>
+                </>
+              )}
             </div>
             <div className="record-info">
-              <div className="user-info">
-                <a href={`http://localhost:3000/my/userId`}>
-                  {record.profileImage !== "" ? (
-                    <ProfileImage
-                      src={record.profileImage}
-                      alt="user-profile-image"
-                    />
-                  ) : (
-                    <ProfileImage
-                      src={DefaultProfileImage}
-                      alt="user-profile-image"
-                    />
-                  )}
-                </a>
+              <div
+                className="user-info"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/${record.user_id}`);
+                }}
+              >
+                {record.profileImage !==
+                "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg" ? (
+                  <ProfileImage
+                    src={record.profileImage}
+                    alt="user-profile-image"
+                  />
+                ) : (
+                  <ProfileImage
+                    src={DefaultProfileImage}
+                    alt="user-profile-image"
+                  />
+                )}
                 <p>{`by ${record.writer}`}</p>
               </div>
               <p>{convertDate(record.created_at)}</p>

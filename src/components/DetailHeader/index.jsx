@@ -1,14 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as More } from "../../assets/More.svg";
 import { ReactComponent as Back } from "../../assets/back_icon.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useToast } from "../../hooks/useToast";
+import axios from "axios";
 
-const DetailHeader = () => {
+const DetailHeader = ({ postId, isCurrentUser, onUpdate, setOnUpdate }) => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { fireToast } = useToast();
+  const [more, setMore] = useState(false);
 
   const onClickBack = () => {
-    navigate(-1);
+    navigate(`/main`);
+  };
+
+  const handleMore = () => {
+    setMore((prev) => !prev);
+  };
+
+  const handleCopyClipBoard = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      fireToast({ content: "공유 링크가 복사되었습니다." });
+      handleMore();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleDelete = async (postId) => {
+    console.log("postId", postId);
+    try {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/record/remove`, {
+        data: { postId },
+        withCredentials: true,
+      });
+      navigate("/main");
+    } catch (error) {
+      console.error("API 호출 오류", error);
+    }
   };
 
   return (
@@ -18,9 +50,49 @@ const DetailHeader = () => {
           <Back />
         </button>
         <div>
-          <button style={{ padding: 0 }}>
+          <button style={{ padding: 0 }} onClick={handleMore}>
             <More />
           </button>
+          {more && (
+            <MoreContainer>
+              <MoreButton
+                onClick={() =>
+                  handleCopyClipBoard(
+                    `${process.env.REACT_APP_URL}${location.pathname}`
+                  )
+                }
+              >
+                공유하기
+              </MoreButton>
+              {isCurrentUser ? (
+                <>
+                  <MoreButton
+                    onClick={() => {
+                      console.log("hi");
+                      setOnUpdate(true);
+                    }}
+                  >
+                    수정하기
+                  </MoreButton>
+                  <MoreButton onClick={() => handleDelete(postId)}>
+                    삭제하기
+                  </MoreButton>
+                </>
+              ) : (
+                <MoreButton
+                  onClick={() => {
+                    fireToast({
+                      content: "신고가 접수되었습니다.",
+                      bottom: "50",
+                    });
+                    handleMore();
+                  }}
+                >
+                  신고하기
+                </MoreButton>
+              )}
+            </MoreContainer>
+          )}
         </div>
       </Container>
     </Header>
@@ -42,10 +114,30 @@ const Header = styled.header`
 `;
 
 const Container = styled.div`
+  position: relative;
   padding: 16px 0;
   width: 320px;
   height: 68px;
   display: flex;
   justify-content: space-between;
   /* align-items: center; */
+`;
+
+const MoreContainer = styled.div`
+  top: 20px;
+  right: 24px;
+  position: absolute;
+  display: flex;
+  padding: 16px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  border-radius: 8px;
+  background: var(--background-bg-surface, #1c1e21);
+`;
+
+const MoreButton = styled.button`
+  color: #fff;
+  ${(props) => props.theme.font["body-medium"]};
 `;

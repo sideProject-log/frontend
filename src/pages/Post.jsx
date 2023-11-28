@@ -121,13 +121,13 @@ const BackGround = styled.div`
 
 const InputField = styled.div`
   display: flex;
-  padding: 8px 20px;
+  padding: 68px 20px 8px;
   flex-direction: column;
   gap: 2rem;
   align-items: center;
 `;
 
-const TitleBox = styled.input`
+export const TitleBox = styled.input`
   width: 320px;
   overflow: hidden;
   color: var(--font-text-lighten, rgba(255, 255, 255, 0.95));
@@ -150,7 +150,7 @@ const TitleBox = styled.input`
   }
 `;
 
-const ContentBox = styled.textarea`
+export const ContentBox = styled.textarea`
   width: 320px;
   color: var(--font-text-active, rgba(255, 255, 255, 0.85));
   font-feature-settings: "clig" off, "liga" off;
@@ -176,7 +176,7 @@ const ContentBox = styled.textarea`
     `}
 `;
 
-const PostBottom = styled.div`
+export const PostBottom = styled.div`
   width: 320px;
   display: flex;
   height: 36px;
@@ -185,7 +185,7 @@ const PostBottom = styled.div`
   gap: 16px;
 `;
 
-const TextNumber = styled.div`
+export const TextNumber = styled.div`
   /* Body/body-small */
   font-family: Pretendard;
   font-size: 14px;
