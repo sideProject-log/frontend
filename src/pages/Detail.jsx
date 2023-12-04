@@ -19,6 +19,8 @@ import { ContentBox, PostBottom, TextNumber, TitleBox } from "./Post";
 import PostHeader from "../components/PostHeader/PostHeader";
 import { useToast } from "../hooks/useToast";
 import { getUserInfo } from "../apis/getUserInfo";
+import ModalPortal from "../components/ModalPortal";
+import UserCommentListModal from "../components/UserCommentListModal";
 
 const username = "";
 
@@ -33,6 +35,7 @@ const Detail = () => {
   const [isClickedStickers, setIsClickedStickers] = useState(false);
   const [bookmark, setBookmark] = useState(null);
   const [userCommentList, setUserCommentList] = useState(null);
+  const [userCommentInfoList, setUserCommentInfoList] = useState([]);
   const [currentUserId, setCurrentUserId] = useState(-1);
   const [onUpdate, setOnUpdate] = useState(false);
   const [title, setTitle] = useState("");
@@ -40,6 +43,7 @@ const Detail = () => {
   const [imgFile, setImgFile] = useState("");
   const [isContentFull, setIsContentFull] = useState(false);
   const [username, setUsername] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const toggleStickersState = () => {
     setShowStickers((prev) => !prev);
@@ -139,12 +143,35 @@ const Detail = () => {
       );
 
       const { data } = await getRecord(recordId);
+      const { bookmarkId, commentList, commentInfoList, title, content } =
+        data.record;
+
+      // 중복 제거 함수
+      function removeDuplicates(comments) {
+        const uniqueComments = [];
+        const uniqueKeys = new Set();
+
+        comments.forEach((comment) => {
+          const key = `${comment.userId}_${comment.comment}`;
+
+          if (!uniqueKeys.has(key)) {
+            uniqueKeys.add(key);
+            uniqueComments.push(comment);
+          }
+        });
+
+        return uniqueComments;
+      }
+
+      const uniqueCommentInfos = removeDuplicates(commentInfoList);
+
       setCurrentUserId(userResponse.data.user.id);
       setRecord(data.record);
-      setBookmark(data.record.bookmarkId);
-      setUserCommentList(data.record.commentList);
-      setTitle(data.record.title);
-      setContent(data.record.content);
+      setBookmark(bookmarkId);
+      setUserCommentList(commentList);
+      setUserCommentInfoList(uniqueCommentInfos);
+      setTitle(title);
+      setContent(content);
     } catch (error) {
       console.error("API 호출 오류:", error);
     }
@@ -267,6 +294,7 @@ const Detail = () => {
                       key={comment}
                       $length={userCommentList.length}
                       $index={index}
+                      onClick={() => setShowModal((prev) => !prev)}
                     >
                       {comment}
                     </CommentSticker>
@@ -285,6 +313,14 @@ const Detail = () => {
           </UserInteractions>
         </DetailContainer>
       </DetailWrapper>
+      {showModal && (
+        <ModalPortal>
+          <UserCommentListModal
+            onClose={() => setShowModal(false)}
+            comments={userCommentInfoList}
+          />
+        </ModalPortal>
+      )}
     </Wrapper>
   );
 };
