@@ -4,13 +4,16 @@ import { ReactComponent as More } from "../../assets/More.svg";
 import { ReactComponent as Back } from "../../assets/back_icon.svg";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useToast } from "../../hooks/useToast";
-import axios from "axios";
+// import axios from "axios";
+import ModalPortal from "../ModalPortal";
+import DeleteModal from "../DeleteModal";
 
 const DetailHeader = ({ postId, isCurrentUser, onUpdate, setOnUpdate }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { fireToast } = useToast();
   const [more, setMore] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const onClickBack = () => {
     navigate(`/main`);
@@ -27,19 +30,6 @@ const DetailHeader = ({ postId, isCurrentUser, onUpdate, setOnUpdate }) => {
       handleMore();
     } catch (err) {
       console.log(err);
-    }
-  };
-
-  const handleDelete = async (postId) => {
-    console.log("postId", postId);
-    try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/api/record/remove`, {
-        data: { postId },
-        withCredentials: true,
-      });
-      navigate("/main");
-    } catch (error) {
-      console.error("API 호출 오류", error);
     }
   };
 
@@ -74,7 +64,12 @@ const DetailHeader = ({ postId, isCurrentUser, onUpdate, setOnUpdate }) => {
                   >
                     수정하기
                   </MoreButton>
-                  <MoreButton onClick={() => handleDelete(postId)}>
+                  <MoreButton
+                    onClick={() => {
+                      setMore();
+                      setShowModal((prev) => !prev);
+                    }}
+                  >
                     삭제하기
                   </MoreButton>
                 </>
@@ -95,6 +90,11 @@ const DetailHeader = ({ postId, isCurrentUser, onUpdate, setOnUpdate }) => {
           )}
         </div>
       </Container>
+      {showModal && (
+        <ModalPortal>
+          <DeleteModal onClose={() => setShowModal(false)} postId={postId} />
+        </ModalPortal>
+      )}
     </Header>
   );
 };
