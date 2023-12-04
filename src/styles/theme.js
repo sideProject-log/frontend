@@ -64,6 +64,7 @@ const theme = {
     },
 
     "body-large": {
+      color: "#fff",
       fontFamily: "Pretendard",
       fontSize: "18px",
       fontWeight: "300",

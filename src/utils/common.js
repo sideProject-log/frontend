@@ -7,7 +7,7 @@ export const convertDate = (target) => {
     (todayDate.getTime() - targetDate.getTime()) / 1000
   );
 
-  console.log("seconds", seconds);
+  // console.log("seconds", seconds);
 
   if (seconds > 24 * 60 * 60) {
     const month = targetDate.getMonth() + 1;
