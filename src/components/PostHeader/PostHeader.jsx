@@ -40,7 +40,7 @@ const FlexCenter = styled.div`
   left: 0;
   right: 0;
   display: flex;
-  width: 100dvw;
+  width: 100%;
   justify-content: center;
   align-items: center;
   z-index: 100;
