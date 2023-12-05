@@ -10,6 +10,7 @@ import { ReactComponent as RightArrowOn } from "../assets/ic-arrow-right-on.svg"
 import { ReactComponent as RightArrowOff } from "../assets/ic-arrow-right-off.svg";
 import ModalPortal from "../components/ModalPortal";
 import DateSelectModal from "../components/DateSelectModal";
+import DefaultProfileImage from "../assets/profile_none.svg";
 
 const User = () => {
   const today = new Date();
@@ -95,7 +96,14 @@ const User = () => {
         <div style={{ height: "90px" }}></div>
         <Diary>
           <AvatarContainer>
-            <Avatar src={user.profile} />
+            <Avatar
+              src={
+                user.profile !==
+                "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg"
+                  ? user.profile
+                  : DefaultProfileImage
+              }
+            />
           </AvatarContainer>
           <DateSelector>
             <LeftArrowOn onClick={onClickDecreaseMonth} />
