@@ -17,8 +17,6 @@ const Post = () => {
   const [isContentFull, setIsContentFull] = useState(false);
   const [isSubmit, setSubmit] = useState(false);
 
-  console.log("imgFile", imgFile);
-
   const onTitleChange = (e) => {
     setTitle(e.target.value);
   };
@@ -76,7 +74,10 @@ const Post = () => {
 
   return (
     <Container>
-      <BackGround imgFile={imgFile} $randIdx={randomIndex}>
+      <BackgroundWrapper>
+        <BackgroundImage imgFile={imgFile} $randIdx={randomIndex} />
+      </BackgroundWrapper>
+      <div>
         <PostHeader onImageClick={saveImgFile} onClick={handleSubmit} />
 
         <InputField>
@@ -95,7 +96,7 @@ const Post = () => {
             <TextNumber>{content.length}/500</TextNumber>
           </PostBottom>
         </InputField>
-      </BackGround>
+      </div>
     </Container>
   );
 };
@@ -107,14 +108,22 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const BackGround = styled.div`
+const BackgroundWrapper = styled.div`
+  position: absolute;
+  z-index: -1;
+  min-height: 100vh;
+  width: 414px;
+`;
+
+const BackgroundImage = styled.div`
   min-height: 100vh;
   width: 414px;
   ${(props) =>
     props.imgFile
-      ? `background-image: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)), url(${props.imgFile});
+      ? `background-image: url(${props.imgFile});
          background-size: cover;
          background-position: center;
+         filter: brightness(60%);
         `
       : `background-color: ${bgColor[props.$randIdx]};`}
 `;
@@ -130,17 +139,11 @@ const InputField = styled.div`
 export const TitleBox = styled.input`
   width: 320px;
   overflow: hidden;
-  color: var(--font-text-lighten, rgba(255, 255, 255, 0.95));
   font-feature-settings: "clig" off, "liga" off;
   text-overflow: ellipsis;
 
-  /* Title/title-extra */
-  font-family: Pretendard;
-  font-size: 26px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 125%; /* 32.5px */
-  letter-spacing: -0.3px;
+  color: white;
+  ${(props) => props.theme.font["title-extra"]};
   background: transparent; /* 배경을 투명하게 설정 */
   border: none; /* 테두리를 없앱니다. 필요에 따라 추가할 수 있습니다. */
   height: 40px;
@@ -152,15 +155,10 @@ export const TitleBox = styled.input`
 
 export const ContentBox = styled.textarea`
   width: 320px;
-  color: var(--font-text-active, rgba(255, 255, 255, 0.85));
   font-feature-settings: "clig" off, "liga" off;
   /* Body/body-large */
-  font-family: Pretendard;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 125%; /* 22.5px */
-  letter-spacing: -0.3px;
+  color: white;
+  ${(props) => props.theme.font["body-large"]};
   background: transparent; /* 배경을 투명하게 설정 */
   border: none; /* 테두리를 없앱니다. 필요에 따라 추가할 수 있습니다. */
   height: 260px;

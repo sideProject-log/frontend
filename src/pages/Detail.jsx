@@ -115,6 +115,7 @@ const Detail = () => {
         );
 
         if (res.status === 201) {
+          setRecord(res.data);
           fireToast({
             content: "수정이 완료되었습니다.",
             bottom: "50",
@@ -127,8 +128,6 @@ const Detail = () => {
 
     updateRecord();
     setOnUpdate((prev) => !prev);
-
-    fetchRecord();
   };
 
   const fetchRecord = async () => {
@@ -195,7 +194,7 @@ const Detail = () => {
               {!onUpdate ? (
                 <>
                   <p className="record-title">{record.title}</p>
-                  <p className="record-content">{record.content}</p>
+                  <pre className="record-content">{record.content}</pre>
                 </>
               ) : (
                 <>
