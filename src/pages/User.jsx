@@ -117,31 +117,33 @@ const User = () => {
             )}
           </DateSelector>
         </Diary>
-        <div>
-          {filteredRecords.length > 0 ? (
-            filteredRecords.map((record) => {
-              return (
-                <Post
-                  key={record.id}
-                  id={record.id}
-                  title={record.title}
-                  desc={record.content}
-                  day={record.day}
-                  emojis={record.emojis}
-                  bookmarks={record.bookmarks}
-                  background={record.background}
-                  image={record.image}
-                  user={user.username}
-                />
-              );
-            })
-          ) : (
-            <EmptyLogMessage>
-              <p className="message">아직 내 로그가 없어요</p>
-            </EmptyLogMessage>
-          )}
-          {}
-        </div>
+        <FlexBox>
+          <div>
+            {filteredRecords.length > 0 ? (
+              filteredRecords.map((record) => {
+                return (
+                  <Post
+                    key={record.id}
+                    id={record.id}
+                    title={record.title}
+                    desc={record.content}
+                    day={record.day}
+                    emojis={record.emojis}
+                    bookmarks={record.bookmarks}
+                    background={record.background}
+                    image={record.image}
+                    user={user.username}
+                  />
+                );
+              })
+            ) : (
+              <EmptyLogMessage>
+                <p className="message">아직 내 로그가 없어요</p>
+              </EmptyLogMessage>
+            )}
+            {}
+          </div>
+        </FlexBox>
       </Main>
       <WriteButton onClick={(e) => onClickWrite(e)}>
         <Posting />
@@ -214,7 +216,8 @@ const DateSelectButton = styled.button`
 `;
 
 const Avatar = styled.img`
-  width: 70px;
+  width: 72px;
+  height: 72px;
   border-radius: 100%;
   border: 3px solid #1c1e21;
   pointer-events: none;
@@ -256,6 +259,11 @@ const WriteButton = styled.div`
   z-index: 10;
 `;
 
+const FlexBox = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 function Post(props) {
   const urlRegex =
     /[-a-zA-Z0-9@:%._~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_.~#?&//=]*)?/gi;
@@ -268,7 +276,7 @@ function Post(props) {
       >
         {/* {props.background.match(urlRegex) ? ( */}
         {props.image.length > 0 ? <PostBackImage image={props.image} /> : <></>}
-        <PostTitleContainer>
+        <PostTitleContainer style={{ width: "288px" }}>
           <div style={{ zIndex: 2 }}>
             <Title>
               {props.title.length > 8
@@ -350,14 +358,13 @@ function Post(props) {
 
 const PostBackGround = styled.div`
   position: relative;
-  width: 85%;
   height: 180px;
   background-color: ${(props) => props.$background};
   overflow: hidden;
   background-size: cover;
   margin: 0 auto;
   color: white;
-  padding: 25px 25px;
+  padding: 16px 16px;
   border-radius: 20px;
   margin-bottom: 20px;
   overflow: hidden;
