@@ -4,6 +4,7 @@ import axios from "axios";
 import styled from "styled-components";
 import Header from "../components/Header";
 import BookMark from "../components/BookMark";
+import CardSkeleton from "../components/CardSkeleton";
 import { ReactComponent as Emoji } from "../assets/emoji.svg";
 import { ReactComponent as Posting } from "../assets/posting.svg";
 import { convertDate } from "../utils/common";
@@ -15,6 +16,7 @@ const Main = () => {
   const [user, setUser] = useState([]);
   const [records, setRecords] = useState([]);
   const [tab, setTab] = useState("모든 로그");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +42,7 @@ const Main = () => {
   }, []);
 
   useEffect(() => {
+    setIsLoading(true); // 로딩 시작
     let apiUrl;
     if (tab === "모든 로그") {
       apiUrl = `${process.env.REACT_APP_API_URL}/api/record/getAll`;
@@ -52,6 +55,7 @@ const Main = () => {
         const data = response.data;
         // console.log("data", data);
         setRecords(data.data.reverse());
+        setIsLoading(false);
 
         window.scrollTo({
           top: 0,
@@ -89,73 +93,77 @@ const Main = () => {
           <Container>
             {/* Logs */}
             <Contents>
-              {records?.length !== 0
-                ? records?.map((record, i) => (
-                    <Card
-                      key={`record-${i}`}
-                      $background={record.background}
-                      onClick={() => navigate(`/detail/${record.id}`)}
-                    >
-                      {record.image && (
-                        <BackgroundImageContainer>
-                          <BackgroundImage
-                            src={record.image}
-                            alt="background-image"
+              {isLoading ? (
+                <CardSkeleton />
+              ) : records?.length ? (
+                records.map((record, i) => (
+                  <Card
+                    key={`record-${i}`}
+                    $background={record.background}
+                    onClick={() => navigate(`/detail/${record.id}`)}
+                  >
+                    {record.image && (
+                      <BackgroundImageContainer>
+                        <BackgroundImage
+                          src={record.image}
+                          alt="background-image"
+                        />
+                      </BackgroundImageContainer>
+                    )}
+                    <Cover>
+                      <BarWrapper>
+                        <Bar>
+                          <BookMark
+                            isMarked={record.bookmarked}
+                            recordId={record.id}
                           />
-                        </BackgroundImageContainer>
-                      )}
-                      <Cover>
-                        <BarWrapper>
-                          <Bar>
-                            <BookMark
-                              isMarked={record.bookmarked}
-                              recordId={record.id}
-                            />
-                          </Bar>
-                        </BarWrapper>
-                        <Content>
-                          <TextWrapper>
-                            <Record>
-                              <RecordTitle>{record.title}</RecordTitle>
-                              <RecordContent>{record.content}</RecordContent>
-                            </Record>
-                            <SmallText>
-                              {convertDate(record.created_at)}
-                            </SmallText>
-                          </TextWrapper>
-                        </Content>
-                        <BarWrapper>
-                          <BottomBar>
-                            <EmojiContainer>
-                              <Emoji />
-                              <SmallText>{record.emojiCount}</SmallText>
-                            </EmojiContainer>
-                            <ImgContainer
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(`/${record.user_id}`);
-                              }}
-                            >
-                              {record.user.profile !==
-                              "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg" ? (
-                                <ProfileImage
-                                  src={record.user.profile}
-                                  alt="user-profile"
-                                />
-                              ) : (
-                                <ProfileImage
-                                  src={DefaultProfileImage}
-                                  alt="user-profile-image"
-                                />
-                              )}
-                              <SmallText>by {record.writer}</SmallText>
-                            </ImgContainer>
-                          </BottomBar>
-                        </BarWrapper>
-                      </Cover>
-                    </Card>
-                  ))
-                : null}
+                        </Bar>
+                      </BarWrapper>
+                      <Content>
+                        <TextWrapper>
+                          <Record>
+                            <RecordTitle>{record.title}</RecordTitle>
+                            <RecordContent>{record.content}</RecordContent>
+                          </Record>
+                          <SmallText>
+                            {convertDate(record.created_at)}
+                          </SmallText>
+                        </TextWrapper>
+                      </Content>
+                      <BarWrapper>
+                        <BottomBar>
+                          <EmojiContainer>
+                            <Emoji />
+                            <SmallText>{record.emojiCount}</SmallText>
+                          </EmojiContainer>
+                          <ImgContainer
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigate(`/${record.user_id}`);
+                            }}
+                          >
+                            {record.user.profile !==
+                            "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg" ? (
+                              <ProfileImage
+                                src={record.user.profile}
+                                alt="user-profile"
+                              />
+                            ) : (
+                              <ProfileImage
+                                src={DefaultProfileImage}
+                                alt="user-profile-image"
+                              />
+                            )}
+                            <SmallText>by {record.writer}</SmallText>
+                          </ImgContainer>
+                        </BottomBar>
+                      </BarWrapper>
+                    </Cover>
+                  </Card>
+                ))
+              ) : (
+                <div>레코드가 없습니다.</div>
+              )}
             </Contents>
           </Container>
           {/* 글작성 버튼 */}
