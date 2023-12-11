@@ -145,30 +145,21 @@ const Detail = () => {
       const { bookmarkId, commentList, commentInfoList, title, content } =
         data.record;
 
-      // 중복 제거 함수
-      function removeDuplicates(comments) {
-        const uniqueComments = [];
-        const uniqueKeys = new Set();
-
-        comments.forEach((comment) => {
-          const key = `${comment.userId}_${comment.comment}`;
-
-          if (!uniqueKeys.has(key)) {
-            uniqueKeys.add(key);
-            uniqueComments.push(comment);
-          }
-        });
-
-        return uniqueComments;
-      }
-
-      const uniqueCommentInfos = removeDuplicates(commentInfoList);
-
       setCurrentUserId(userResponse.data.user.id);
       setRecord(data.record);
       setBookmark(bookmarkId);
       setUserCommentList(commentList);
-      setUserCommentInfoList(uniqueCommentInfos);
+      setUserCommentInfoList(
+        commentInfoList.sort((a, b) => {
+          if (a.userId < b.userId) return -1;
+          else if (a.userId > b.userId) return 1;
+          else {
+            const idx1 = stickerList.indexOf(a.comment);
+            const idx2 = stickerList.indexOf(b.comment);
+            return idx1 - idx2;
+          }
+        })
+      );
       setTitle(title);
       setContent(content);
     } catch (error) {
