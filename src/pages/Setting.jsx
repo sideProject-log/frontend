@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SettingHeader from "../components/SettingHeader";
 import styled from "styled-components";
 import { ReactComponent as RightArrow } from "../assets/right_arrow.svg";
 import { ReactComponent as Add } from "../assets/add.svg";
 import { requestIsLogin } from "../apis/auth";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { ReactComponent as DefaultProFile } from "../assets/profile_none.svg";
+import axios from "axios";
 
 const Setting = () => {
+  const imgRef = useRef(null);
   const [userInfo, setUserInfo] = useState(null);
   useEffect(() => {
     const fetchMyData = async () => {
@@ -25,6 +28,51 @@ const Setting = () => {
     fetchMyData();
   }, []);
 
+  const saveImgFile = (e) => {
+    const { files } = e.target;
+
+    if (!files || !files[0]) return;
+
+    const uploadImage = files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(uploadImage);
+    reader.onloadend = async () => {
+      // setImgFile(reader.result);
+      console.log("eader.result,:", reader.result);
+      try {
+        const response = await axios.patch(
+          `${process.env.REACT_APP_API_URL}/api/user/modify/userimg`,
+          {
+            image: reader.result,
+          },
+          { withCredentials: true }
+        );
+        console.log("서버 응답:", response.data);
+
+        const fetchMyData = async () => {
+          try {
+            const { data } = await requestIsLogin();
+            const { result, user } = data;
+            if (result === false) {
+              window.location.href = "/";
+            } else {
+              setUserInfo(user);
+            }
+          } catch (error) {
+            console.error("API 호출 오류:", error);
+          }
+        };
+
+        fetchMyData();
+      } catch (error) {
+        console.error("API 호출 오류:", error);
+      }
+    };
+  };
+
+  const onClick = async () => {
+    imgRef.current?.click();
+  };
   if (userInfo === null) {
     return <LoadingSpinner />;
   }
@@ -35,9 +83,40 @@ const Setting = () => {
         <ContentsWrapper>
           <ContentsContainer>
             <InfoContainer>
-              <div className="profile-image">
-                <ProfileImage src={userInfo.profile} />
-                {/* TODO: 프로필 사진 변경 기능 보류*/}
+              <div className="profile-image" onClick={onClick}>
+                {userInfo.profile !==
+                "http://k.kakaocdn.net/dn/dpk9l1/btqmGhA2lKL/Oz0wDuJn1YV2DIn92f6DVK/img_640x640.jpg" ? (
+                  <>
+                    <ProfileImage src={userInfo.profile} />
+                    <input
+                      hidden
+                      type="file"
+                      accept="image/jpg,image/png,image/jpeg,image/gif"
+                      name="image-input"
+                      onChange={saveImgFile}
+                      ref={imgRef}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <DefaultProFile
+                      style={{
+                        width: "72px",
+                        height: "72px",
+                        cursor: "pointer",
+                      }}
+                    />
+                    <input
+                      hidden
+                      type="file"
+                      accept="image/jpg,image/png,image/jpeg,image/gif"
+                      name="image-input"
+                      onChange={saveImgFile}
+                      ref={imgRef}
+                    />
+                  </>
+                )}
+
                 <Add className="change-profile" style={{ display: "none" }} />
               </div>
               <div className="user-info">
@@ -131,7 +210,6 @@ const InfoContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: white;
     border: 1px solid gray;
     border-radius: 50%;
   }
