@@ -18,11 +18,8 @@ import axios from "axios";
 import { ContentBox, PostBottom, TextNumber, TitleBox } from "./Post";
 import PostHeader from "../components/PostHeader/PostHeader";
 import { useToast } from "../hooks/useToast";
-import { getUserInfo } from "../apis/getUserInfo";
 import ModalPortal from "../components/ModalPortal";
 import UserCommentListModal from "../components/UserCommentListModal";
-
-const username = "";
 
 const Detail = () => {
   const navigate = useNavigate();
@@ -30,6 +27,7 @@ const Detail = () => {
   const { fireToast } = useToast();
 
   const stickerList = ["😍", "😆", "😋", "😔", "😭", "😡"];
+  const [user, setUser] = useState({});
   const [record, setRecord] = useState(null);
   const [showStickers, setShowStickers] = useState(false);
   const [isClickedStickers, setIsClickedStickers] = useState(false);
@@ -42,9 +40,17 @@ const Detail = () => {
   const [content, setContent] = useState("");
   const [imgFile, setImgFile] = useState("");
   const [isContentFull, setIsContentFull] = useState(false);
-  const [username, setUsername] = useState("");
   const [showModal, setShowModal] = useState(false);
 
+  const sortUserCommentInfoList = (a, b) => {
+    if (a.userId < b.userId) return -1;
+    else if (a.userId > b.userId) return 1;
+    else {
+      const idx1 = stickerList.indexOf(a.comment);
+      const idx2 = stickerList.indexOf(b.comment);
+      return idx1 - idx2;
+    }
+  };
   const toggleStickersState = () => {
     setShowStickers((prev) => !prev);
     setIsClickedStickers((prev) => !prev);
@@ -54,9 +60,22 @@ const Detail = () => {
     if (userCommentList && userCommentList.includes(clickedEmoji) === false) {
       setUserCommentList([...userCommentList, clickedEmoji]);
     }
-    const newComment = await registerComment(recordId, clickedEmoji);
-    console.log(newComment);
+    const response = await registerComment(recordId, clickedEmoji);
+    console.log(response);
 
+    const newComment = {
+      id:
+        userCommentInfoList.reduce((acc = -1, cur) =>
+          acc > cur.id ? acc : cur.id
+        ) + 1,
+      comment: clickedEmoji,
+      userId: user.id,
+      username: user.username,
+      profile: user.profile,
+    };
+    setUserCommentInfoList((prev) =>
+      [...prev, newComment].sort(sortUserCommentInfoList)
+    );
     toggleStickersState();
   };
 
@@ -145,30 +164,11 @@ const Detail = () => {
       const { bookmarkId, commentList, commentInfoList, title, content } =
         data.record;
 
-      // 중복 제거 함수
-      function removeDuplicates(comments) {
-        const uniqueComments = [];
-        const uniqueKeys = new Set();
-
-        comments.forEach((comment) => {
-          const key = `${comment.userId}_${comment.comment}`;
-
-          if (!uniqueKeys.has(key)) {
-            uniqueKeys.add(key);
-            uniqueComments.push(comment);
-          }
-        });
-
-        return uniqueComments;
-      }
-
-      const uniqueCommentInfos = removeDuplicates(commentInfoList);
-
       setCurrentUserId(userResponse.data.user.id);
       setRecord(data.record);
       setBookmark(bookmarkId);
       setUserCommentList(commentList);
-      setUserCommentInfoList(uniqueCommentInfos);
+      setUserCommentInfoList(commentInfoList.sort(sortUserCommentInfoList));
       setTitle(title);
       setContent(content);
     } catch (error) {
@@ -179,6 +179,29 @@ const Detail = () => {
   useEffect(() => {
     fetchRecord();
   }, [recordId]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userResponse = await axios.get(
+          `${process.env.REACT_APP_API_URL}/auth/isLogin`,
+          { withCredentials: true }
+        );
+        const data = userResponse.data.user;
+
+        setUser(data);
+
+        if (!userResponse.data.result) {
+          console.log("유저 정보 없음");
+          // window.location.href = "/";
+        }
+      } catch (error) {
+        console.error("API 호출 오류:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   if (record === null) {
     return (
@@ -301,7 +324,7 @@ const Detail = () => {
               </div>
             </div>
             <div>
-              {username === record.writer ? (
+              {user.username === record.writer ? (
                 <Edit />
               ) : (
                 <button type="button" onClick={onClickBookmark}>
